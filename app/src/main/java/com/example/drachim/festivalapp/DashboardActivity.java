@@ -34,6 +34,7 @@ public class DashboardActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_dashboard);
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.dashboard_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

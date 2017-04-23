@@ -4,6 +4,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/ic_action_home"
+            android:title="@string/nav_dashboard" />
+        <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_action_favorite_gray"
             android:title="@string/nav_favorites" />
@@ -11,7 +15,6 @@
             android:id="@+id/nav_discover"
             android:icon="@drawable/ic_action_map_gray"
             android:title="@string/nav_discover" />
-
     </group>
 
     <item android:title="@string/nav_settings">
