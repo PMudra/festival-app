@@ -1,6 +1,7 @@
 package com.example.drachim.festivalapp;
 
 import android.animation.Animator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -104,6 +105,8 @@ public class DashboardActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_discover:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
 
                 break;
 
@@ -117,4 +120,8 @@ public class DashboardActivity extends AppCompatActivity
         return true;
     }
 
+    public void openFestivalDetail(View view) {
+        Intent intent = new Intent(this, FestivalActivity.class);
+        startActivity(intent);
+    }
 }

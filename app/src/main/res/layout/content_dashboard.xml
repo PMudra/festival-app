@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.drachim.festivalapp.DashboardActivity"
-    tools:showIn="@layout/app_bar_dashboard"
     android:id="@+id/dashboard_swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="fill_vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.drachim.festivalapp.DashboardActivity"
+    tools:showIn="@layout/app_bar_dashboard">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -18,10 +17,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_with_cards_horizontal_margin"
             android:layout_marginRight="@dimen/activity_with_cards_horizontal_margin"
-            android:layout_marginBottom="@dimen/activity_vertical_margin">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -29,65 +28,66 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="Soon"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorDashboardSubtitles"/>
+                android:textColor="@color/colorDashboardSubtitles" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 android:layout_marginLeft="@dimen/card_view_horizontal_margin"
                 android:layout_marginRight="@dimen/card_view_horizontal_margin"
                 android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
+                android:onClick="openFestivalDetail"
                 app:theme="@style/MyCardViewStyle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="140dp"
+                        android:layout_height="100dp"
+                        android:background="@drawable/side_nav_bar"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/festival_mysteryland" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_marginStart="8dp"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:layout_width="140dp"
-                            android:layout_height="100dp"
-                            android:background="@drawable/side_nav_bar"
-                            android:scaleType="centerInside"
-                            app:srcCompat="@drawable/festival_mysteryland" />
-
-                        <LinearLayout
+                        <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:orientation="vertical">
+                            android:layout_height="wrap_content"
+                            android:text="Mysteryland"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorAccent" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mysteryland"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                android:textColor="@color/colorAccent" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="26 - 27 Aug 2017" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="26 - 27 Aug 2017" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Netherlands, Haarlemmermeer" />
-
-                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Netherlands, Haarlemmermeer" />
 
                     </LinearLayout>
+
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 android:layout_marginLeft="@dimen/card_view_horizontal_margin"
                 android:layout_marginRight="@dimen/card_view_horizontal_margin"
                 android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 app:theme="@style/MyCardViewStyle">
 
                 <LinearLayout
@@ -99,16 +99,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_action_arrow_forward"
-                        android:text="More"/>
+                        android:gravity="center_vertical"
+                        android:text="More" />
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
-
 
 
             <TextView
@@ -117,15 +115,15 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="Discover"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorDashboardSubtitles"/>
+                android:textColor="@color/colorDashboardSubtitles" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 android:layout_marginLeft="@dimen/card_view_horizontal_margin"
                 android:layout_marginRight="@dimen/card_view_horizontal_margin"
                 android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 app:theme="@style/MyCardViewStyle">
 
                 <LinearLayout
@@ -172,10 +170,10 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 android:layout_marginLeft="@dimen/card_view_horizontal_margin"
                 android:layout_marginRight="@dimen/card_view_horizontal_margin"
                 android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
                 app:theme="@style/MyCardViewStyle">
 
                 <LinearLayout
@@ -187,10 +185,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
                         android:drawablePadding="10dp"
                         android:drawableStart="@drawable/ic_action_arrow_forward"
-                        android:text="More"/>
+                        android:gravity="center_vertical"
+                        android:text="More" />
 
                 </LinearLayout>
 
