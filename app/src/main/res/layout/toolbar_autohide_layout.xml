@@ -5,7 +5,8 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
-    app:layout_scrollFlags="scroll|snap"
+    android:minHeight="?attr/actionBarSize"
+    app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed|snap"
     app:popupTheme="@style/AppTheme.PopupOverlay"
-    app:theme="@style/AppTheme.AppBarOverlay"/>
+    app:theme="@style/AppTheme.AppBarOverlay"
+    app:layout_collapseMode="pin"/>
