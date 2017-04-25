@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".DashboardActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.TranslucentDecor">
+            android:theme="@style/AppTheme.NoActionBar.Compat.TranslucentNavbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
