@@ -12,11 +12,14 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_notifications">Notifications</string>
 
-    <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="action_add_favorite">Add as favorite</string>
     <string name="filter">Filter</string>
+    <string name="festival_card_header_time_and_place">Time and place</string>
+    <string name="festival_card_header_description">Description</string>
+    <string name="festival_card_header_ticket">Tickets</string>
+    <string name="festival_tab_infos">Infos</string>
+    <string name="festival_tab_lineup">Line Up</string>
+    <string name="festival_tab_planning">Planning</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
