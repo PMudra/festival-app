@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.fragment.FestivalListFragment.OnListFragmentInteractionListener;
 import com.example.drachim.festivalapp.data.DummyContent.DummyItem;
+import com.example.drachim.festivalapp.fragment.FestivalListFragment.OnListFragmentInteractionListener;
 
 import java.util.List;
 
