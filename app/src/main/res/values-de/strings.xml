@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Festival Planer</string>
+    <string name="action_add_favorite">Als Favorit hinzufügen</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="festival_card_header_description">Beschreibung</string>
+    <string name="festival_card_header_ticket">Tickets</string>
+    <string name="festival_card_header_time_and_place">Zeit und Ort</string>
+    <string name="festival_tab_planning">Planen</string>
+    <string name="festival_tab_infos">Infos</string>
+    <string name="nav_discover">Entdecken</string>
+    <string name="nav_favorites">Favoriten</string>
+    <string name="nav_notifications">Benachrichtigungen</string>
+    <string name="nav_settings">Einstellungen</string>
+    <string name="navigation_drawer_close"></string>
+</resources>
