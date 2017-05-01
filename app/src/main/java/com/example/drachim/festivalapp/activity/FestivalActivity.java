@@ -1,4 +1,4 @@
-package com.example.drachim.festivalapp;
+package com.example.drachim.festivalapp.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.example.drachim.festivalapp.FestivalActivityPager;
+import com.example.drachim.festivalapp.R;
 
 public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
 

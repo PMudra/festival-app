@@ -1,4 +1,4 @@
-package com.example.drachim.festivalapp;
+package com.example.drachim.festivalapp.activity;
 
 import android.app.Fragment;
 

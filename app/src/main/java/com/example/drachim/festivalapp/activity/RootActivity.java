@@ -1,4 +1,4 @@
-package com.example.drachim.festivalapp;
+package com.example.drachim.festivalapp.activity;
 
 import android.animation.Animator;
 import android.app.Fragment;
@@ -17,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+
+import com.example.drachim.festivalapp.R;
 
 public abstract class RootActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 

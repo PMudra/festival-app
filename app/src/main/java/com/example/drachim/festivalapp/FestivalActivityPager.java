@@ -5,6 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.drachim.festivalapp.fragment.FestivalInfoFragment;
+import com.example.drachim.festivalapp.fragment.FestivalLineupFragment;
+import com.example.drachim.festivalapp.fragment.FestivalPlaningFragment;
+
 /**
  * Created by Dr. Achim on 01.05.2017.
  */
