@@ -22,7 +22,9 @@
             android:name=".FestivalActivity"
             android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
 
-        <activity android:name=".SearchActivity"/>
+        <activity
+            android:name=".DiscoverActivity"
+            android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
 
     </application>
 
