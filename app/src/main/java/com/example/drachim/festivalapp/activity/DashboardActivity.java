@@ -14,14 +14,17 @@ public class DashboardActivity extends RootActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.title_activity_dashboard);
-        }
+
     }
 
     @Override
     protected Fragment CreateFragment() {
         return new DashboardFragment();
+    }
+
+    @Override
+    protected int createTitle() {
+        return R.string.title_activity_dashboard;
     }
 
     public void openFestivalDetail(View view) {

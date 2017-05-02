@@ -23,6 +23,7 @@ import com.example.drachim.festivalapp.R;
 public abstract class RootActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     protected abstract Fragment CreateFragment();
+    protected abstract int createTitle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public abstract class RootActivity extends AppCompatActivity implements Navigati
         fragmentTransaction.commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(createTitle());
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -27,4 +27,9 @@ public class DiscoverActivity extends RootActivity implements FestivalListFragme
     protected Fragment CreateFragment() {
         return new FestivalListFragment();
     }
+
+    @Override
+    protected int createTitle() {
+        return R.string.title_activity_discover;
+    }
 }
