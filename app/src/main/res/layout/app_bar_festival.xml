@@ -22,11 +22,12 @@
             android:background="@color/colorPrimary">
 
             <ImageView
-                android:id="@+id/expandedImage"
+                android:id="@+id/festivalCover"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:src="@drawable/festival_mysteryland"
                 android:scaleType="centerCrop"
+                android:transitionName="festivalCover"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7"
                 android:fitsSystemWindows="true"/>

@@ -45,8 +45,10 @@
                     <ImageView
                         android:layout_width="140dp"
                         android:layout_height="100dp"
+                        android:id="@+id/festivalCover"
                         android:background="@drawable/side_nav_bar"
                         android:scaleType="centerInside"
+                        android:transitionName="festivalCover"
                         app:srcCompat="@drawable/festival_mysteryland" />
 
                     <LinearLayout

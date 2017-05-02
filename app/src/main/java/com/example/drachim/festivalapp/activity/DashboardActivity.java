@@ -3,6 +3,7 @@ package com.example.drachim.festivalapp.activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.view.View;
 
 import com.example.drachim.festivalapp.R;
@@ -26,6 +27,8 @@ public class DashboardActivity extends RootActivity {
     }
 
     public void openFestivalDetail(View view) {
-        startActivity(new Intent(this, FestivalActivity.class));
+        final View festivalCover = findViewById(R.id.festivalCover);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
+        startActivity(new Intent(this, FestivalActivity.class), options.toBundle());
     }
 }
