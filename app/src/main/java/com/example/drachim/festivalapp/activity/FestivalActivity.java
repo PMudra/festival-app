@@ -24,6 +24,10 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         FestivalActivityPager adapter = new FestivalActivityPager(getSupportFragmentManager(), this);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -48,6 +52,10 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         switch(item.getItemId()) {
             case R.id.action_toggle_favorite:
 
+                return true;
+
+            case android.R.id.home:
+                this.finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
