@@ -55,7 +55,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
                 return true;
 
             case android.R.id.home:
-                this.finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
