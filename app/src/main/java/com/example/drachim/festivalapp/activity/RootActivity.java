@@ -37,7 +37,6 @@ public abstract class RootActivity extends AppCompatActivity implements Navigati
         fragmentTransaction.commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.title_activity_dashboard);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

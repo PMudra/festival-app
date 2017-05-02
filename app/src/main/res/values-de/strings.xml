@@ -18,6 +18,7 @@
     <string name="filter">Filter</string>
     <string name="nav_dashboard">Dashboard</string>
     <string name="title_activity_dashboard">Dashboard</string>
-    <string name="soon">Bald</string>
+    <string name="soon">Demnächst</string>
     <string name="more">Mehr</string>
+    <string name="title_activity_discover">Entdecken</string>
 </resources>

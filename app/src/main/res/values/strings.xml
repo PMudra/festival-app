@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Festival Planer</string>
     <string name="title_activity_dashboard">Dashboard</string>
+    <string name="title_activity_discover">Discover</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,6 +15,7 @@
 
     <string name="action_search">Search</string>
     <string name="action_add_favorite">Add as favorite</string>
+
     <string name="filter">Filter</string>
     <string name="festival_card_header_time_and_place">Time and place</string>
     <string name="festival_card_header_description">Description</string>
@@ -21,6 +23,7 @@
     <string name="festival_tab_infos">Infos</string>
     <string name="festival_tab_lineup">Line Up</string>
     <string name="festival_tab_planning">Planning</string>
+
     <string name="soon">Soon</string>
     <string name="more">More</string>
     <string name="action_settings">Settings</string>
