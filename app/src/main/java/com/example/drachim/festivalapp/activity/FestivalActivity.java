@@ -37,7 +37,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         tabLayout.setupWithViewPager(viewPager);
 
         tabLayout.addOnTabSelectedListener(this);
-
     }
 
     @Override
