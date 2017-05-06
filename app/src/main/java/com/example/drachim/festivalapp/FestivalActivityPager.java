@@ -53,4 +53,5 @@ public class FestivalActivityPager extends FragmentPagerAdapter {
                 return null;
         }
     }
+
 }
