@@ -83,8 +83,30 @@ public class FestivalPlaningFragment extends Fragment {
                 // replace spaces, dashes etc. to non-breaking ones
                 artist = artist.replace(" ", "\u00A0").replace("-", "\u2011");
 
-                textView.append(artist + " * ");
+                // add middle dot between artists as a seperator
+                textView.append(artist + " \u00B7 ");
             }
+
+            String newLines = "";
+
+            for (int i = 0; i < textView.getLineCount(); i++) {
+
+                // get line
+                int start = textView.getLayout().getLineStart(i);
+                int end = textView.getLayout().getLineEnd(i);
+                String line = textView.getText().toString().substring(start, end);
+
+                // remove whitespaces and middle dot at line start
+                line = line.replaceFirst("^\\s?\\u00B7?\\s?", "");
+
+                // remove whitespaces and middle dot at line end
+                line = line.replaceFirst("\\s?\\u00B7?\\s?$", "\n");
+
+                newLines += line;
+            }
+
+            textView.setText(newLines);
+
         }
     }
 
