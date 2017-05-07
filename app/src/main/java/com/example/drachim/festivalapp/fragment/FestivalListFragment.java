@@ -75,7 +75,7 @@ public class FestivalListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_filter:
                 DialogFragment filterDialogFragment = new FilterDialogFragment();
-                filterDialogFragment.show(getFragmentManager(), "missiles");
+                filterDialogFragment.show(getFragmentManager(), null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

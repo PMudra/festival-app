@@ -27,5 +27,7 @@
     <string name="soon">Soon</string>
     <string name="more">More</string>
     <string name="action_settings">Settings</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
 </resources>
