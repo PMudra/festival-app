@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ public class FestivalListFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -87,9 +89,25 @@ public class FestivalListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
         recyclerView.setAdapter(new MyFestivalRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO: Refresh implementieren
+            }
+        });
+
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.destroyDrawingCache();
+        swipeRefreshLayout.clearAnimation();
+    }
 
     @Override
     public void onAttach(Context context) {

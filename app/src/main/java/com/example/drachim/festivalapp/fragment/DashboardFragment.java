@@ -12,6 +12,8 @@ import com.example.drachim.festivalapp.R;
 
 public class DashboardFragment extends Fragment {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     public DashboardFragment() {
     }
 
@@ -20,7 +22,7 @@ public class DashboardFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.dashboard_swipe_refresh_layout);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.dashboard_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -33,5 +35,14 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.destroyDrawingCache();
+        swipeRefreshLayout.clearAnimation();
     }
 }
