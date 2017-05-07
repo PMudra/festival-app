@@ -22,10 +22,6 @@
             android:name=".activity.FestivalActivity"
             android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
 
-        <activity
-            android:name=".activity.DiscoverActivity"
-            android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
-
     </application>
 
 </manifest>
