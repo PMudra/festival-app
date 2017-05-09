@@ -77,6 +77,7 @@ public class FestivalPlanningFragment extends Fragment {
             participants.add(new Participant("Uwe", true));
             participants.add(new Participant("Herbert", true));
             participants.add(new Participant("Opa", false));
+            participants.add(new Participant("Annegret", false));
 
             recyclerView.setAdapter(new MyParticipantRecyclerViewAdapter(participants, mListener));
         }

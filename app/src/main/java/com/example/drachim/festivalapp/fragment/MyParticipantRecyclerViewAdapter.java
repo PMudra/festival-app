@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.Participant;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment.OnListFragmentInteractionListener;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -30,6 +31,24 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
     public MyParticipantRecyclerViewAdapter(List<Participant> participants, OnListFragmentInteractionListener listener) {
         this.participants = participants;
         this.mListener = listener;
+
+        sortList();
+    }
+
+    /**
+     * First sort by isInterested.
+     * Second sort by participant name.
+     */
+    private void sortList() {
+        Collections.sort(participants, new Comparator<Participant>() {
+            @Override
+            public int compare(final Participant p1, final Participant p2) {
+                int c = Boolean.compare(p2.isInterested(), p1.isInterested());
+                if (c == 0) {
+                    c = p1.getName().compareTo(p2.getName());
+                }
+                return c;
+            }});
     }
 
     @Override
@@ -40,12 +59,21 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.participant = participants.get(position);
         holder.checkBox.setText(holder.participant.getName());
 
-        Utilities.strikeThru(holder.checkBox, !holder.participant.isInterested());
         holder.checkBox.setChecked(holder.participant.isInterested());
+        Utilities.strikeThru(holder.checkBox, !holder.participant.isInterested());
+
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                participants.get(position).setInterested(holder.checkBox.isChecked());
+                sortList();
+                notifyDataSetChanged();
+            }
+        });
+
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,12 +101,6 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
             super(view);
             mView = view;
             checkBox = (CheckBox) view.findViewById(R.id.participant);
-            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Utilities.strikeThru(checkBox, !isChecked);
-                }
-            });
         }
 
         @Override
