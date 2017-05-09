@@ -21,4 +21,6 @@
     <string name="soon">Demnächst</string>
     <string name="more">Mehr</string>
     <string name="title_activity_discover">Entdecken</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="ok">Okay</string>
 </resources>
