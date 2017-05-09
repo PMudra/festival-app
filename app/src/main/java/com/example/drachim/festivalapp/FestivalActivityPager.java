@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.drachim.festivalapp.fragment.FestivalInfoFragment;
 import com.example.drachim.festivalapp.fragment.FestivalLineupFragment;
-import com.example.drachim.festivalapp.fragment.FestivalPlaningFragment;
+import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
 /**
  * Created by Dr. Achim on 01.05.2017.
@@ -30,7 +30,7 @@ public class FestivalActivityPager extends FragmentPagerAdapter {
             case 1:
                 return new FestivalLineupFragment();
             case 2:
-                return new FestivalPlaningFragment();
+                return new FestivalPlanningFragment();
             default:
                 return null;
         }

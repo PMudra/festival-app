@@ -8,7 +8,7 @@
     <!-- needed to easily add contact names to a festival planning -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!-- not quiet sure if needed. maybe for synchronizing calender to check if event was already added to calender or if it was removed-->
+    <!-- not quiet sure if needed. maybe for synchronizing calender to check if event was already added to calender or if it was removed -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <!-- needed to add festivals marked as interesting or as participating to calender -->
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
@@ -16,8 +16,19 @@
     <!-- needed to calculate the distance to a festival (e.g. for the search filter) -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <!-- needed because the app targets Android 5.0 (API level 21) or higher -->
-    <uses-feature android:name="android.hardware.location.gps" />
+    <!-- Declare optional permissions as not required -->
+    <uses-feature
+        android:name="android.permission.READ_CONTACTS"
+        android:required="false" />
+    <uses-feature
+        android:name="android.permission.READ_CALENDAR"
+        android:required="false" />
+    <uses-feature
+        android:name="android.permission.WRITE_CALENDAR"
+        android:required="false" />
+    <uses-feature
+        android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -31,14 +42,13 @@
             android:theme="@style/AppTheme.NoActionBar.Compat.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.FestivalActivity"
             android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
-
     </application>
 
 </manifest>
