@@ -5,9 +5,6 @@
     <!-- needed to load festival data from the internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- needed to easily add contact names to a festival planning -->
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <!-- not quiet sure if needed. maybe for synchronizing calender to check if event was already added to calender or if it was removed -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <!-- needed to add festivals marked as interesting or as participating to calender -->

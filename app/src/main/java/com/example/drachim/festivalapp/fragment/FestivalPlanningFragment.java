@@ -1,17 +1,20 @@
 package com.example.drachim.festivalapp.fragment;
 
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +35,15 @@ import static android.app.Activity.RESULT_OK;
  */
 public class FestivalPlanningFragment extends Fragment {
 
-    private static final int RESULT_PICK_CONTACT = 1;
+    private static final int PICK_CONTACT_REQUEST = 1;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private List<Participant> participants;
+    private MyParticipantRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,7 +86,7 @@ public class FestivalPlanningFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            final List<Participant> participants = new ArrayList<>();
+            participants = new ArrayList<>();
             participants.add(new Participant("Achim", true));
             participants.add(new Participant("Manni", true));
             participants.add(new Participant("Uwe", true));
@@ -89,24 +94,15 @@ public class FestivalPlanningFragment extends Fragment {
             participants.add(new Participant("Opa", false));
             participants.add(new Participant("Annegret", false));
 
-            final MyParticipantRecyclerViewAdapter adapter = new MyParticipantRecyclerViewAdapter(participants, mListener);
+            adapter = new MyParticipantRecyclerViewAdapter(participants, mListener);
             recyclerView.setAdapter(adapter);
 
             FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                    startActivityForResult(intent, RESULT_PICK_CONTACT);
-
-                    Participant participant = new Participant("Rotor Rckrt", true);
-                    participants.add(participant);
-                    adapter.sortAndUpdateList();
-
-                    Snackbar.make(view, participant.getName() + " added", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
-
+                    startActivityForResult(intent, PICK_CONTACT_REQUEST);
                 }
             });
         }
@@ -118,29 +114,35 @@ public class FestivalPlanningFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK) {
-            // Check for the request code, we might be usign multiple startActivityForReslut
-            switch (requestCode) {
-                case RESULT_PICK_CONTACT:
+        switch (requestCode) {
+            case PICK_CONTACT_REQUEST:
+
+                if (resultCode == RESULT_OK) {
                     contactPicked(data);
-                    break;
-            }
+                }
+                break;
         }
+
     }
 
     private void contactPicked(Intent data) {
-        Cursor cursor = null;
-        try {
-            Uri uri = data.getData();
-            cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-            cursor.moveToFirst();
+        Uri contactUri = data.getData();
+        String[] projection = {Phone.DISPLAY_NAME};
 
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        CursorLoader loader = new CursorLoader(getActivity());
+        loader.setProjection(projection);
+        loader.setUri(contactUri);
 
+        Cursor cursor = loader.loadInBackground();
+        cursor.moveToFirst();
 
+        int column = cursor.getColumnIndex(Phone.DISPLAY_NAME);
+        String contactName = cursor.getString(column);
+
+        participants.add(new Participant(contactName, true));
+        adapter.sortAndUpdateList();
+
+        Snackbar.make(getView(), contactName + " added", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
     }
 
 
