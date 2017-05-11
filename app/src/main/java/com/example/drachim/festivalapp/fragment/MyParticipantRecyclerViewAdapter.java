@@ -35,6 +35,11 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
         sortList();
     }
 
+    public void sortAndUpdateList() {
+        sortList();
+        notifyDataSetChanged();
+    }
+
     /**
      * First sort by isInterested.
      * Second sort by participant name.
@@ -69,8 +74,7 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 participants.get(position).setInterested(holder.checkBox.isChecked());
-                sortList();
-                notifyDataSetChanged();
+                sortAndUpdateList();
             }
         });
 
@@ -108,4 +112,5 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
             return super.toString() + " '";
         }
     }
+
 }
