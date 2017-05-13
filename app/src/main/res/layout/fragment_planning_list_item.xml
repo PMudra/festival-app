@@ -11,6 +11,8 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:paddingStart="12dp"
         android:layout_gravity="center_vertical"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:layout_marginBottom="@dimen/planning_list_item_spacing"
+        android:layout_marginTop="@dimen/planning_list_item_spacing"/>
 
 </LinearLayout>

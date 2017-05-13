@@ -10,5 +10,7 @@
     <dimen name="card_view_corner_radius">3dp</dimen>
     <dimen name="card_view_padding">6dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="planning_list_item_spacing">5dp</dimen>
+    <dimen name="expanded_toolbar_image_height">220dp</dimen>
 
 </resources>

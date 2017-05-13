@@ -2,6 +2,8 @@ package com.example.drachim.festivalapp.data;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +71,8 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
         holder.checkBox.setChecked(holder.participant.isInterested());
         Utilities.strikeThru(holder.checkBox, !holder.participant.isInterested());
 
-        Drawable drawable = new BitmapDrawable(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
+        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
+        drawable.setCircular(true);
         holder.checkBox.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
 
         holder.checkBox.setOnClickListener(new View.OnClickListener() {

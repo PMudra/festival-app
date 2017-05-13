@@ -189,7 +189,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                 try {
                     Uri uri = Uri.parse(contactThumbnail);
                     bp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-                    // bp = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
 
                 } catch (FileNotFoundException e) {
                     // TODO Auto-generated catch block

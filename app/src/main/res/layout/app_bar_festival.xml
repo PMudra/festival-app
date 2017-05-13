@@ -24,7 +24,7 @@
             <ImageView
                 android:id="@+id/festivalCover"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="@dimen/expanded_toolbar_image_height"
                 android:src="@drawable/festival_mysteryland"
                 android:scaleType="centerCrop"
                 android:transitionName="festivalCover"
