@@ -7,4 +7,4 @@
     android:layout_height="?attr/actionBarSize"
     android:minHeight="?attr/actionBarSize"
     app:popupTheme="@style/AppTheme.PopupOverlay"
-    app:theme="@style/AppTheme.AppBarOverlay"/>
+    android:theme="@style/AppTheme.AppBarOverlay"/>

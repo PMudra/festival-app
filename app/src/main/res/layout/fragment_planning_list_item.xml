@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:paddingStart="12dp"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"/>
 
 </LinearLayout>
