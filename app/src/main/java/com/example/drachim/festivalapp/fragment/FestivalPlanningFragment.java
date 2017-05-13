@@ -3,14 +3,20 @@ package com.example.drachim.festivalapp.fragment;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.support.v13.app.FragmentCompat;
+import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,10 +24,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.drachim.festivalapp.R;
+import com.example.drachim.festivalapp.common.Utilities;
+import com.example.drachim.festivalapp.data.MyParticipantRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.Participant;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +44,10 @@ import static android.app.Activity.RESULT_OK;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class FestivalPlanningFragment extends Fragment {
+public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback  {
 
     private static final int PICK_CONTACT_REQUEST = 1;
+    private static final int READ_CONTACTS_PERMISSIONS_REQUEST_CODE = 2;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -101,8 +113,10 @@ public class FestivalPlanningFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                    startActivityForResult(intent, PICK_CONTACT_REQUEST);
+                    if (Utilities.checkAndRequestReadContactsPermission(FestivalPlanningFragment.this, READ_CONTACTS_PERMISSIONS_REQUEST_CODE)) {
+                        openContactPicker();
+                    }
+
                 }
             });
         }
@@ -110,7 +124,28 @@ public class FestivalPlanningFragment extends Fragment {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case READ_CONTACTS_PERMISSIONS_REQUEST_CODE:
 
+                for (int grantResult : grantResults) {
+                    if (grantResult == PackageManager.PERMISSION_DENIED) {
+                        break;
+                    }
+                }
+                openContactPicker();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void openContactPicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, PICK_CONTACT_REQUEST);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -118,16 +153,22 @@ public class FestivalPlanningFragment extends Fragment {
             case PICK_CONTACT_REQUEST:
 
                 if (resultCode == RESULT_OK) {
-                    contactPicked(data);
+                    Uri uri = data.getData();
+                    Participant participant = getSelectedContact(uri);
+
+                    participants.add(participant);
+                    adapter.sortAndUpdateList();
+
+                    Snackbar.make(getView(), participant.getName() + " added", Snackbar.LENGTH_SHORT).show();
                 }
+
                 break;
         }
 
     }
 
-    private void contactPicked(Intent data) {
-        Uri contactUri = data.getData();
-        String[] projection = {Phone.DISPLAY_NAME};
+    private Participant getSelectedContact(Uri contactUri) {
+        String[] projection = {Phone.DISPLAY_NAME, Phone.PHOTO_THUMBNAIL_URI};
 
         CursorLoader loader = new CursorLoader(getActivity());
         loader.setProjection(projection);
@@ -136,13 +177,35 @@ public class FestivalPlanningFragment extends Fragment {
         Cursor cursor = loader.loadInBackground();
         cursor.moveToFirst();
 
-        int column = cursor.getColumnIndex(Phone.DISPLAY_NAME);
-        String contactName = cursor.getString(column);
+        String contactName = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
 
-        participants.add(new Participant(contactName, true));
-        adapter.sortAndUpdateList();
+        Participant participant = new Participant(contactName, true);
 
-        Snackbar.make(getView(), contactName + " added", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+        if (Utilities.checkReadContactsPermission(getActivity())) {
+            String contactThumbnail = cursor.getString(cursor.getColumnIndex(Phone.PHOTO_THUMBNAIL_URI));
+
+            Bitmap bp = null;
+            if (contactThumbnail != null) {
+                try {
+                    Uri uri = Uri.parse(contactThumbnail);
+                    bp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+                    // bp = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
+
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+            if (bp != null) {
+                participant.setPhoto(bp);
+            }
+        }
+
+        return participant;
     }
 
 

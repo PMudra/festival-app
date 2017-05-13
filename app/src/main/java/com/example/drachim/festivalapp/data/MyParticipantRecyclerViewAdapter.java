@@ -1,7 +1,8 @@
-package com.example.drachim.festivalapp.fragment;
+package com.example.drachim.festivalapp.data;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.CheckBox;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
-import com.example.drachim.festivalapp.data.Participant;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment.OnListFragmentInteractionListener;
 
 import java.util.Collections;
@@ -22,8 +22,6 @@ import java.util.List;
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyParticipantRecyclerViewAdapter.ViewHolder> {
-
-    private static final StrikethroughSpan STRIKE_THROUGH_SPAN = new StrikethroughSpan();
 
     private final List<Participant> participants;
     private final OnListFragmentInteractionListener mListener;
@@ -64,20 +62,22 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.participant = participants.get(position);
         holder.checkBox.setText(holder.participant.getName());
 
         holder.checkBox.setChecked(holder.participant.isInterested());
         Utilities.strikeThru(holder.checkBox, !holder.participant.isInterested());
 
+        Drawable drawable = new BitmapDrawable(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
+        holder.checkBox.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
+
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                participants.get(position).setInterested(holder.checkBox.isChecked());
+                participants.get(holder.getAdapterPosition()).setInterested(holder.checkBox.isChecked());
                 sortAndUpdateList();
             }
         });
-
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
