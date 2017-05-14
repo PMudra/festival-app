@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="24dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="20dp"
     android:stretchColumns="1">
 
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
         android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sort by" />
+            android:layout_marginRight="16dp"
+            android:text="@string/sort_by" />
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -21,14 +26,17 @@
             android:orientation="horizontal">
 
             <RadioButton
+                android:id="@+id/radio_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date" />
+                android:text="@string/date" />
 
             <RadioButton
+                android:id="@+id/radio_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Distance" />
+                android:layout_marginLeft="16dp"
+                android:text="@string/distance" />
 
         </RadioGroup>
 
@@ -36,12 +44,14 @@
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Distance" />
+            android:layout_marginRight="16dp"
+            android:text="@string/distance" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,16 +60,60 @@
             android:orientation="vertical">
 
             <SeekBar
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:id="@+id/distance_seek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="10"
-                android:progress="2" />
+                android:max="5"
+                android:progress="1" />
+
+            <TextView
+                android:id="@+id/distance_text"
+                style="@style/Base.TextAppearance.AppCompat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10 km" />
+
+        </LinearLayout>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="@string/date_range" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/fromDate"
+                style="@style/Base.TextAppearance.AppCompat.Menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="20.05.2017" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10 km" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/to" />
+
+            <TextView
+                android:id="@+id/toDate"
+                style="@style/Base.TextAppearance.AppCompat.Menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="20.05.2017" />
 
         </LinearLayout>
 
@@ -72,25 +126,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date" />
-
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Genre" />
+            android:layout_marginRight="16dp"
+            android:text="@string/genre" />
 
         <Spinner
             android:id="@+id/genre_spinner"

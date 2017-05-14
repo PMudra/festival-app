@@ -23,6 +23,13 @@
     <string name="title_activity_discover">Entdecken</string>
     <string name="cancel">Abbrechen</string>
     <string name="ok">Okay</string>
+    <string name="any_distance">Jede Entfernung</string>
+    <string name="sort_by">Sortieren nach</string>
+    <string name="date">Datum</string>
+    <string name="distance">Entfernung</string>
+    <string name="date_range">Zeitraum</string>
+    <string name="to">bis</string>
+    <string name="genre">Genre</string>
     <string name="single_item_selected">Eintrag ausgewählt</string>
     <string name="multiple_items_selected">Einträge ausgewählt</string>
 </resources>

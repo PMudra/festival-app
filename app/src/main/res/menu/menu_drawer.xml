@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
@@ -15,16 +14,10 @@
             android:id="@+id/nav_discover"
             android:icon="@drawable/ic_action_map_gray"
             android:title="@string/nav_discover" />
+        <item
+            android:id="@+id/nav_preferences"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/action_settings" />
     </group>
-
-    <item android:title="@string/nav_settings">
-        <menu>
-            <item
-                android:id="@+id/nav_notification"
-                android:icon="@drawable/ic_action_notifications_active_gray"
-                android:title="@string/nav_notifications"
-                app:actionLayout="@layout/nav_switch"/>
-        </menu>
-    </item>
 
 </menu>

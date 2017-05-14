@@ -29,6 +29,13 @@
     <string name="action_settings">Settings</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="any_distance">Any distance</string>
+    <string name="sort_by">Sort by</string>
+    <string name="date">Date</string>
+    <string name="distance">Distance</string>
+    <string name="date_range">Date range</string>
+    <string name="to">to</string>
+    <string name="genre">Genre</string>
     <string name="action_remove">Remove</string>
     <string name="single_item_selected">item selected</string>
     <string name="multiple_items_selected">items selected</string>

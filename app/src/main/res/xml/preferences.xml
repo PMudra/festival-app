@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="true"
+        android:icon="@drawable/ic_action_notifications_active_gray"
+        android:key="pref_notifications"
+        android:summary="Lala"
+        android:title="Notifications" />
+</PreferenceScreen>
