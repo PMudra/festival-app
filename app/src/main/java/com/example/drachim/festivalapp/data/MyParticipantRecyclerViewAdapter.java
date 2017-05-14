@@ -1,27 +1,15 @@
 package com.example.drachim.festivalapp.data;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment.OnListFragmentInteractionListener;
