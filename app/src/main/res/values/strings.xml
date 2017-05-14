@@ -37,4 +37,8 @@
     <string name="to">to</string>
     <string name="genre">Genre</string>
 
+    <string name="action_remove">Remove</string>
+    <string name="single_item_selected">item selected</string>
+    <string name="multiple_items_selected">items selected</string>
+
 </resources>

@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#ffab40</color>
     <color name="colorDashboardSubtitles">#757575</color>
+    <color name="colorLightGray">#cccccc</color>
 
 </resources>

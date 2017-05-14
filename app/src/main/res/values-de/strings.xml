@@ -30,4 +30,7 @@
     <string name="date_range">Zeitraum</string>
     <string name="to">bis</string>
     <string name="genre">Genre</string>
+    <string name="action_remove">Entfernen</string>
+    <string name="single_item_selected">Eintrag ausgewählt</string>
+    <string name="multiple_items_selected">Einträge ausgewählt</string>
 </resources>

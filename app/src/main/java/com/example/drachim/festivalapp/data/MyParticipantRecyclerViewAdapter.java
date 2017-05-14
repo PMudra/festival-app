@@ -1,7 +1,5 @@
 package com.example.drachim.festivalapp.data;
 
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
+import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment.OnListFragmentInteractionListener;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -27,10 +28,12 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
 
     private final List<Participant> participants;
     private final OnListFragmentInteractionListener mListener;
+    private FestivalPlanningFragment festivalPlanningFragment;
 
-    public MyParticipantRecyclerViewAdapter(List<Participant> participants, OnListFragmentInteractionListener listener) {
+    public MyParticipantRecyclerViewAdapter(List<Participant> participants, OnListFragmentInteractionListener listener, FestivalPlanningFragment festivalPlanningFragment) {
         this.participants = participants;
         this.mListener = listener;
+        this.festivalPlanningFragment = festivalPlanningFragment;
 
         sortList();
     }
@@ -64,16 +67,21 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        if (festivalPlanningFragment.getActionMode() == null) {
+            holder.mView.setSelected(false);
+            holder.mView.setBackgroundResource(R.drawable.planning_list_item_bg);
+        }
+
         holder.participant = participants.get(position);
-        holder.checkBox.setText(holder.participant.getName());
+        holder.textView.setText(holder.participant.getName());
 
         holder.checkBox.setChecked(holder.participant.isInterested());
-        Utilities.strikeThru(holder.checkBox, !holder.participant.isInterested());
+        Utilities.strikeThru(holder.textView, !holder.participant.isInterested());
 
         RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
         drawable.setCircular(true);
-        holder.checkBox.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
+        holder.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
 
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -82,9 +90,15 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
             }
         });
 
+        holder.mView.setOnLongClickListener(festivalPlanningFragment);
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (festivalPlanningFragment.getActionMode() != null) {
+                    festivalPlanningFragment.toggleSelection(holder.mView, holder.getAdapterPosition());
+                }
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
@@ -99,15 +113,24 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
         return participants.size();
     }
 
+    public void updateAdapter(ArrayList<Participant> selectionList) {
+        for(Participant contact : selectionList) {
+            participants.remove(contact);
+        }
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final CheckBox checkBox;
+        public final TextView textView;
         public Participant participant;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            checkBox = (CheckBox) view.findViewById(R.id.participant);
+            checkBox = (CheckBox) view.findViewById(R.id.cb_participant);
+            textView = (TextView) view.findViewById(R.id.tv_participant);
         }
 
         @Override
