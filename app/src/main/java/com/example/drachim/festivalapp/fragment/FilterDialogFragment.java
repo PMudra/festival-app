@@ -3,12 +3,12 @@ package com.example.drachim.festivalapp.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,9 +41,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             return Distance.values()[progress];
         }
 
-        @Override
-        public String toString() {
-            return this != ANY ? kilometres + " km" : "Any distance";
+        public String toString(Context context) {
+            return this != ANY ? kilometres + " km" : context.getString(R.string.any_distance);
         }
     }
 
@@ -107,7 +106,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
-        ((TextView) getDialog().findViewById(R.id.distance_text)).setText(Distance.fromProgress(progress).toString());
+        ((TextView) getDialog().findViewById(R.id.distance_text)).setText(Distance.fromProgress(progress).toString(getActivity()));
     }
 
     @Override
