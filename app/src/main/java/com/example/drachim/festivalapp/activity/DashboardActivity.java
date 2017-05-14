@@ -22,9 +22,13 @@ import android.view.ViewAnimationUtils;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.data.DummyContent;
 import com.example.drachim.festivalapp.fragment.DashboardFragment;
+import com.example.drachim.festivalapp.fragment.DateDialogFragment;
 import com.example.drachim.festivalapp.fragment.FestivalListFragment;
+import com.example.drachim.festivalapp.fragment.FilterDialogFragment;
 
-public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FestivalListFragment.OnListFragmentInteractionListener {
+import java.util.Date;
+
+public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FestivalListFragment.OnListFragmentInteractionListener, DateDialogFragment.OnDateListener {
 
     public static final String CURRENT_FRAGMENT_KEY = "fragment_key";
     private DrawerLayout drawer;
@@ -158,5 +162,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
         // todo
+    }
+
+    @Override
+    public void onDateSet(final String tag, final Date date) {
+        ((FilterDialogFragment) getFragmentManager().findFragmentByTag(FilterDialogFragment.tag)).onDateSet(tag, date);
     }
 }
