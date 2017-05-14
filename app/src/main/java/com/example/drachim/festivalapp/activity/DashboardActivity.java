@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,7 @@ import com.example.drachim.festivalapp.fragment.DashboardFragment;
 import com.example.drachim.festivalapp.fragment.DateDialogFragment;
 import com.example.drachim.festivalapp.fragment.FestivalListFragment;
 import com.example.drachim.festivalapp.fragment.FilterDialogFragment;
+import com.example.drachim.festivalapp.fragment.SettingsFragment;
 
 import java.util.Date;
 
@@ -33,6 +35,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public static final String CURRENT_FRAGMENT_KEY = "fragment_key";
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
+    private int currentFragmentId;
     private Toolbar toolbar;
 
     public void openFestivalDetail(View view) {
@@ -44,6 +47,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         setContentView(R.layout.activity_dashboard);
 
@@ -124,18 +129,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.nav_notification:
-                break;
-            default:
-                switchContentFragment(item.getItemId());
-                break;
-        }
+        switchContentFragment(item.getItemId());
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    private int currentFragmentId;
 
     private void switchContentFragment(int itemId) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -153,6 +150,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             case R.id.nav_discover:
                 fragment = new FestivalListFragment();
                 toolbar.setTitle(R.string.nav_discover);
+                break;
+            case R.id.nav_preferences:
+                fragment = new SettingsFragment();
+                toolbar.setTitle(R.string.nav_settings);
                 break;
         }
         fragmentTransaction.replace(R.id.fragment_container, fragment);
