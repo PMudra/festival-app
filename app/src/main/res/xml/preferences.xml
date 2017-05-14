@@ -4,6 +4,5 @@
         android:defaultValue="true"
         android:icon="@drawable/ic_action_notifications_active_gray"
         android:key="pref_notifications"
-        android:summary="Lala"
-        android:title="Notifications" />
+        android:title="@string/nav_notifications" />
 </PreferenceScreen>
