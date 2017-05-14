@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -17,14 +17,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentCompat;
 import android.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
@@ -44,7 +47,7 @@ import static android.app.Activity.RESULT_OK;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback  {
+public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener  {
 
     private static final int PICK_CONTACT_REQUEST = 1;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST_CODE = 2;
@@ -56,6 +59,10 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     private OnListFragmentInteractionListener mListener;
     private List<Participant> participants;
     private MyParticipantRecyclerViewAdapter adapter;
+    private ActionMode actionMode;
+    int counter = 0;
+    ArrayList<Participant> selection_list = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -91,7 +98,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            final RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -106,7 +113,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             participants.add(new Participant("Opa", false));
             participants.add(new Participant("Annegret", false));
 
-            adapter = new MyParticipantRecyclerViewAdapter(participants, mListener);
+            adapter = new MyParticipantRecyclerViewAdapter(participants, mListener, this);
             recyclerView.setAdapter(adapter);
 
             FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
@@ -225,6 +232,82 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         mListener = null;
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        // Allows you to be notified when the action mode is dismissed
+        if (actionMode == null) {
+            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new ActionMode.Callback() {
+                boolean backButtonClicked = true;
+
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.action_mode_planning, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+                    Log.d("TEST", "home: " + item.getItemId());
+                    switch (item.getItemId()) {
+                        case R.id.action_remove:
+                            backButtonClicked = false;
+                            mode.finish();
+                            return true;
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    if (backButtonClicked) {
+                        selection_list.clear();
+                    }
+                    adapter.updateAdapter(selection_list);
+                    selection_list.clear();
+                    actionMode = null;
+                }
+            });
+        }
+        toggleSelection(v, recyclerView.getChildAdapterPosition(v));
+        return true;
+    }
+
+    public void toggleSelection(View view, int position) {
+        view.setSelected(!view.isSelected());
+
+        if(view.isSelected()) {
+            selection_list.add(participants.get(position));
+        }
+        else {
+            view.setBackground(null);
+            selection_list.remove(participants.get(position));
+        }
+
+        updateCounter(selection_list.size());
+
+    }
+
+    private void updateCounter(int counter) {
+        if(counter == 1) {
+            getActionMode().setTitle(counter + " " + getString(R.string.single_item_selected));
+        }
+        else {
+            getActionMode().setTitle(counter + " " + getString(R.string.multiple_items_selected));
+        }
+
+    }
+
+    public ActionMode getActionMode() {
+        return actionMode;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -239,4 +322,5 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         // TODO: Update argument type and name
         void onListFragmentInteraction(Participant item);
     }
+
 }
