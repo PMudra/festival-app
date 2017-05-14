@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.data.DummyContent;
+import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.fragment.DashboardFragment;
 import com.example.drachim.festivalapp.fragment.DateDialogFragment;
 import com.example.drachim.festivalapp.fragment.FestivalListFragment;
@@ -161,7 +161,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Festival festival) {
         // todo
     }
 

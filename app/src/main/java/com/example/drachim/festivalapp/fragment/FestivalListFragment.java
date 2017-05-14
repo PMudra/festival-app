@@ -1,12 +1,10 @@
 package com.example.drachim.festivalapp.fragment;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.data.DummyContent;
-import com.example.drachim.festivalapp.data.DummyContent.DummyItem;
-import com.example.drachim.festivalapp.data.MyFestivalRecyclerViewAdapter;
+import com.example.drachim.festivalapp.data.Festival;
+import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
+import com.example.drachim.festivalapp.data.sqlite.FestivalPlannerDbHelper;
 
 /**
  * A fragment representing a list of Items.
@@ -87,7 +85,7 @@ public class FestivalListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_festival_list, container, false);
 
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
-        recyclerView.setAdapter(new MyFestivalRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(new FestivalPlannerDbHelper(getActivity()).ReadFestivals(), mListener));
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -137,6 +135,6 @@ public class FestivalListFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Festival festival);
     }
 }
