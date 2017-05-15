@@ -39,6 +39,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private Toolbar toolbar;
 
     public void openFestivalDetail(View view) {
+        //todo
         final View festivalCover = findViewById(R.id.festivalCover);
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
         startActivity(new Intent(this, FestivalActivity.class), options.toBundle());
@@ -162,7 +163,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void onListFragmentInteraction(Festival festival) {
-        // todo
+        //final View festivalCover = findViewById(R.id.festivalCover);
+        //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
+
+        Intent intent = new Intent(this, FestivalActivity.class);
+        intent.putExtra("festival_id", festival.getId());
+        startActivity(intent);
     }
 
     @Override

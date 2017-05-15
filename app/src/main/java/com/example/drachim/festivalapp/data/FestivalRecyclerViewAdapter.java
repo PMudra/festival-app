@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.fragment.FestivalListFragment.OnListFragmentInteractionListener;
 
+import java.text.DateFormat;
 import java.util.List;
 
 public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRecyclerViewAdapter.ViewHolder> {
@@ -31,6 +32,8 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
         viewHolder.festival = festivals.get(position);
         viewHolder.getNameTextView().setText(festivals.get(position).getName());
+        viewHolder.getDateTextView().setText(DateFormat.getDateInstance().format(festivals.get(position).getStartDate()));
+        viewHolder.getPlaceTextView().setText(festivals.get(position).getPlace());
 
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,11 +54,15 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView nameTextView;
+        private final TextView dateTextView;
+        private final TextView placeTextView;
         private Festival festival;
 
         ViewHolder(View view) {
             super(view);
             nameTextView = (TextView) view.findViewById(R.id.name);
+            dateTextView = (TextView) view.findViewById(R.id.date);
+            placeTextView = (TextView) view.findViewById(R.id.place);
         }
 
         public Festival getFestival() {
@@ -64,6 +71,14 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
         public TextView getNameTextView() {
             return nameTextView;
+        }
+
+        public TextView getDateTextView() {
+            return dateTextView;
+        }
+
+        public TextView getPlaceTextView() {
+            return placeTextView;
         }
 
         public View getView() {

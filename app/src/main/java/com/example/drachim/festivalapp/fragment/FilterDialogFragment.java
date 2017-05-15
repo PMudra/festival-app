@@ -81,12 +81,12 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         switch (view.getId()) {
             case R.id.fromDate:
                 final Calendar calendar = Calendar.getInstance();
-                calendar.set(2017, 5, 14);
+                calendar.set(2017, 5 - 1, 14);
                 DateDialogFragment.newInstance(calendar).show(getFragmentManager(), "from_date");
                 break;
             case R.id.toDate:
                 final Calendar calendar2 = Calendar.getInstance();
-                calendar2.set(2017, 5, 14);
+                calendar2.set(2017, 5 - 1, 14);
                 DateDialogFragment.newInstance(calendar2).show(getFragmentManager(), "to_date");
                 break;
         }

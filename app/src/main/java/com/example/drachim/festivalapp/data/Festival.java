@@ -3,48 +3,65 @@ package com.example.drachim.festivalapp.data;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Dr. Achim on 04.05.2017.
- */
-
 public class Festival {
-    private final String name;
 
-    /**
-     *  adress fields
-     */
-    private final String country;
-    private final String place;
-    private final String postalCode;
+    private int id;
+    private String name;
+    private String description;
+    private String country;
+    private String place;
+    private String postalCode;
     private String street;
-    private Integer houseNumber;
-
     private Date startDate;
     private Date endDate;
-
     private List<String> lineup;
 
-    public Festival(String name, String country, String place, String postalCode) {
-        this.name = name;
-        this.country = country;
-        this.place = place;
-        this.postalCode = postalCode;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getCountry() {
         return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getPlace() {
         return place;
     }
 
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
     public String getPostalCode() {
         return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     public String getStreet() {
@@ -53,14 +70,6 @@ public class Festival {
 
     public void setStreet(String street) {
         this.street = street;
-    }
-
-    public Integer getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(Integer houseNumber) {
-        this.houseNumber = houseNumber;
     }
 
     public Date getStartDate() {
