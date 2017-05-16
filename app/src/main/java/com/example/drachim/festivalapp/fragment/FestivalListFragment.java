@@ -1,5 +1,6 @@
 package com.example.drachim.festivalapp.fragment;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
@@ -114,6 +115,20 @@ public class FestivalListFragment extends Fragment {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    /**
+     * Necessary for devices older than API 23.
+     * Alternatively one could use Fragment class from SupportLibrary.
+     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (activity instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) activity;
+        } else {
+            throw new RuntimeException(activity.toString() + " must implement OnListFragmentInteractionListener");
         }
     }
 
