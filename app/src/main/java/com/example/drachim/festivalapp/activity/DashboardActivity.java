@@ -37,6 +37,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private FragmentManager fragmentManager;
     private int currentFragmentId;
     private Toolbar toolbar;
+    private NavigationView navigationView;
 
     public void openFestivalDetail(View view) {
         //todo
@@ -61,7 +62,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_dashboard);
 
@@ -84,6 +85,9 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (currentFragmentId != R.id.nav_dashboard) {
+            navigationView.setCheckedItem(R.id.nav_dashboard);
+            switchContentFragment(R.id.nav_dashboard);
         } else {
             super.onBackPressed();
         }
@@ -163,6 +167,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void onListFragmentInteraction(Festival festival) {
+        // todo animation
         //final View festivalCover = findViewById(R.id.festivalCover);
         //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
 
