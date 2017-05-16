@@ -28,14 +28,10 @@
                 android:textColor="@color/colorDashboardSubtitles" />
 
             <android.support.v7.widget.CardView
+                style="@style/MyCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
-                android:layout_marginLeft="@dimen/card_view_horizontal_margin"
-                android:layout_marginRight="@dimen/card_view_horizontal_margin"
-                android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:onClick="openFestivalDetail"
-                android:theme="@style/MyCardViewStyle">
+                android:onClick="openFestivalDetail">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -43,8 +39,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="140dp"
-                        android:layout_height="100dp"
+                        android:layout_width="@dimen/festival_card_image_width"
+                        android:layout_height="@dimen/festival_card_image_height"
                         android:id="@+id/festivalCover"
                         android:background="@drawable/side_nav_bar"
                         android:scaleType="centerInside"
@@ -54,7 +50,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="@dimen/festival_card_textview_horizontal_margin"
+                        android:layout_marginEnd="@dimen/festival_card_textview_horizontal_margin"
+                        android:layout_marginBottom="@dimen/festival_card_textview_vertical_margin"
                         android:orientation="vertical">
 
                         <TextView
@@ -70,6 +68,7 @@
                             android:text="26 - 27 Aug 2017" />
 
                         <TextView
+                            android:id="@+id/textView2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Netherlands, Haarlemmermeer" />
@@ -81,13 +80,9 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                style="@style/MyCardViewStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
-                android:layout_marginLeft="@dimen/card_view_horizontal_margin"
-                android:layout_marginRight="@dimen/card_view_horizontal_margin"
-                android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:theme="@style/MyCardViewStyle">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -117,13 +112,9 @@
                 android:textColor="@color/colorDashboardSubtitles" />
 
             <android.support.v7.widget.CardView
+                style="@style/MyCardViewStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
-                android:layout_marginLeft="@dimen/card_view_horizontal_margin"
-                android:layout_marginRight="@dimen/card_view_horizontal_margin"
-                android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:theme="@style/MyCardViewStyle">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,8 +122,8 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="140dp"
-                        android:layout_height="100dp"
+                        android:layout_width="@dimen/festival_card_image_width"
+                        android:layout_height="@dimen/festival_card_image_height"
                         android:background="@drawable/side_nav_bar"
                         android:scaleType="centerInside"
                         app:srcCompat="@drawable/festival_defqon" />
@@ -140,7 +131,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="@dimen/festival_card_textview_horizontal_margin"
+                        android:layout_marginEnd="@dimen/festival_card_textview_horizontal_margin"
+                        android:layout_marginBottom="@dimen/festival_card_textview_vertical_margin"
                         android:orientation="vertical">
 
                         <TextView
@@ -167,13 +160,9 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                style="@style/MyCardViewStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/card_view_vertical_margin"
-                android:layout_marginLeft="@dimen/card_view_horizontal_margin"
-                android:layout_marginRight="@dimen/card_view_horizontal_margin"
-                android:layout_marginTop="@dimen/card_view_vertical_margin"
-                android:theme="@style/MyCardViewStyle">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"

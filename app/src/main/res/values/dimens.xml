@@ -9,8 +9,11 @@
     <dimen name="card_view_vertical_margin">5dp</dimen>
     <dimen name="card_view_corner_radius">3dp</dimen>
     <dimen name="card_view_padding">6dp</dimen>
+    <dimen name="festival_card_textview_horizontal_margin">8dp</dimen>
+    <dimen name="festival_card_textview_vertical_margin">8dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="planning_list_item_spacing">5dp</dimen>
     <dimen name="expanded_toolbar_image_height">220dp</dimen>
-
+    <dimen name="festival_card_image_width">140dp</dimen>
+    <dimen name="festival_card_image_height">100dp</dimen>
 </resources>

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <!-- different ids necessary to show seperator between groups -->
+    <group
+        android:id="@+id/menu_top"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_action_home"
@@ -14,6 +18,12 @@
             android:id="@+id/nav_discover"
             android:icon="@drawable/ic_action_map_gray"
             android:title="@string/nav_discover" />
+    </group>
+
+    <group
+        android:id="@+id/menu_bottom"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_preferences"
             android:icon="@drawable/ic_settings"

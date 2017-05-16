@@ -180,6 +180,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         loader.setProjection(projection);
         loader.setUri(contactUri);
 
+        //TODO: Callback einbauen
         Cursor cursor = loader.loadInBackground();
         cursor.moveToFirst();
 
