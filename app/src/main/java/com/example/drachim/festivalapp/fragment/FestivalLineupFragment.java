@@ -20,6 +20,7 @@ public class FestivalLineupFragment extends Fragment {
 
     private TextView textView;
     private List<String> lineup;
+    private FestivalPlannerDbHelper festivalPlannerDbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +34,8 @@ public class FestivalLineupFragment extends Fragment {
         }
 
         if (festival_id != -1) {
-            Festival festival = new FestivalPlannerDbHelper(getActivity()).ReadFestival(festival_id);
+            festivalPlannerDbHelper = new FestivalPlannerDbHelper(getActivity());
+            Festival festival = festivalPlannerDbHelper.ReadFestival(festival_id);
             lineup = festival.getLineup();
         }
 
@@ -138,6 +140,12 @@ public class FestivalLineupFragment extends Fragment {
         lineupList.add("Wildstylez");
         lineupList.add("Zatox");
         return lineupList;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        festivalPlannerDbHelper.close();
     }
 
 }

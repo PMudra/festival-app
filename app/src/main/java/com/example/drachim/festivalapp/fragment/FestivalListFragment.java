@@ -33,6 +33,7 @@ public class FestivalListFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FestivalPlannerDbHelper festivalPlannerDbHelper;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -86,7 +87,8 @@ public class FestivalListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_festival_list, container, false);
 
         RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
-        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(new FestivalPlannerDbHelper(getActivity()).ReadFestivals(), mListener));
+        festivalPlannerDbHelper = new FestivalPlannerDbHelper(getActivity());
+        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(festivalPlannerDbHelper.ReadFestivals(), mListener));
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -136,6 +138,12 @@ public class FestivalListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        festivalPlannerDbHelper.close();
     }
 
     public interface OnListFragmentInteractionListener {
