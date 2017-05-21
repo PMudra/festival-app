@@ -1,9 +1,8 @@
 package com.example.drachim.festivalapp.fragment;
 
-import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.activity.ContactsActivity;
@@ -41,7 +39,7 @@ import static android.app.Activity.RESULT_OK;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener {
+public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener, InputParticipantDialog.Callback {
 
     private static final int PICK_CONTACT_REQUEST = 1;
     private static final int CONTACT_ACTIVITY_REQUEST = 3;
@@ -147,39 +145,9 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     }
 
     private void showInputDialog() {
-        View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.input_dialog, (ViewGroup) getView(), false);
-        final EditText input = (EditText) viewInflated.findViewById(R.id.tv_input_contact_name);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(viewInflated);
-        builder.setTitle("New participant");
-
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                toggleShowFab();
-                addedParticipantName = input.getText().toString();
-
-                if (!addedParticipantName.trim().isEmpty()) {
-
-                    participants.add(new Participant(addedParticipantName));
-                    adapter.sortAndUpdateList();
-
-                    Snackbar.make(fab, addedParticipantName + " added", Snackbar.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                toggleShowFab();
-            }
-        });
-
-        builder.show();
+        DialogFragment dialogFragment = new InputParticipantDialog();
+        dialogFragment.setTargetFragment(this, 1); //request code
+        dialogFragment.show(getFragmentManager(), "dialog");
     }
 
     private void toggleShowFab() {
@@ -341,6 +309,24 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
     public ActionMode getActionMode() {
         return actionMode;
+    }
+
+    @Override
+    public void accept(String participantName) {
+        toggleShowFab();
+
+        if (!participantName.trim().isEmpty()) {
+
+            participants.add(new Participant(participantName));
+            adapter.sortAndUpdateList();
+
+            Snackbar.make(fab, participantName + " added", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void cancel() {
+        toggleShowFab();
     }
 
     /**
