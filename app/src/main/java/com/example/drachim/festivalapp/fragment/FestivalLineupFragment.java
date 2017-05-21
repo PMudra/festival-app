@@ -145,7 +145,9 @@ public class FestivalLineupFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        festivalPlannerDbHelper.close();
+        if (festivalPlannerDbHelper != null) {
+            festivalPlannerDbHelper.close();
+        }
     }
 
 }

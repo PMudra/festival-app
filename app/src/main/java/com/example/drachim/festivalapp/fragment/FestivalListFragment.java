@@ -143,7 +143,9 @@ public class FestivalListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        festivalPlannerDbHelper.close();
+        if (festivalPlannerDbHelper != null) {
+            festivalPlannerDbHelper.close();
+        }
     }
 
     public interface OnListFragmentInteractionListener {

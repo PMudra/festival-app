@@ -6,6 +6,7 @@
     <!-- needed to load festival data from the internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- for multi-selection contact picker -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- not quiet sure if needed. maybe for synchronizing calender to check if event was already added to calender or if it was removed -->
@@ -49,6 +50,9 @@
         <activity
             android:name=".activity.FestivalActivity"
             android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
+        <activity
+            android:name=".activity.ContactsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

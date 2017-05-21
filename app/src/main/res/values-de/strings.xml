@@ -33,4 +33,8 @@
     <string name="action_remove">Entfernen</string>
     <string name="single_item_selected">Eintrag ausgewählt</string>
     <string name="multiple_items_selected">Einträge ausgewählt</string>
+    <string name="participants">Teilnehmer</string>
+    <string name="added">hinzugefügt</string>
+    <string name="action_add">Hinzufügen</string>
+    <string name="title_activity_contacts">Aus Kontakten auswählen</string>
 </resources>

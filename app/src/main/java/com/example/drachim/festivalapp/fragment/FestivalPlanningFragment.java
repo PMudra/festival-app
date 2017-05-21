@@ -1,17 +1,12 @@
 package com.example.drachim.festivalapp.fragment;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,14 +22,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.drachim.festivalapp.R;
+import com.example.drachim.festivalapp.activity.ContactsActivity;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.MyParticipantRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.Participant;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +41,10 @@ import static android.app.Activity.RESULT_OK;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener  {
+public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener {
 
     private static final int PICK_CONTACT_REQUEST = 1;
+    private static final int CONTACT_ACTIVITY_REQUEST = 3;
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST_CODE = 2;
 
     // TODO: Customize parameter argument names
@@ -59,16 +55,12 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     private List<Participant> participants;
     private MyParticipantRecyclerViewAdapter adapter;
     private ActionMode actionMode;
-    int counter = 0;
     ArrayList<Participant> selection_list = new ArrayList<>();
     private RecyclerView recyclerView;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public FestivalPlanningFragment() {
-    }
+    private FloatingActionButton fab;
+    private FloatingActionButton fab_add_single;
+    private FloatingActionButton fab_add_multiple;
+    private String addedParticipantName;
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
@@ -105,28 +97,111 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             }
 
             participants = new ArrayList<>();
-            participants.add(new Participant("Achim", true));
-            participants.add(new Participant("Manni", true));
-            participants.add(new Participant("Uwe", true));
-            participants.add(new Participant("Herbert", true));
-            participants.add(new Participant("Opa", false));
-            participants.add(new Participant("Annegret", false));
+            participants.add(new Participant("Achim"));
+            participants.add(new Participant("Manni"));
+            participants.add(new Participant("Uwe"));
+            participants.add(new Participant("Herbert"));
+            participants.add(new Participant("Opa"));
+            participants.add(new Participant("Annegret"));
 
             adapter = new MyParticipantRecyclerViewAdapter(participants, mListener, this);
             recyclerView.setAdapter(adapter);
 
-            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
+            fab_add_multiple = (FloatingActionButton) getActivity().findViewById(R.id.fab2);
+            fab_add_single = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
+
+                    fab_add_multiple.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(View v) {
                     if (Utilities.checkAndRequestReadContactsPermission(FestivalPlanningFragment.this, READ_CONTACTS_PERMISSIONS_REQUEST_CODE)) {
-                        openContactPicker();
+                        openContactsActivity();
                     }
 
                 }
             });
+
+            fab_add_single.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showInputDialog();
+
+                }
+            });
+
+            fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggleShowFab();
+                }
+            });
+
         }
         return view;
+    }
+
+    private void openContactsActivity() {
+        Intent intent = new Intent(getActivity(), ContactsActivity.class);
+        startActivityForResult(intent, CONTACT_ACTIVITY_REQUEST);
+        toggleShowFab();
+    }
+
+    private void showInputDialog() {
+        View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.input_dialog, (ViewGroup) getView(), false);
+        final EditText input = (EditText) viewInflated.findViewById(R.id.tv_input_contact_name);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(viewInflated);
+        builder.setTitle("New participant");
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                toggleShowFab();
+                addedParticipantName = input.getText().toString();
+
+                if (!addedParticipantName.trim().isEmpty()) {
+
+                    participants.add(new Participant(addedParticipantName));
+                    adapter.sortAndUpdateList();
+
+                    Snackbar.make(fab, addedParticipantName + " added", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                toggleShowFab();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void toggleShowFab() {
+        if (fab_add_multiple.isShown() || fab_add_single.isShown()) {
+
+            getFragmentManager().popBackStack();
+
+            Utilities.animRotateBackward(fab);
+
+            fab_add_multiple.hide();
+            fab_add_single.hide();
+        } else {
+            Utilities.animRotateForward(fab);
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .commit();
+
+            fab_add_multiple.show();
+            fab_add_single.show();
+        }
     }
 
     @Override
@@ -135,20 +210,18 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             case READ_CONTACTS_PERMISSIONS_REQUEST_CODE:
 
                 for (int grantResult : grantResults) {
-                    if (grantResult == PackageManager.PERMISSION_DENIED) {
+                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                        openContactsActivity();
+                        break;
+                    } else {
                         break;
                     }
                 }
-                openContactPicker();
+                Log.d("TEST", "erklärung sollte angezeigt werden");
                 break;
             default:
                 break;
         }
-    }
-
-    private void openContactPicker() {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-        startActivityForResult(intent, PICK_CONTACT_REQUEST);
     }
 
     @Override
@@ -156,64 +229,27 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
-            case PICK_CONTACT_REQUEST:
 
+            case CONTACT_ACTIVITY_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    Uri uri = data.getData();
-                    Participant participant = getSelectedContact(uri);
 
-                    participants.add(participant);
+                    ArrayList<Participant> addedParticipants = data.getParcelableArrayListExtra("participants");
+                    participants.addAll(addedParticipants);
                     adapter.sortAndUpdateList();
 
-                    Snackbar.make(getView(), participant.getName() + " added", Snackbar.LENGTH_SHORT).show();
-                }
+                    String message;
+                    if (addedParticipants.size() == 1) {
+                        message = addedParticipants.get(0).getName() + " " + getString(R.string.added);
+                    } else {
+                        message = addedParticipants.size() + " " + getString(R.string.participants) + " " + getString(R.string.added);
+                    }
+                    Snackbar.make(fab, message, Snackbar.LENGTH_SHORT).show();
 
+                }
                 break;
         }
 
     }
-
-    private Participant getSelectedContact(Uri contactUri) {
-        String[] projection = {Phone.DISPLAY_NAME, Phone.PHOTO_THUMBNAIL_URI};
-
-        CursorLoader loader = new CursorLoader(getActivity());
-        loader.setProjection(projection);
-        loader.setUri(contactUri);
-
-        //TODO: Callback einbauen
-        Cursor cursor = loader.loadInBackground();
-        cursor.moveToFirst();
-
-        String contactName = cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME));
-
-        Participant participant = new Participant(contactName, true);
-
-        if (Utilities.checkReadContactsPermission(getActivity())) {
-            String contactThumbnail = cursor.getString(cursor.getColumnIndex(Phone.PHOTO_THUMBNAIL_URI));
-
-            Bitmap bp = null;
-            if (contactThumbnail != null) {
-                try {
-                    Uri uri = Uri.parse(contactThumbnail);
-                    bp = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
-
-                } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-
-            if (bp != null) {
-                participant.setPhoto(bp);
-            }
-        }
-
-        return participant;
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -241,7 +277,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.action_mode_planning, menu);
+                    mode.getMenuInflater().inflate(R.menu.menu_cab_planning, menu);
                     return true;
                 }
 
@@ -253,7 +289,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                 @Override
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-                    Log.d("TEST", "home: " + item.getItemId());
                     switch (item.getItemId()) {
                         case R.id.action_remove:
                             backButtonClicked = false;

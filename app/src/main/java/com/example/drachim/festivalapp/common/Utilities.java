@@ -7,8 +7,10 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.support.v13.app.FragmentCompat;
+import android.support.v13.view.ViewCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -90,6 +92,18 @@ public class Utilities {
 
     public static boolean checkReadContactsPermission(Activity activity) {
         return checkPermissions(activity, new String[]{Manifest.permission.READ_CONTACTS});
+    }
+
+    public static void animRotateBackward(View view) {
+        ViewCompat.animate(view)
+                .rotation(0)
+                .setDuration(300);
+    }
+
+    public static void animRotateForward(View view) {
+        ViewCompat.animate(view)
+                .rotation(45)
+                .setDuration(300);
     }
 
 }

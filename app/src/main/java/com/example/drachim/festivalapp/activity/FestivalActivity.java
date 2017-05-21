@@ -12,19 +12,22 @@ import android.view.MenuItem;
 
 import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
+import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.Participant;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
 public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, FestivalPlanningFragment.OnListFragmentInteractionListener {
 
-    private TabLayout tabLayout;
     private ViewPager viewPager;
     private FloatingActionButton fab;
+    private FloatingActionButton fab1;
+    private FloatingActionButton fab2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_festival);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -37,13 +40,25 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
 
-        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
         tabLayout.addOnTabSelectedListener(this);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab1 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab2 = (FloatingActionButton) findViewById(R.id.fab1);
+
         showFab(viewPager.getCurrentItem());
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fab1.isShown() || fab2.isShown()) {
+            hideFabsMini();
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -88,13 +103,27 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         // TODO:
     }
 
+    private void hideFabs() {
+        fab.hide();
+        hideFabsMini();
+    }
+
+    private void hideFabsMini() {
+        Utilities.animRotateBackward(fab);
+        fab1.hide();
+        fab2.hide();
+    }
+
     public void showFab(int tabPosition) {
         switch (tabPosition) {
             case 2:
+                fab.setRotation(0);
                 fab.show();
                 break;
             default:
-                fab.hide();
+                if (fab.isShown()) {
+                    hideFabs();
+                }
                 break;
         }
 
