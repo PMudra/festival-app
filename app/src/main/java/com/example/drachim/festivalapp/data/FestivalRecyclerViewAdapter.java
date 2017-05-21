@@ -1,9 +1,11 @@
 package com.example.drachim.festivalapp.data;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
@@ -30,17 +32,18 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int position) {
-        viewHolder.festival = festivals.get(position);
-        viewHolder.getNameTextView().setText(festivals.get(position).getName());
-        viewHolder.getDateTextView().setText(DateFormat.getDateInstance().format(festivals.get(position).getStartDate()));
-        viewHolder.getPlaceTextView().setText(festivals.get(position).getPlace());
+        Festival festival = festivals.get(position);
+        viewHolder.festival = festival;
+        viewHolder.getNameTextView().setText(festival.getName());
+        String dateRange = DateUtils.formatDateRange(viewHolder.getDateTextView().getContext(), festival.getStartDate().getTime(), festival.getEndDate().getTime(), DateUtils.FORMAT_SHOW_DATE);
+        viewHolder.getDateTextView().setText(dateRange);
+        viewHolder.getPlaceTextView().setText(festival.getPlace());
+        viewHolder.getImageView().setImageResource(festival.getProfileImage());
 
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != listener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
                     listener.onListFragmentInteraction(viewHolder.getFestival());
                 }
             }
@@ -56,6 +59,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         private final TextView nameTextView;
         private final TextView dateTextView;
         private final TextView placeTextView;
+        private final ImageView imageView;
         private Festival festival;
 
         ViewHolder(View view) {
@@ -63,22 +67,27 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
             nameTextView = (TextView) view.findViewById(R.id.name);
             dateTextView = (TextView) view.findViewById(R.id.date);
             placeTextView = (TextView) view.findViewById(R.id.place);
+            imageView = (ImageView) view.findViewById(R.id.image);
         }
 
         public Festival getFestival() {
             return festival;
         }
 
-        public TextView getNameTextView() {
+        TextView getNameTextView() {
             return nameTextView;
         }
 
-        public TextView getDateTextView() {
+        TextView getDateTextView() {
             return dateTextView;
         }
 
-        public TextView getPlaceTextView() {
+        TextView getPlaceTextView() {
             return placeTextView;
+        }
+
+        public ImageView getImageView() {
+            return imageView;
         }
 
         public View getView() {

@@ -28,6 +28,8 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
         static final String COLUMN_STARTDATE = "StartDate";
         static final String COLUMN_ENDDATE = "EndDate";
         static final String COLUMN_LINEUP = "Lineup";
+        static final String COLUMN_PROFILEIMAGE = "ProfileImage";
+        static final String COLUMN_TITLEIMAGE = "TitleImage";
     }
 
     private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + FestivalEntry.TABLE_NAME + " (" +
@@ -40,11 +42,13 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
             FestivalEntry.COLUMN_STREET + " TEXT," +
             FestivalEntry.COLUMN_STARTDATE + " INTEGER," +
             FestivalEntry.COLUMN_ENDDATE + " INTEGER," +
-            FestivalEntry.COLUMN_LINEUP + " TEXT)";
+            FestivalEntry.COLUMN_LINEUP + " TEXT," +
+            FestivalEntry.COLUMN_PROFILEIMAGE + " INTEGER," +
+            FestivalEntry.COLUMN_TITLEIMAGE + " INTEGER)";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FestivalEntry.TABLE_NAME;
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "FestivalPlanner.db";
 
     public FestivalPlannerDbHelper(Context context) {
@@ -77,6 +81,8 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
         values.put(FestivalEntry.COLUMN_STARTDATE, festival.getStartDate().getTime());
         values.put(FestivalEntry.COLUMN_ENDDATE, festival.getEndDate().getTime());
         values.put(FestivalEntry.COLUMN_LINEUP, TextUtils.join(";", festival.getLineup()));
+        values.put(FestivalEntry.COLUMN_PROFILEIMAGE, festival.getProfileImage());
+        values.put(FestivalEntry.COLUMN_TITLEIMAGE, festival.getTitleImage());
 
         db.insert(FestivalEntry.TABLE_NAME, null, values);
     }
@@ -108,6 +114,8 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
         festival.setStartDate(new Date(cursor.getLong(cursor.getColumnIndex(FestivalEntry.COLUMN_STARTDATE))));
         festival.setEndDate(new Date(cursor.getLong(cursor.getColumnIndex(FestivalEntry.COLUMN_ENDDATE))));
         festival.setLineup(Arrays.asList(TextUtils.split(cursor.getString(cursor.getColumnIndex(FestivalEntry.COLUMN_LINEUP)), ";")));
+        festival.setProfileImage(cursor.getInt(cursor.getColumnIndex(FestivalEntry.COLUMN_PROFILEIMAGE)));
+        festival.setTitleImage(cursor.getInt(cursor.getColumnIndex(FestivalEntry.COLUMN_TITLEIMAGE)));
         return festival;
     }
 

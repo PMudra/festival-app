@@ -16,7 +16,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="planning_list_item_spacing">5dp</dimen>
     <dimen name="expanded_toolbar_image_height">220dp</dimen>
-    <dimen name="festival_card_image_width">140dp</dimen>
+    <dimen name="festival_card_image_width">100dp</dimen>
     <dimen name="festival_card_image_height">100dp</dimen>
     <dimen name="input_dialog_horizontal_margin">20dp</dimen>
     <dimen name="input_dialog_vertical_margin">16dp</dimen>

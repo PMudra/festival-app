@@ -15,6 +15,8 @@ public class Festival {
     private Date startDate;
     private Date endDate;
     private List<String> lineup;
+    private int profileImage;
+    private int titleImage;
 
     public int getId() {
         return id;
@@ -94,5 +96,21 @@ public class Festival {
 
     public void setLineup(List<String> lineup) {
         this.lineup = lineup;
+    }
+
+    public int getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(int profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public int getTitleImage() {
+        return titleImage;
+    }
+
+    public void setTitleImage(int titleImage) {
+        this.titleImage = titleImage;
     }
 }
