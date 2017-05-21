@@ -9,17 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.fragment.FestivalListFragment.OnListFragmentInteractionListener;
+import com.example.drachim.festivalapp.fragment.AbstractFestivalListFragment;
 
-import java.text.DateFormat;
 import java.util.List;
 
 public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRecyclerViewAdapter.ViewHolder> {
 
     private final List<Festival> festivals;
-    private final OnListFragmentInteractionListener listener;
+    private final AbstractFestivalListFragment.OnListFragmentInteractionListener listener;
 
-    public FestivalRecyclerViewAdapter(List<Festival> items, OnListFragmentInteractionListener listener) {
+    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnListFragmentInteractionListener listener) {
         festivals = items;
         this.listener = listener;
     }

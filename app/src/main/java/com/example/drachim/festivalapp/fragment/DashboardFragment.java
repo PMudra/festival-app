@@ -1,21 +1,20 @@
 package com.example.drachim.festivalapp.fragment;
 
-import android.app.Fragment;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.drachim.festivalapp.R;
+import com.example.drachim.festivalapp.data.Festival;
 
-public class DashboardFragment extends Fragment {
+import java.util.List;
+
+public class DashboardFragment extends AbstractFestivalListFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    public DashboardFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,26 +22,18 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.dashboard_swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // TODO: Refresh implementieren
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
+    public void onLoadFinished(Loader<List<Festival>> loader, List<Festival> data) {
         swipeRefreshLayout.setRefreshing(false);
-        swipeRefreshLayout.destroyDrawingCache();
-        swipeRefreshLayout.clearAnimation();
     }
 }
