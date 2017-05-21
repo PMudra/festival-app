@@ -11,7 +11,8 @@ public final class FestivalExampleData {
     public Festival[] getFestivals() {
         return new Festival[]{
                 createTanteMiaTanzt(),
-                createDefqon()
+                createDefqon(),
+                createMysteryland()
         };
     }
 
@@ -47,7 +48,23 @@ public final class FestivalExampleData {
         festival.setProfileImage(R.drawable.festival_defqon_profile);
         festival.setTitleImage(R.drawable.festival_defqon_title);
         return festival;
+    }
 
+    private static Festival createMysteryland() {
+        Festival festival = new Festival();
+        festival.setName("Mysteryland");
+        festival.setDescription("Guided by the rhythm of the drum, we escape into a mysterious world of endless possibilities...");
+        festival.setCountry("nl");
+        festival.setPlace("Haarlemmermeer");
+        festival.setPostalCode("2131");
+        festival.setStreet("Paviljoenlaan 1");
+        festival.setStartDate(createDate(2017, 8, 26));
+        festival.setEndDate(createDate(2017, 8, 27));
+        // unvollständig
+        festival.setLineup(Arrays.asList("Deadmau5", "Alesso", "Alok", "Broederliefde", "Charming Horses", "Craig David presents TS5", "Hannah Wants ", "KSHMR", "Showtek", "Tinlicker", "Yellow Claw", "Armin van Buuren", "Axwell Λ Ingrosso", "Benny Rodrigues", "Digital Farm Animals", "Made in June", "Oliver Heldens", "Sam Feldt (live)", "Sunnery James & Ryan Marciano"));
+        festival.setProfileImage(R.drawable.festival_mysteryland_profile);
+        festival.setTitleImage(R.drawable.festival_mysteryland_title);
+        return festival;
     }
 
     private static Date createDate(int year, int month, int date) {

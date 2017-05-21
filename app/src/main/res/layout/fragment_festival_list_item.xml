@@ -16,7 +16,7 @@
             android:layout_height="@dimen/festival_card_image_height"
             android:background="@drawable/side_nav_bar"
             android:scaleType="centerInside"
-            tools:src="@drawable/festival_defqon" />
+            tools:src="@drawable/festival_mysteryland_profile" />
 
         <LinearLayout
             android:layout_width="match_parent"
