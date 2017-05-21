@@ -9,10 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
+import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.Participant;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
@@ -29,6 +31,10 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_festival);
+
+        Festival festival = (Festival) getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
+
+        ((ImageView) findViewById(R.id.festivalCover)).setImageResource(festival.getTitleImage());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
