@@ -34,7 +34,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         Festival festival = festivals.get(position);
         viewHolder.festival = festival;
         viewHolder.getNameTextView().setText(festival.getName());
-        String dateRange = DateUtils.formatDateRange(viewHolder.getDateTextView().getContext(), festival.getStartDate().getTime(), festival.getEndDate().getTime(), DateUtils.FORMAT_SHOW_DATE);
+        String dateRange = FestivalHelper.getDateRange(festival, viewHolder.getDateTextView().getContext());
         viewHolder.getDateTextView().setText(dateRange);
         viewHolder.getPlaceTextView().setText(festival.getPlace());
         viewHolder.getImageView().setImageResource(festival.getProfileImage());

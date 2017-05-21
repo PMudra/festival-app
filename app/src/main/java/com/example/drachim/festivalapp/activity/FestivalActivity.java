@@ -18,6 +18,8 @@ import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
 public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, FestivalPlanningFragment.OnListFragmentInteractionListener {
 
+    public static final String EXTRA_FESTIVAL = "FESTIVAL";
+
     private ViewPager viewPager;
     private FloatingActionButton fab;
     private FloatingActionButton fab1;

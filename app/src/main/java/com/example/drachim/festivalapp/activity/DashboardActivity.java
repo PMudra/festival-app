@@ -7,8 +7,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -39,13 +39,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private int currentFragmentId;
     private Toolbar toolbar;
     private NavigationView navigationView;
-
-    public void openFestivalDetail(View view) {
-        //todo
-        final View festivalCover = findViewById(R.id.festivalCover);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
-        startActivity(new Intent(this, FestivalActivity.class), options.toBundle());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +112,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     float finalRadius = (float) Math.hypot(cx, cy);
 
                     // create the animator for this view (the start radius is zero)
-                    Animator anim = null;
+                    Animator anim;
                     anim = ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
 
                     // make the view visible and start the animation
@@ -133,7 +126,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switchContentFragment(item.getItemId());
         drawer.closeDrawer(GravityCompat.START);
@@ -173,7 +166,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
 
         Intent intent = new Intent(this, FestivalActivity.class);
-        intent.putExtra("festival_id", festival.getId());
+        intent.putExtra(FestivalActivity.EXTRA_FESTIVAL, festival);
         startActivity(intent);
     }
 

@@ -1,9 +1,10 @@
 package com.example.drachim.festivalapp.data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Festival {
+public class Festival implements Serializable {
 
     private int id;
     private String name;
