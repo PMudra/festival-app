@@ -52,7 +52,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter, null);
 
         Spinner spinner = (Spinner) view.findViewById(R.id.genre_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.music_genres, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.music_genres, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
