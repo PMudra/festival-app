@@ -22,6 +22,7 @@ import android.view.ViewAnimationUtils;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.data.Festival;
+import com.example.drachim.festivalapp.fragment.AbstractFestivalListFragment;
 import com.example.drachim.festivalapp.fragment.DashboardFragment;
 import com.example.drachim.festivalapp.fragment.DateDialogFragment;
 import com.example.drachim.festivalapp.fragment.FestivalListFragment;
@@ -30,7 +31,7 @@ import com.example.drachim.festivalapp.fragment.SettingsFragment;
 
 import java.util.Date;
 
-public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FestivalListFragment.OnListFragmentInteractionListener, DateDialogFragment.OnDateListener {
+public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AbstractFestivalListFragment.OnFestivalListInteractionListener, DateDialogFragment.OnDateListener {
 
     public static final String CURRENT_FRAGMENT_KEY = "fragment_key";
     private DrawerLayout drawer;
@@ -166,7 +167,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void onListFragmentInteraction(Festival festival) {
+    public void onFestivalClicked(Festival festival) {
         // todo animation
         //final View festivalCover = findViewById(R.id.festivalCover);
         //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
@@ -174,6 +175,19 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         Intent intent = new Intent(this, FestivalActivity.class);
         intent.putExtra("festival_id", festival.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onMoreClicked(MoreOption moreOption) {
+        switch (moreOption) {
+
+            case Discover:
+                navigationView.setCheckedItem(R.id.nav_discover);
+                switchContentFragment(R.id.nav_discover);
+                break;
+            case Soon:
+                break;
+        }
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class AbstractFestivalListFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Festival>>, SwipeRefreshLayout.OnRefreshListener {
 
     private FestivalPlannerDbHelper festivalPlannerDbHelper;
-    private OnListFragmentInteractionListener onListFragmentInteractionListener;
+    private OnFestivalListInteractionListener onFestivalListInteractionListener;
 
     protected abstract SwipeRefreshLayout getSwipeRefreshLayout();
 
@@ -56,10 +56,10 @@ public abstract class AbstractFestivalListFragment extends Fragment implements L
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            onListFragmentInteractionListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnFestivalListInteractionListener) {
+            onFestivalListInteractionListener = (OnFestivalListInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFestivalListInteractionListener");
         }
     }
 
@@ -70,17 +70,17 @@ public abstract class AbstractFestivalListFragment extends Fragment implements L
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof OnListFragmentInteractionListener) {
-            onListFragmentInteractionListener = (OnListFragmentInteractionListener) activity;
+        if (activity instanceof OnFestivalListInteractionListener) {
+            onFestivalListInteractionListener = (OnFestivalListInteractionListener) activity;
         } else {
-            throw new RuntimeException(activity.toString() + " must implement OnListFragmentInteractionListener");
+            throw new RuntimeException(activity.toString() + " must implement OnFestivalListInteractionListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        onListFragmentInteractionListener = null;
+        onFestivalListInteractionListener = null;
     }
 
     @Override
@@ -101,11 +101,18 @@ public abstract class AbstractFestivalListFragment extends Fragment implements L
 
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Festival festival);
+    protected OnFestivalListInteractionListener getOnFestivalListInteractionListener() {
+        return onFestivalListInteractionListener;
     }
 
-    protected OnListFragmentInteractionListener getOnListFragmentInteractionListener() {
-        return onListFragmentInteractionListener;
+    public interface OnFestivalListInteractionListener {
+        void onFestivalClicked(Festival festival);
+
+        void onMoreClicked(MoreOption moreOption);
+
+        enum MoreOption {
+            Discover,
+            Soon
+        }
     }
 }

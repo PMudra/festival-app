@@ -16,9 +16,9 @@ import java.util.List;
 public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRecyclerViewAdapter.ViewHolder> {
 
     private final List<Festival> festivals;
-    private final AbstractFestivalListFragment.OnListFragmentInteractionListener listener;
+    private final AbstractFestivalListFragment.OnFestivalListInteractionListener listener;
 
-    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnListFragmentInteractionListener listener) {
+    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener) {
         festivals = items;
         this.listener = listener;
     }
@@ -43,7 +43,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
             @Override
             public void onClick(View v) {
                 if (null != listener) {
-                    listener.onListFragmentInteraction(viewHolder.getFestival());
+                    listener.onFestivalClicked(viewHolder.getFestival());
                 }
             }
         });
