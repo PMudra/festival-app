@@ -24,4 +24,5 @@
     <dimen name="dialog_filter_row_vertical_margin">16dp</dimen>
     <dimen name="dialog_filter_label_vertical_margin">16dp</dimen>
     <dimen name="dialog_filter_label_vertical_margin_land">6dp</dimen>
+    <dimen name="expanded_toolbar_image_gradient_height">80dp</dimen>
 </resources>
