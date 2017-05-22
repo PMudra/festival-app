@@ -20,4 +20,9 @@
     <dimen name="festival_card_image_height">100dp</dimen>
     <dimen name="input_dialog_horizontal_margin">20dp</dimen>
     <dimen name="input_dialog_vertical_margin">16dp</dimen>
+    <dimen name="dialog_filter_horizontal_padding">24dp</dimen>
+    <dimen name="dialog_filter_vertical_padding">6dp</dimen>
+    <dimen name="dialog_filter_row_vertical_margin">16dp</dimen>
+    <dimen name="dialog_filter_label_vertical_margin">16dp</dimen>
+    <dimen name="dialog_filter_label_vertical_margin_land">6dp</dimen>
 </resources>

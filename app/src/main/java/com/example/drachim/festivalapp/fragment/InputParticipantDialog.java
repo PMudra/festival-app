@@ -23,7 +23,7 @@ public class InputParticipantDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.input_dialog, (ViewGroup) getView(), false);
+        View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_input, (ViewGroup) getView(), false);
         final EditText input = (EditText) viewInflated.findViewById(R.id.tv_input_contact_name);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
