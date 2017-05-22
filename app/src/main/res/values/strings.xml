@@ -17,7 +17,6 @@
     <string name="action_add_favorite">Add as favorite</string>
 
     <string name="filter">Filter</string>
-    <string name="festival_card_header_time_and_place">Time and place</string>
     <string name="festival_card_header_description">Description</string>
     <string name="festival_card_header_ticket">Tickets</string>
     <string name="festival_tab_infos">Infos</string>

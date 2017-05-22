@@ -41,6 +41,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
         FestivalActivityPager adapter = new FestivalActivityPager(getFragmentManager(), this);
