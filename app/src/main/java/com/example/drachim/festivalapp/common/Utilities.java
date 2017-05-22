@@ -16,10 +16,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Dr. Achim on 09.05.2017.
- */
-
 public class Utilities {
 
     public static void strikeThru(TextView view, boolean strikeThru) {

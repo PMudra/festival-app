@@ -39,7 +39,7 @@ import static android.app.Activity.RESULT_OK;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener, InputParticipantDialog.Callback {
+public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener, InputParticipantDialogFragment.Callback {
 
     private static final int PICK_CONTACT_REQUEST = 1;
     private static final int CONTACT_ACTIVITY_REQUEST = 3;
@@ -145,7 +145,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     }
 
     private void showInputDialog() {
-        DialogFragment dialogFragment = new InputParticipantDialog();
+        DialogFragment dialogFragment = new InputParticipantDialogFragment();
         dialogFragment.setTargetFragment(this, 1); //request code
         dialogFragment.show(getFragmentManager(), "dialog");
     }

@@ -13,11 +13,7 @@ import android.widget.EditText;
 
 import com.example.drachim.festivalapp.R;
 
-/**
- * Created by Dr. Achim on 21.05.2017.
- */
-
-public class InputParticipantDialog extends DialogFragment {
+public class InputParticipantDialogFragment extends DialogFragment {
 
     private String participantName;
 

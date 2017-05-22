@@ -4,10 +4,6 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Dr. Achim on 09.05.2017.
- */
-
 public class Participant implements Parcelable{
     private String name;
     private Bitmap photo = null;

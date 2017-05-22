@@ -9,10 +9,6 @@ import com.example.drachim.festivalapp.fragment.FestivalInfoFragment;
 import com.example.drachim.festivalapp.fragment.FestivalLineupFragment;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
-/**
- * Created by Dr. Achim on 01.05.2017.
- */
-
 public class FestivalActivityPager extends FragmentPagerAdapter {
 
     private final Context context;
