@@ -10,10 +10,28 @@ import java.util.Date;
 public final class FestivalExampleData {
     public Festival[] getFestivals() {
         return new Festival[]{
+                createQontinent(),
                 createTanteMiaTanzt(),
                 createDefqon(),
                 createMysteryland()
         };
+    }
+
+    private static Festival createQontinent() {
+        Festival festival = new Festival();
+        festival.setName("The Qontinent");
+        festival.setDescription("On 11-12-13 August 2017 Bass Events and Q-dance present The Qontinent - Decade of Dedication. An extra spectacular 10th anniversary weekend.");
+        festival.setCountry("bg");
+        festival.setPlace("Provinciaal domein Puyenbroeck");
+        festival.setPostalCode("9185");
+        festival.setStreet("Puyenbrug 1a");
+        festival.setStartDate(createDate(2017, 8, 211));
+        festival.setEndDate(createDate(2017, 8, 13));
+        // unvollständig
+        festival.setLineup(Arrays.asList("Adrenalize", "Audiofreq", "B-Front", "Brennan Heart", "Hard Driver", "Mandy", "Paul Elstak", "Crisis Era", "Refuzion", "Atmosfears", "Audiotricz", "Code Black", "Cyber", "Da Tweekaz", "Gunz For Hire [Live]", "Radical Redemption", "Rebourne", "Sephix", "Sub Zero Project", "Wasted Penguinz", "Angerfist [Live]", "Decypher", "Adaro", "Crypsis", "Deetox", "Delete", "Phuture Noize"));
+        festival.setProfileImage(R.drawable.festival_qontinent_profile);
+        festival.setTitleImage(R.drawable.festival_qontinent_title);
+        return festival;
     }
 
     private static Festival createTanteMiaTanzt() {
