@@ -95,12 +95,12 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             }
 
             participants = new ArrayList<>();
-            participants.add(new Participant("Achim"));
-            participants.add(new Participant("Manni"));
-            participants.add(new Participant("Uwe"));
-            participants.add(new Participant("Herbert"));
-            participants.add(new Participant("Opa"));
-            participants.add(new Participant("Annegret"));
+            Participant achim = new Participant();
+            achim.setName("Achim");
+            participants.add(achim);
+            Participant manni = new Participant();
+            manni.setName("Manni");
+            participants.add(manni);
 
             adapter = new MyParticipantRecyclerViewAdapter(participants, mListener, this);
             recyclerView.setAdapter(adapter);
@@ -317,7 +317,9 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
         if (!participantName.trim().isEmpty()) {
 
-            participants.add(new Participant(participantName));
+            Participant participant = new Participant();
+            participant.setName(participantName);
+            participants.add(participant);
             adapter.sortAndUpdateList();
 
             Snackbar.make(fab, participantName + " added", Snackbar.LENGTH_SHORT).show();

@@ -9,9 +9,9 @@ import java.util.List;
 
 public class AsyncFestivalLoader extends AsyncTaskLoader<List<Festival>> {
 
-    private FestivalPlannerDbHelper festivalPlannerDbHelper;
+    private final FestivalPlannerDbHelper festivalPlannerDbHelper;
 
-    public AsyncFestivalLoader(Context context, final FestivalPlannerDbHelper festivalPlannerDbHelper) {
+    public AsyncFestivalLoader(final Context context, final FestivalPlannerDbHelper festivalPlannerDbHelper) {
         super(context);
         this.festivalPlannerDbHelper = festivalPlannerDbHelper;
         onContentChanged();

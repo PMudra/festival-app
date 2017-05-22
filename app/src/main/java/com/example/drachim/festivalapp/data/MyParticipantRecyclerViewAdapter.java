@@ -28,7 +28,7 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
 
     private final List<Participant> participants;
     private final OnListFragmentInteractionListener mListener;
-    private FestivalPlanningFragment festivalPlanningFragment;
+    private final FestivalPlanningFragment festivalPlanningFragment;
 
     public MyParticipantRecyclerViewAdapter(List<Participant> participants, OnListFragmentInteractionListener listener, FestivalPlanningFragment festivalPlanningFragment) {
         this.participants = participants;
@@ -79,7 +79,7 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
         holder.checkBox.setChecked(holder.participant.isInterested());
         Utilities.strikeThru(holder.textView, !holder.participant.isInterested());
 
-        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
+        RoundedBitmapDrawable drawable = null;//RoundedBitmapDrawableFactory.create(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
         drawable.setCircular(true);
         holder.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
 

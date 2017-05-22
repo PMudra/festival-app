@@ -199,7 +199,9 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
             photo = drawable.getBitmap();
         }
 
-        return new Participant(name, photo);
+        Participant participant = new Participant();
+        participant.setName(name);
+        return participant;
     }
 
     @Override

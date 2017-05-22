@@ -9,6 +9,7 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 import com.example.drachim.festivalapp.data.Festival;
+import com.example.drachim.festivalapp.data.Participant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,12 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
         static final String COLUMN_TITLEIMAGE = "TitleImage";
     }
 
-    private static final String SQL_CREATE_ENTRIES = "CREATE TABLE " + FestivalEntry.TABLE_NAME + " (" +
+    private static class ParticipantEntry implements BaseColumns {
+        static final String TABLE_NAME = "Festival";
+        static final String COLUMN_NAME = "Name";
+    }
+
+    private static final String SQL_CREATE_FESTIVAL_TABLE = "CREATE TABLE " + FestivalEntry.TABLE_NAME + " (" +
             FestivalEntry._ID + " INTEGER PRIMARY KEY," +
             FestivalEntry.COLUMN_NAME + " TEXT," +
             FestivalEntry.COLUMN_DESCRIPTION + " TEXT," +
@@ -46,7 +52,11 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
             FestivalEntry.COLUMN_PROFILEIMAGE + " INTEGER," +
             FestivalEntry.COLUMN_TITLEIMAGE + " INTEGER)";
 
-    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FestivalEntry.TABLE_NAME;
+    private static final String SQL_CREATE_PARTICIPANT_TABLE = "CREATE TABLE " + ParticipantEntry.TABLE_NAME + " (" +
+            ParticipantEntry._ID + " INTEGER PRIMARY KEY," +
+            ParticipantEntry.COLUMN_NAME + " TEXT)";
+
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FestivalEntry.TABLE_NAME + ", " + ParticipantEntry.TABLE_NAME;
 
     private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "FestivalPlanner.db";
@@ -57,7 +67,8 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_FESTIVAL_TABLE);
+        db.execSQL(SQL_CREATE_PARTICIPANT_TABLE);
         for (Festival festival : new FestivalExampleData().getFestivals()) {
             CreateFestival(festival, db);
         }
@@ -87,7 +98,15 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
         db.insert(FestivalEntry.TABLE_NAME, null, values);
     }
 
-    public List<Festival> ReadFestivals() {
+    public void CreateParticipant(final Participant participant, final SQLiteDatabase db) {
+
+        ContentValues values = new ContentValues();
+        values.put(ParticipantEntry.COLUMN_NAME, participant.getName());
+
+        db.insert(ParticipantEntry.TABLE_NAME, null, values);
+    }
+
+    List<Festival> ReadFestivals() {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(FestivalEntry.TABLE_NAME, null, null, null, null, null, null);
@@ -116,16 +135,6 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
         festival.setLineup(Arrays.asList(TextUtils.split(cursor.getString(cursor.getColumnIndex(FestivalEntry.COLUMN_LINEUP)), ";")));
         festival.setProfileImage(cursor.getInt(cursor.getColumnIndex(FestivalEntry.COLUMN_PROFILEIMAGE)));
         festival.setTitleImage(cursor.getInt(cursor.getColumnIndex(FestivalEntry.COLUMN_TITLEIMAGE)));
-        return festival;
-    }
-
-    public Festival ReadFestival(int festivalId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(FestivalEntry.TABLE_NAME, null, FestivalEntry._ID + " = ?", new String[]{String.valueOf(festivalId)}, null, null, null);
-        cursor.moveToFirst();
-        Festival festival = getFestival(cursor);
-        cursor.close();
         return festival;
     }
 }

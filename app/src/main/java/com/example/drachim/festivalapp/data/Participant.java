@@ -1,31 +1,42 @@
 package com.example.drachim.festivalapp.data;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Participant implements Parcelable{
+
+    private int id;
+    private int festivalId;
     private String name;
-    private Bitmap photo = null;
-    private boolean isInterested = true;
+    private boolean isInterested;
+    private Uri pictureUri;
 
-    public Participant(String name) {
-        this.name = name;
-    }
-
-    public Participant(String name, Bitmap photo) {
-        this.name = name;
-        this.photo = photo;
+    public Participant() {
     }
 
     private Participant(Parcel data) {
-        this.name = data.readString();
+        id = data.readInt();
+        festivalId = data.readInt();
+        name = data.readString();
+        isInterested = data.readInt() != 0;
+        pictureUri = data.readParcelable(Uri.class.getClassLoader());
+    }
 
-        boolean[] myBooleanArr = new boolean[1];
-        data.readBooleanArray(myBooleanArr);
-        this.isInterested = myBooleanArr[0];
+    public int getId() {
+        return id;
+    }
 
-        this.photo = data.readParcelable(Bitmap.class.getClassLoader());
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getFestivalId() {
+        return festivalId;
+    }
+
+    public void setFestivalId(int festivalId) {
+        this.festivalId = festivalId;
     }
 
     public String getName() {
@@ -44,12 +55,12 @@ public class Participant implements Parcelable{
         isInterested = interested;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
+    public Uri getPictureUri() {
+        return pictureUri;
     }
 
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
+    public void setPictureUri(Uri pictureUri) {
+        this.pictureUri = pictureUri;
     }
 
     @Override
@@ -59,9 +70,11 @@ public class Participant implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(festivalId);
         dest.writeString(name);
-        dest.writeBooleanArray(new boolean[]{isInterested});
-        dest.writeParcelable(photo, flags);
+        dest.writeInt(isInterested ? 1 : 0);
+        dest.writeParcelable(pictureUri, flags);
     }
 
     static final Parcelable.Creator<Participant> CREATOR = new Parcelable.Creator<Participant>() {
