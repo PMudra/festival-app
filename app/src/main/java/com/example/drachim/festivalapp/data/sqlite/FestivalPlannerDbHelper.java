@@ -48,7 +48,7 @@ public class FestivalPlannerDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FestivalEntry.TABLE_NAME;
 
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_NAME = "FestivalPlanner.db";
 
     public FestivalPlannerDbHelper(Context context) {

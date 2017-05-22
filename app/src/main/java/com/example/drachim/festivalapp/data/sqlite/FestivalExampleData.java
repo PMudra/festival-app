@@ -25,7 +25,7 @@ public final class FestivalExampleData {
         festival.setPlace("Provinciaal domein Puyenbroeck");
         festival.setPostalCode("9185");
         festival.setStreet("Puyenbrug 1a");
-        festival.setStartDate(createDate(2017, 8, 211));
+        festival.setStartDate(createDate(2017, 8, 11));
         festival.setEndDate(createDate(2017, 8, 13));
         // unvollständig
         festival.setLineup(Arrays.asList("Adrenalize", "Audiofreq", "B-Front", "Brennan Heart", "Hard Driver", "Mandy", "Paul Elstak", "Crisis Era", "Refuzion", "Atmosfears", "Audiotricz", "Code Black", "Cyber", "Da Tweekaz", "Gunz For Hire [Live]", "Radical Redemption", "Rebourne", "Sephix", "Sub Zero Project", "Wasted Penguinz", "Angerfist [Live]", "Decypher", "Adaro", "Crypsis", "Deetox", "Delete", "Phuture Noize"));
