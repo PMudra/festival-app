@@ -250,10 +250,12 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
         if (count == 0) {
             actionMode.finish();
+        } else if (count == 1) {
+            actionMode.setTitle("1 " + getString(R.string.single_item_selected));
         } else {
-            actionMode.setTitle(String.valueOf(count));
-            actionMode.invalidate();
+            actionMode.setTitle(count + " " + getString(R.string.multiple_items_selected));
         }
+
     }
 
     @Override
