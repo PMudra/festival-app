@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.activity.ContactsActivity;
+import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.MyParticipantRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.Participant;
@@ -36,10 +37,8 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
  */
-public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, View.OnLongClickListener, InputParticipantDialogFragment.Callback {
+public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, InputParticipantDialogFragment.Callback, View.OnLongClickListener, View.OnClickListener {
 
     private static final int PICK_CONTACT_REQUEST = 1;
     private static final int CONTACT_ACTIVITY_REQUEST = 3;
@@ -49,19 +48,19 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
     private List<Participant> participants;
     private MyParticipantRecyclerViewAdapter adapter;
-    private ActionMode actionMode;
-    ArrayList<Participant> selection_list = new ArrayList<>();
     private RecyclerView recyclerView;
+
     private FloatingActionButton fab;
     private FloatingActionButton fab_add_single;
     private FloatingActionButton fab_add_multiple;
-    private String addedParticipantName;
+
+    private ActionMode actionMode;
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
+
     public static FestivalPlanningFragment newInstance(int columnCount) {
         FestivalPlanningFragment fragment = new FestivalPlanningFragment();
         Bundle args = new Bundle();
@@ -102,13 +101,13 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             participants.add(new Participant("Opa"));
             participants.add(new Participant("Annegret"));
 
-            adapter = new MyParticipantRecyclerViewAdapter(participants, mListener, this);
+            adapter = new MyParticipantRecyclerViewAdapter(participants, this);
             recyclerView.setAdapter(adapter);
 
             fab_add_multiple = (FloatingActionButton) getActivity().findViewById(R.id.fab2);
             fab_add_single = (FloatingActionButton) getActivity().findViewById(R.id.fab1);
 
-                    fab_add_multiple.setOnClickListener(new View.OnClickListener() {
+            fab_add_multiple.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (Utilities.checkAndRequestReadContactsPermission(FestivalPlanningFragment.this, READ_CONTACTS_PERMISSIONS_REQUEST_CODE)) {
@@ -220,98 +219,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        // Allows you to be notified when the action mode is dismissed
-        if (actionMode == null) {
-            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new ActionMode.Callback() {
-                boolean backButtonClicked = true;
-
-                @Override
-                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate(R.menu.menu_cab_planning, menu);
-                    return true;
-                }
-
-                @Override
-                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                    return false;
-                }
-
-                @Override
-                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-                    switch (item.getItemId()) {
-                        case R.id.action_remove:
-                            backButtonClicked = false;
-                            mode.finish();
-                            return true;
-                    }
-
-                    return false;
-                }
-
-                @Override
-                public void onDestroyActionMode(ActionMode mode) {
-                    if (backButtonClicked) {
-                        selection_list.clear();
-                    }
-                    adapter.updateAdapter(selection_list);
-                    selection_list.clear();
-                    actionMode = null;
-                }
-            });
-        }
-        toggleSelection(v, recyclerView.getChildAdapterPosition(v));
-        return true;
-    }
-
-    public void toggleSelection(View view, int position) {
-        view.setSelected(!view.isSelected());
-
-        if(view.isSelected()) {
-            selection_list.add(participants.get(position));
-        }
-        else {
-            view.setBackground(null);
-            selection_list.remove(participants.get(position));
-        }
-
-        updateCounter(selection_list.size());
-
-    }
-
-    private void updateCounter(int counter) {
-        if(counter == 1) {
-            getActionMode().setTitle(counter + " " + getString(R.string.single_item_selected));
-        }
-        else {
-            getActionMode().setTitle(counter + " " + getString(R.string.multiple_items_selected));
-        }
-
-    }
-
-    public ActionMode getActionMode() {
-        return actionMode;
-    }
-
-    @Override
     public void accept(String participantName) {
         toggleShowFab();
 
@@ -330,18 +237,74 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Toggle the selection state of an item.
+     *
+     * If the item was the last one in the selection and is unselected, the selection is stopped.
+     * Note that the selection must already be started (actionMode must not be null).
+     *
+     * @param position Position of the item to toggle the selection state
      */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Participant item);
+    private void toggleSelection(int position) {
+        adapter.toggleSelection(position);
+        int count = adapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (actionMode != null) {
+            toggleSelection(recyclerView.getChildLayoutPosition(v));
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        if (actionMode == null) {
+            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate (R.menu.menu_cab_planning, menu);
+                    ((FestivalActivity) getActivity()).hideFabs();
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return true;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_remove:
+                            adapter.removeItems(adapter.getSelectedItems());
+                            mode.finish();
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    adapter.clearSelection();
+                    actionMode = null;
+                    fab.show();
+                }
+            });
+        }
+
+        toggleSelection(recyclerView.getChildLayoutPosition(v));
+
+        return true;
     }
 
 }

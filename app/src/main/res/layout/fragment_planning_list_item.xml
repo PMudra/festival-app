@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingTop="@dimen/planning_list_item_spacing"
-    android:paddingBottom="@dimen/planning_list_item_spacing">
+    android:paddingBottom="@dimen/planning_list_item_spacing"
+    android:clickable="true"
+    android:background="?android:attr/activatedBackgroundIndicator">
 
     <CheckBox
         android:id="@+id/cb_participant"

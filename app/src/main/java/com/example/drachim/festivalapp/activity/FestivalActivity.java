@@ -1,10 +1,17 @@
 package com.example.drachim.festivalapp.activity;
 
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,12 +22,15 @@ import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.Festival;
-import com.example.drachim.festivalapp.data.Participant;
-import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
-public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, FestivalPlanningFragment.OnListFragmentInteractionListener {
+public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     public static final String EXTRA_FESTIVAL = "FESTIVAL";
+
+    private boolean isFestivalAccentColor;
+    private int festivalAccentColor;
+    private int festivalTextColor;
+    private int festivalTextColorSelected;
 
     private ViewPager viewPager;
     private FloatingActionButton fab;
@@ -33,8 +43,10 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         setContentView(R.layout.activity_festival);
 
         Festival festival = (Festival) getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), festival.getTitleImage());
 
-        ((ImageView) findViewById(R.id.festivalCover)).setImageResource(festival.getTitleImage());
+        ImageView titleImage = (ImageView) findViewById(R.id.festivalCover);
+        titleImage.setImageBitmap(bitmap);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,11 +65,48 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
 
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab2);
         fab2 = (FloatingActionButton) findViewById(R.id.fab1);
 
         showFab(viewPager.getCurrentItem());
+
+        Palette palette = Palette.from(bitmap).generate();
+        Palette.Swatch psVibrant = palette.getVibrantSwatch();
+
+        isFestivalAccentColor = psVibrant != null;
+
+        if (isFestivalAccentColor) {
+            festivalAccentColor = psVibrant.getRgb();
+            festivalTextColor = psVibrant.getTitleTextColor();
+            festivalTextColorSelected = psVibrant.getBodyTextColor();
+
+            tabLayout.setBackgroundColor(festivalAccentColor);
+            tabLayout.setTabTextColors(festivalTextColor, festivalTextColorSelected);
+            tabLayout.setSelectedTabIndicatorColor(festivalTextColorSelected);
+
+            CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+            collapsingToolbarLayout.setContentScrimColor(festivalAccentColor);
+            collapsingToolbarLayout.setBackgroundColor(festivalAccentColor);
+            collapsingToolbarLayout.setStatusBarScrimColor(festivalAccentColor);
+
+            fab.setBackgroundTintList(ColorStateList.valueOf(festivalAccentColor));
+            fab1.setBackgroundTintList(ColorStateList.valueOf(festivalAccentColor));
+            fab2.setBackgroundTintList(ColorStateList.valueOf(festivalAccentColor));
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fab.setImageTintList(ColorStateList.valueOf(festivalTextColorSelected));
+                fab1.setImageTintList(ColorStateList.valueOf(festivalTextColorSelected));
+                fab2.setImageTintList(ColorStateList.valueOf(festivalTextColorSelected));
+            } else {
+                ColorStateList cslTabSelectedTextColor = ColorStateList.valueOf(festivalTextColorSelected);
+                DrawableCompat.setTintList(DrawableCompat.wrap(fab.getDrawable()), cslTabSelectedTextColor);
+                DrawableCompat.setTintList(DrawableCompat.wrap(fab1.getDrawable()), cslTabSelectedTextColor);
+                DrawableCompat.setTintList(DrawableCompat.wrap(fab2.getDrawable()), cslTabSelectedTextColor);
+            }
+        }
+
     }
 
     @Override
@@ -107,12 +156,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
     }
 
-    @Override
-    public void onListFragmentInteraction(Participant item) {
-        // TODO:
-    }
-
-    private void hideFabs() {
+    public void hideFabs() {
         fab.hide();
         hideFabsMini();
     }
@@ -136,5 +180,21 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
                 break;
         }
 
+    }
+
+    public boolean hasFestivalAccentColor() {
+        return isFestivalAccentColor;
+    }
+
+    public int getFestivalAccentColor() {
+        return festivalAccentColor;
+    }
+
+    public int getFestivalTextColor() {
+        return festivalTextColor;
+    }
+
+    public int getFestivalTextColorSelected() {
+        return festivalTextColorSelected;
     }
 }
