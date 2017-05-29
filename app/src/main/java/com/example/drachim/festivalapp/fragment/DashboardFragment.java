@@ -14,6 +14,7 @@ import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class DashboardFragment extends AbstractFestivalListFragment implements View.OnClickListener {
@@ -31,10 +32,10 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
         swipeRefreshLayout.setOnRefreshListener(this);
 
         discoverList = (RecyclerView)view.findViewById(R.id.dashboard_discover_list);
-        discoverList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener()));
+        discoverList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener(), getImageLoader()));
 
         soonList = (RecyclerView)view.findViewById(R.id.dashboard_soon_list);
-        soonList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener()));
+        soonList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener(), getImageLoader()));
 
         view.findViewById(R.id.dashboard_discover_more_card).setOnClickListener(this);
         view.findViewById(R.id.dashboard_soon_more_card).setOnClickListener(this);
@@ -48,9 +49,9 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Festival>> loader, List<Festival> data) {
-        discoverList.setAdapter(new FestivalRecyclerViewAdapter(data, getOnFestivalListInteractionListener()));
-        soonList.setAdapter(new FestivalRecyclerViewAdapter(Arrays.asList(data.get(0)), getOnFestivalListInteractionListener()));
+    protected void onLoadFinished(List<Festival> data) {
+        discoverList.setAdapter(new FestivalRecyclerViewAdapter(data, getOnFestivalListInteractionListener(), getImageLoader()));
+        soonList.setAdapter(new FestivalRecyclerViewAdapter(Arrays.asList(data.get(0)), getOnFestivalListInteractionListener(), getImageLoader()));
         swipeRefreshLayout.setRefreshing(false);
     }
 

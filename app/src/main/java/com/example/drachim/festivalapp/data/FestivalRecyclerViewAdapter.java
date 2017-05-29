@@ -1,13 +1,13 @@
 package com.example.drachim.festivalapp.data;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.fragment.AbstractFestivalListFragment;
 
@@ -17,10 +17,12 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
     private final List<Festival> festivals;
     private final AbstractFestivalListFragment.OnFestivalListInteractionListener listener;
+    private final ImageLoader imageLoader;
 
-    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener) {
+    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener, ImageLoader imageLoader) {
         festivals = items;
         this.listener = listener;
+        this.imageLoader = imageLoader;
     }
 
     @Override
@@ -37,7 +39,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         String dateRange = FestivalHelper.getDateRange(festival, viewHolder.getDateTextView().getContext());
         viewHolder.getDateTextView().setText(dateRange);
         viewHolder.getPlaceTextView().setText(festival.getPlace());
-        viewHolder.getImageView().setImageResource(festival.getProfileImage());
+        imageLoader.get("http://amgbr.us.to:3000/festival/" + festival.getId() + "/profile", ImageLoader.getImageListener(viewHolder.getImageView(), 0, 0));
 
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override

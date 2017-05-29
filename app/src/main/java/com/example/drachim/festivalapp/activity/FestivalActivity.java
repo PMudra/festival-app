@@ -43,7 +43,24 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         setContentView(R.layout.activity_festival);
 
         Festival festival = (Festival) getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), festival.getTitleImage());
+
+        // Todo
+        int ressourceId = 0;
+        switch (festival.getId()) {
+            case 1:
+                ressourceId = R.drawable.festival_defqon_title;
+                break;
+            case 2:
+                ressourceId = R.drawable.festival_mysteryland_title;
+                break;
+            case 3:
+                ressourceId = R.drawable.festival_qontinent_title;
+                break;
+            case 4:
+                ressourceId = R.drawable.festival_tantemia_title;
+                break;
+        }
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), ressourceId);
 
         ImageView titleImage = (ImageView) findViewById(R.id.festivalCover);
         titleImage.setImageBitmap(bitmap);
