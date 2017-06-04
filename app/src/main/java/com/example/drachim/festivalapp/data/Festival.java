@@ -13,6 +13,8 @@ public class Festival implements Serializable {
     private String place;
     private String postalCode;
     private String street;
+    private Double latitude;
+    private Double longitude;
     private Date startDate;
     private Date endDate;
     private List<String> lineup;
@@ -43,6 +45,14 @@ public class Festival implements Serializable {
 
     public String getStreet() {
         return street;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
     }
 
     public Date getStartDate() {
