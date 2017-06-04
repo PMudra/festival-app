@@ -2,7 +2,6 @@ package com.example.drachim.festivalapp.activity;
 
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -18,9 +17,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
+import com.example.drachim.festivalapp.common.VolleySingleton;
 import com.example.drachim.festivalapp.data.Festival;
 
 public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
@@ -36,6 +38,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     private FloatingActionButton fab;
     private FloatingActionButton fab1;
     private FloatingActionButton fab2;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +46,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         setContentView(R.layout.activity_festival);
 
         Festival festival = (Festival) getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
-
-        // Todo
-        int ressourceId = 0;
-        switch (festival.getId()) {
-            case 1:
-                ressourceId = R.drawable.festival_defqon_title;
-                break;
-            case 2:
-                ressourceId = R.drawable.festival_mysteryland_title;
-                break;
-            case 3:
-                ressourceId = R.drawable.festival_qontinent_title;
-                break;
-            case 4:
-                ressourceId = R.drawable.festival_tantemia_title;
-                break;
-        }
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), ressourceId);
-
-        ImageView titleImage = (ImageView) findViewById(R.id.festivalCover);
-        titleImage.setImageBitmap(bitmap);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,15 +55,8 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        FestivalActivityPager adapter = new FestivalActivityPager(getFragmentManager(), this);
-
         viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addOnTabSelectedListener(this);
-
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab2);
@@ -89,6 +64,37 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         showFab(viewPager.getCurrentItem());
 
+        ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
+        String url = "http://amgbr.us.to:3000/festival/" + festival.getId() + "/title";
+        imageLoader.get(url, new ImageLoader.ImageListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
+
+                if (response.getBitmap() != null) {
+                    initColors(response.getBitmap());
+                    initGui(response.getBitmap());
+                }
+            }
+        });
+
+    }
+
+    private void initGui(Bitmap bitmap) {
+        FestivalActivityPager adapter = new FestivalActivityPager(getFragmentManager(), this);
+        viewPager.setAdapter(adapter);
+
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(this);
+
+        ImageView titleImage = (ImageView) findViewById(R.id.festivalCover);
+        titleImage.setImageBitmap(bitmap);
+    }
+
+    private void initColors(Bitmap bitmap) {
         Palette palette = Palette.from(bitmap).generate();
         Palette.Swatch psVibrant = palette.getVibrantSwatch();
 
@@ -123,7 +129,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
                 DrawableCompat.setTintList(DrawableCompat.wrap(fab2.getDrawable()), cslTabSelectedTextColor);
             }
         }
-
     }
 
     @Override

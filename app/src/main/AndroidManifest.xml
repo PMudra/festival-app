@@ -11,6 +11,7 @@
 
     <!-- not quiet sure if needed. maybe for synchronizing calender to check if event was already added to calender or if it was removed -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+
     <!-- needed to add festivals marked as interesting or as participating to calender -->
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
@@ -33,6 +34,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".common.Application"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -52,6 +54,11 @@
         <activity
             android:name=".activity.ContactsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>

@@ -46,8 +46,6 @@ public class InputParticipantDialogFragment extends DialogFragment {
     }
 
     private void onButtonClick(int which) {
-        Log.d("TEST", "which: " + which);
-
         Callback callback;
         try {
             callback = (Callback) getTargetFragment();

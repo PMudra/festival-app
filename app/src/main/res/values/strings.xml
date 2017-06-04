@@ -44,5 +44,6 @@
     <string name="added">added</string>
     <string name="action_add">Add</string>
     <string name="title_activity_contacts">Choose from contacts</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

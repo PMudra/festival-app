@@ -8,7 +8,6 @@ import android.content.Loader;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
@@ -23,10 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.ImageLoader;
@@ -148,19 +145,20 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
                     case R.id.action_add:
 
                         SparseBooleanArray checked = listView.getCheckedItemPositions();
-                        ArrayList<Participant> selectedParticipants = new ArrayList<>();
+                        ArrayList<Participant> selectedContacts = new ArrayList<>();
 
                         for (int i = 0; i < checked.size(); i++) {
                             // Item position in adapter
                             int position = checked.keyAt(i);
+
                             // Add data if it is checked i.e. (== TRUE!)
                             if (checked.valueAt(i)) {
-                                Participant participant = getSelectedParticipant(position);
-                                selectedParticipants.add(participant);
+                                Participant participant = getSelectedContact(position);
+                                selectedContacts.add(participant);
                             }
                         }
 
-                        sendParticipantsToCallingActivity(selectedParticipants);
+                        sendParticipantsToCallingActivity(selectedContacts);
 
                         mode.finish();
                         return true;
@@ -177,29 +175,25 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
         getLoaderManager().initLoader(ContactsQuery.QUERY_ID, null, this);
     }
 
-    private void sendParticipantsToCallingActivity(ArrayList<Participant> selectedParticipants) {
+    private void sendParticipantsToCallingActivity(ArrayList<Participant> selectedContacts) {
         Intent intent = new Intent();
-        intent.putParcelableArrayListExtra("participants", selectedParticipants);
+        intent.putParcelableArrayListExtra("selectedContacts", selectedContacts);
         setResult(Activity.RESULT_OK, intent);
         supportFinishAfterTransition();
     }
 
-    private Participant getSelectedParticipant(int position) {
+    private Participant getSelectedContact(int position) {
 
-        View v = listView.getChildAt(position);
+        // Gets the Cursor object currently bound to the ListView
+        final Cursor cursor = mAdapter.getCursor();
 
-        TextView textView = (TextView) v.findViewById(R.id.contact_name);
-        String name = textView.getText().toString();
+        // Moves to the Cursor row corresponding to the ListView item that was clicked
+        cursor.moveToPosition(position);
 
-        ImageView imageView = (ImageView) v.findViewById(R.id.contact_image);
-        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        final String displayName = cursor.getString(ContactsQuery.DISPLAY_NAME);
+        final String photoUri = cursor.getString(ContactsQuery.PHOTO_THUMBNAIL_DATA);
 
-        Bitmap photo = null;
-        if (drawable != null) {
-            photo = drawable.getBitmap();
-        }
-
-        return new Participant(name, photo);
+        return new Participant(displayName, photoUri);
     }
 
     @Override
@@ -224,8 +218,7 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         ArrayList<Participant> selectedParticipants = new ArrayList<>();
-        selectedParticipants.add(getSelectedParticipant(position));
-
+        selectedParticipants.add(getSelectedContact(position));
         sendParticipantsToCallingActivity(selectedParticipants);
     }
 
@@ -315,7 +308,6 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
 
             afd = getContentResolver().openAssetFileDescriptor(thumbUri, "r");
 
-
             // Gets a FileDescriptor from the AssetFileDescriptor. A BitmapFactory object can
             // decode the contents of a file pointed to by a FileDescriptor into a Bitmap.
             FileDescriptor fileDescriptor = afd.getFileDescriptor();
@@ -391,7 +383,9 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
         };
 
         // The query column numbers which map to each value in the projection
-        int ID = 0;
-        int LOOKUP_KEY = 1;
+        final static int ID = 0;
+        final static int LOOKUP_KEY = 1;
+        final static int DISPLAY_NAME = 2;
+        final static int PHOTO_THUMBNAIL_DATA = 3;
     }
 }

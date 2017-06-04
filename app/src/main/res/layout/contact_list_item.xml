@@ -32,7 +32,6 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_fab_mini_edit"
             android:layout_centerHorizontal="true"/>
 
     </android.support.v7.widget.CardView>

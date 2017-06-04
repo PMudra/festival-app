@@ -15,7 +15,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,8 +25,8 @@ import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.activity.ContactsActivity;
 import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.example.drachim.festivalapp.common.Utilities;
-import com.example.drachim.festivalapp.data.MyParticipantRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.Participant;
+import com.example.drachim.festivalapp.data.ParticipantRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,16 +39,15 @@ import static android.app.Activity.RESULT_OK;
  */
 public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, InputParticipantDialogFragment.Callback, View.OnLongClickListener, View.OnClickListener {
 
-    private static final int PICK_CONTACT_REQUEST = 1;
-    private static final int CONTACT_ACTIVITY_REQUEST = 3;
-    private static final int READ_CONTACTS_PERMISSIONS_REQUEST_CODE = 2;
+    private static final int READ_CONTACTS_PERMISSIONS_REQUEST_CODE = 1;
+    private static final int CONTACT_ACTIVITY_REQUEST = 2;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private List<Participant> participants;
-    private MyParticipantRecyclerViewAdapter adapter;
+    private ParticipantRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
 
     private FloatingActionButton fab;
@@ -94,14 +92,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             }
 
             participants = new ArrayList<>();
-            participants.add(new Participant("Achim"));
-            participants.add(new Participant("Manni"));
-            participants.add(new Participant("Uwe"));
-            participants.add(new Participant("Herbert"));
-            participants.add(new Participant("Opa"));
-            participants.add(new Participant("Annegret"));
-
-            adapter = new MyParticipantRecyclerViewAdapter(participants, this);
+            adapter = new ParticipantRecyclerViewAdapter(participants, this);
             recyclerView.setAdapter(adapter);
 
             fab_add_multiple = (FloatingActionButton) getActivity().findViewById(R.id.fab2);
@@ -184,7 +175,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                         break;
                     }
                 }
-                Log.d("TEST", "erklärung sollte angezeigt werden");
+                //TODO: erklärung sollte angezeigt werden
                 break;
             default:
                 break;
@@ -200,22 +191,22 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             case CONTACT_ACTIVITY_REQUEST:
                 if (resultCode == RESULT_OK) {
 
-                    ArrayList<Participant> addedParticipants = data.getParcelableArrayListExtra("participants");
-                    participants.addAll(addedParticipants);
+                    ArrayList<Participant> addedContacts = data.getParcelableArrayListExtra("selectedContacts");
+
+                    participants.addAll(addedContacts);
                     adapter.sortAndUpdateList();
 
                     String message;
-                    if (addedParticipants.size() == 1) {
-                        message = addedParticipants.get(0).getName() + " " + getString(R.string.added);
+                    if (addedContacts.size() == 1) {
+                        message = addedContacts.get(0).getName() + " " + getString(R.string.added);
                     } else {
-                        message = addedParticipants.size() + " " + getString(R.string.participants) + " " + getString(R.string.added);
+                        message = addedContacts.size() + " " + getString(R.string.participants) + " " + getString(R.string.added);
                     }
                     Snackbar.make(fab, message, Snackbar.LENGTH_SHORT).show();
 
                 }
                 break;
         }
-
     }
 
     @Override
@@ -286,7 +277,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                 public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_remove:
-                            adapter.removeItems(adapter.getSelectedItems());
+                            adapter.removeItems(adapter.getSelectedItemIds());
                             mode.finish();
                             return true;
 

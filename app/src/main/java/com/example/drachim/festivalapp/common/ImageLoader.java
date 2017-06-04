@@ -25,10 +25,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.widget.ImageView;
+
 import java.io.FileDescriptor;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
@@ -91,7 +93,7 @@ public abstract class ImageLoader {
     }
 
     /**
-     * Set placeholder bitmap that shows when the the background thread is running.
+     * Set placeholder bitmap that shows when the background thread is running.
      *
      * @param resId Resource ID of loading image.
      */
@@ -183,7 +185,7 @@ public abstract class ImageLoader {
         private final WeakReference<ImageView> imageViewReference;
 
         public BitmapWorkerTask(ImageView imageView) {
-            imageViewReference = new WeakReference<ImageView>(imageView);
+            imageViewReference = new WeakReference<>(imageView);
         }
 
         /**
@@ -339,8 +341,12 @@ public abstract class ImageLoader {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
+
+        // Only for Android 6 Marshmallow and older versions
+        if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
+        }
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);

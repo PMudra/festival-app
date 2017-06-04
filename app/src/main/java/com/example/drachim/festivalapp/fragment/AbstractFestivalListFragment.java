@@ -3,25 +3,19 @@ package com.example.drachim.festivalapp.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.Volley;
+import com.example.drachim.festivalapp.common.VolleySingleton;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalRequest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractFestivalListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -41,21 +35,8 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestQueue = Volley.newRequestQueue(getActivity());
-
-        imageLoader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
-            private final LruCache<String, Bitmap> cache = new LruCache<>(20);
-
-            @Override
-            public Bitmap getBitmap(String url) {
-                return cache.get(url);
-            }
-
-            @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                cache.put(url, bitmap);
-            }
-        });
+        requestQueue = VolleySingleton.getInstance().getRequestQueue();
+        imageLoader = VolleySingleton.getInstance().getImageLoader();
     }
 
     @Override

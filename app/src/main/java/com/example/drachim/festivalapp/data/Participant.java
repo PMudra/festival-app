@@ -1,31 +1,29 @@
 package com.example.drachim.festivalapp.data;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Participant implements Parcelable{
     private String name;
-    private Bitmap photo = null;
+    private String photoUri;
     private boolean isInterested = true;
 
     public Participant(String name) {
         this.name = name;
     }
 
-    public Participant(String name, Bitmap photo) {
+    public Participant(String name, String photoUri) {
         this.name = name;
-        this.photo = photo;
+        this.photoUri = photoUri;
     }
 
     private Participant(Parcel data) {
         this.name = data.readString();
+        this.photoUri = data.readString();
 
         boolean[] myBooleanArr = new boolean[1];
         data.readBooleanArray(myBooleanArr);
         this.isInterested = myBooleanArr[0];
-
-        this.photo = data.readParcelable(Bitmap.class.getClassLoader());
     }
 
     public String getName() {
@@ -44,12 +42,12 @@ public class Participant implements Parcelable{
         isInterested = interested;
     }
 
-    public Bitmap getPhoto() {
-        return photo;
+    public String getPhoto() {
+        return photoUri;
     }
 
-    public void setPhoto(Bitmap photo) {
-        this.photo = photo;
+    public void setPhoto(String photoUri) {
+        this.photoUri = photoUri;
     }
 
     @Override
@@ -60,8 +58,8 @@ public class Participant implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(photoUri);
         dest.writeBooleanArray(new boolean[]{isInterested});
-        dest.writeParcelable(photo, flags);
     }
 
     static final Parcelable.Creator<Participant> CREATOR = new Parcelable.Creator<Participant>() {

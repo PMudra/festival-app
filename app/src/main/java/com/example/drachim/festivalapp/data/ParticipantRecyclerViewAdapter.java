@@ -1,16 +1,19 @@
 package com.example.drachim.festivalapp.data;
 
+import android.content.res.AssetFileDescriptor;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.CompoundButtonCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
@@ -18,6 +21,9 @@ import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.fragment.FestivalPlanningFragment;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,21 +33,36 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link Participant}
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyParticipantRecyclerViewAdapter.ViewHolder> {
+public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ViewHolder> {
 
     private final List<Participant> participants;
     private FestivalPlanningFragment festivalPlanningFragment;
     private final FestivalActivity activity;
+    private final com.example.drachim.festivalapp.common.ImageLoader imageLoader;
 
     private SparseBooleanArray selectedItems;
 
-    public MyParticipantRecyclerViewAdapter(List<Participant> participants, FestivalPlanningFragment festivalPlanningFragment) {
+    public ParticipantRecyclerViewAdapter(List<Participant> participants, FestivalPlanningFragment festivalPlanningFragment) {
         this.participants = participants;
         this.festivalPlanningFragment = festivalPlanningFragment;
+        this.activity = (FestivalActivity) festivalPlanningFragment.getActivity();
+        this.selectedItems = new SparseBooleanArray();
 
-        activity = (FestivalActivity) festivalPlanningFragment.getActivity();
+        this.imageLoader = new com.example.drachim.festivalapp.common.ImageLoader(this.activity, 100) {
+            @Override
+            protected Bitmap processBitmap(Object data) {
+                // This gets called in a background thread and passed the data from
+                // ImageLoader.loadImage().
+                return loadContactPhotoThumbnail(data.toString(), getImageSize());
+            }
+        };
 
-        selectedItems = new SparseBooleanArray();
+        // Set a placeholder loading image for the image loader
+//        imageLoader.setLoadingImage(R.drawable.ic_contact_picture_180_holo_light);
+
+        // Tell the image loader to set the image directly when it's finished loading
+        // rather than fading in
+        imageLoader.setImageFadeIn(true);
 
         sortList();
     }
@@ -93,31 +114,35 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
             }
         }
 
-        holder.participant = participants.get(position);
-        holder.textView.setText(holder.participant.getName());
+        Participant participant = participants.get(position);
+        holder.participant = participant;
 
-        holder.checkBox.setChecked(holder.participant.isInterested());
-        Utilities.strikeThru(holder.textView, !holder.participant.isInterested());
-
-        RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(holder.itemView.getContext().getResources(), participants.get(holder.getAdapterPosition()).getPhoto());
-        drawable.setCircular(true);
-        holder.textView.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
-
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+        // Checkbox
+        holder.getCheckBox().setChecked(participant.isInterested());
+        holder.getCheckBox().setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                participants.get(holder.getAdapterPosition()).setInterested(holder.checkBox.isChecked());
+                participants.get(holder.getAdapterPosition()).setInterested(((CheckBox) v).isChecked());
                 sortAndUpdateList();
             }
         });
 
-        holder.mView.setOnLongClickListener(festivalPlanningFragment);
-        holder.mView.setOnClickListener(festivalPlanningFragment);
+        // Textview
+        holder.getTextView().setText(participant.getName());
+        Utilities.strikeThru(holder.getTextView(), !participant.isInterested());
 
-        holder.mView.setOnClickListener(festivalPlanningFragment);
-        holder.mView.setOnLongClickListener(festivalPlanningFragment);
+        // Imageview
+        Log.d("TEST", participant.getName() + ": " + participant.getPhoto());
+        if (participant.getPhoto() != null) {
+            holder.getImageView().setVisibility(View.VISIBLE);
+            imageLoader.loadImage(participant.getPhoto(), holder.getImageView());
+        } else {
+            holder.getImageView().setVisibility(View.GONE);
+        }
 
-        holder.mView.setActivated(isSelected(position));
+        holder.getView().setOnLongClickListener(festivalPlanningFragment);
+        holder.getView().setOnClickListener(festivalPlanningFragment);
 
+        holder.getView().setActivated(isSelected(position));
     }
 
     @Override
@@ -131,7 +156,7 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
      * @return true if the item is selected, false otherwise
      */
     private boolean isSelected(int position) {
-        return getSelectedItems().contains(position);
+        return getSelectedItemIds().contains(position);
     }
 
     /**
@@ -151,7 +176,7 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
      * Clear the selection status for all items
      */
     public void clearSelection() {
-        List<Integer> selection = getSelectedItems();
+        List<Integer> selection = getSelectedItemIds();
         selectedItems.clear();
         for (Integer i : selection) {
             notifyItemChanged(i);
@@ -170,7 +195,7 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
      * Indicates the list of selected items
      * @return List of selected items ids
      */
-    public List<Integer> getSelectedItems() {
+    public List<Integer> getSelectedItemIds() {
         List<Integer> items = new ArrayList<>(selectedItems.size());
         for (int i = 0; i < selectedItems.size(); ++i) {
             items.add(selectedItems.keyAt(i));
@@ -216,6 +241,54 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
         }
     }
 
+    private Bitmap loadContactPhotoThumbnail(String photoData, int imageSize) {
+        // Instantiates an AssetFileDescriptor. Given a content Uri pointing to an image file, the
+        // ContentResolver can return an AssetFileDescriptor for the file.
+        AssetFileDescriptor afd = null;
+
+        // This "try" block catches an Exception if the file descriptor returned from the Contacts
+        // Provider doesn't point to an existing file.
+        try {
+            Uri thumbUri;
+            // If Android 3.0 or later, converts the Uri passed as a string to a Uri object.
+            thumbUri = Uri.parse(photoData);
+            // Retrieves a file descriptor from the Contacts Provider. To learn more about this
+            // feature, read the reference documentation for
+            // ContentResolver#openAssetFileDescriptor.
+
+            afd = this.activity.getContentResolver().openAssetFileDescriptor(thumbUri, "r");
+
+            // Gets a FileDescriptor from the AssetFileDescriptor. A BitmapFactory object can
+            // decode the contents of a file pointed to by a FileDescriptor into a Bitmap.
+            FileDescriptor fileDescriptor = afd.getFileDescriptor();
+
+            if (fileDescriptor != null) {
+                // Decodes a Bitmap from the image pointed to by the FileDescriptor, and scales it
+                // to the specified width and height
+                return com.example.drachim.festivalapp.common.ImageLoader.decodeSampledBitmapFromDescriptor(
+                        fileDescriptor, imageSize, imageSize);
+            }
+        } catch (FileNotFoundException e) {
+            // If the file pointed to by the thumbnail URI doesn't exist, or the file can't be
+            // opened in "read" mode, ContentResolver.openAssetFileDescriptor throws a
+            // FileNotFoundException.
+
+        } finally {
+            // If an AssetFileDescriptor was returned, try to close it
+            if (afd != null) {
+                try {
+                    afd.close();
+                } catch (IOException e) {
+                    // Closing a file descriptor might cause an IOException if the file is
+                    // already closed. Nothing extra is needed to handle this.
+                }
+            }
+        }
+
+        // If the decoding failed, returns null
+        return null;
+    }
+
     private void removeRange(int positionStart, int itemCount) {
         for (int i = 0; i < itemCount; ++i) {
             participants.remove(positionStart);
@@ -224,23 +297,37 @@ public class MyParticipantRecyclerViewAdapter extends RecyclerView.Adapter<MyPar
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        final View mView;
-        final CheckBox checkBox;
-        final TextView textView;
-        Participant participant;
+        private Participant participant;
+        private final CheckBox checkBox;
+        private final TextView textView;
+        private final ImageView imageView;
 
         ViewHolder(View view) {
             super(view);
-            mView = view;
             checkBox = (CheckBox) view.findViewById(R.id.cb_participant);
             textView = (TextView) view.findViewById(R.id.tv_participant);
+            imageView = (ImageView) view.findViewById(R.id.iv_participant);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '";
+        public Participant getParticipant() {
+            return participant;
         }
 
+        CheckBox getCheckBox() {
+            return checkBox;
+        }
+
+        TextView getTextView() {
+            return textView;
+        }
+
+        ImageView getImageView() {
+            return imageView;
+        }
+
+        public View getView() {
+            return itemView;
+        }
     }
 
 }

@@ -5,13 +5,13 @@
     android:id="@+id/dashboard_swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="fill_vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_gravity="fill_vertical">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:fillViewport="true"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_horizontal_margin"
@@ -20,14 +20,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:clickable="true">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/soon"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorDashboardSubtitles" />
+                android:textColor="@color/colorDashboardSubtitles"
+                android:clickable="true"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/dashboard_soon_list"
@@ -36,7 +38,7 @@
                 android:clipToPadding="false"
                 app:layoutManager="LinearLayoutManager"
                 tools:context="com.example.drachim.festivalapp.fragment.FestivalListFragment"
-                tools:listitem="@layout/fragment_festival_list_item" />
+                tools:listitem="@layout/fragment_festival_list_item"/>
 
             <include
                 android:id="@+id/dashboard_soon_more_card"
@@ -48,7 +50,8 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/nav_discover"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorDashboardSubtitles" />
+                android:textColor="@color/colorDashboardSubtitles"
+                android:clickable="true"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/dashboard_discover_list"
@@ -57,7 +60,7 @@
                 android:clipToPadding="false"
                 app:layoutManager="LinearLayoutManager"
                 tools:context="com.example.drachim.festivalapp.fragment.FestivalListFragment"
-                tools:listitem="@layout/fragment_festival_list_item" />
+                tools:listitem="@layout/fragment_festival_list_item"/>
 
             <include
                 android:id="@+id/dashboard_discover_more_card"
