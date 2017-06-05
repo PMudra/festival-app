@@ -10,7 +10,7 @@
     <string name="festival_tab_infos">Infos</string>
     <string name="nav_discover">Entdecken</string>
     <string name="nav_favorites">Favoriten</string>
-    <string name="nav_notifications">Benachrichtigungen</string>
+    <string name="pref_notifications">Benachrichtigungen</string>
     <string name="nav_settings">Einstellungen</string>
     <string name="navigation_drawer_close"></string>
     <string name="festival_tab_lineup">Line Up</string>
@@ -37,4 +37,6 @@
     <string name="action_add">Hinzufügen</string>
     <string name="title_activity_contacts">Aus Kontakten auswählen</string>
     <string name="festival_card_header_direction">Anfahrt</string>
+    <string name="pref_home_address">Heimatadresse</string>
+    <string name="pref_set_home_address_via_gps">Ermittle Heimatadresse</string>
 </resources>

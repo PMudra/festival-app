@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
-        android:defaultValue="true"
-        android:icon="@drawable/ic_action_notifications_active_gray"
-        android:key="pref_notifications"
-        android:title="@string/nav_notifications" />
+
+    <PreferenceCategory android:title="@string/pref_notifications">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_action_notifications_active_gray"
+            android:key="pref_notifications"
+            android:title="@string/pref_notifications"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Location">
+        <EditTextPreference
+            android:icon="@drawable/ic_action_home"
+            android:key="pref_home_address"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/pref_home_address"/>
+
+        <Preference
+            android:icon="@drawable/ic_action_gps"
+            android:key="pref_determine_location"
+            android:title="@string/pref_set_home_address_via_gps"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

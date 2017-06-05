@@ -24,8 +24,7 @@
                 android:id="@+id/image"
                 android:layout_width="@dimen/festival_card_image_width"
                 android:layout_height="@dimen/festival_card_image_height"
-                android:scaleType="centerInside"
-                tools:src="@drawable/festival_mysteryland_profile" />
+                android:scaleType="centerInside" />
 
         </FrameLayout>
 

@@ -90,6 +90,14 @@ public class Utilities {
         return checkPermissions(activity, new String[]{Manifest.permission.READ_CONTACTS});
     }
 
+    public static boolean checkAndRequestAccessFineLocationPermission(Fragment fragment, int requestCode) {
+        return checkAndRequestPermissions(fragment, requestCode, new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
+    }
+
+    public static boolean checkAccessFineLocationPermission(Activity activity) {
+        return checkPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION});
+    }
+
     public static void animRotateBackward(View view) {
         ViewCompat.animate(view)
                 .rotation(0)
