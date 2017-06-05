@@ -9,7 +9,7 @@
             android:title="@string/pref_notifications"/>
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Location">
+    <PreferenceCategory android:title="@string/pref_location">
         <EditTextPreference
             android:icon="@drawable/ic_action_home"
             android:key="pref_home_address"

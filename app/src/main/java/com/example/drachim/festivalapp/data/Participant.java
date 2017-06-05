@@ -62,7 +62,7 @@ public class Participant implements Parcelable{
         dest.writeBooleanArray(new boolean[]{isInterested});
     }
 
-    static final Parcelable.Creator<Participant> CREATOR = new Parcelable.Creator<Participant>() {
+    public static final Parcelable.Creator<Participant> CREATOR = new Parcelable.Creator<Participant>() {
         @Override
         public Participant[] newArray(int size) {
             return new Participant[size];

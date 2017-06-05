@@ -47,5 +47,6 @@
     <string name="festival_card_header_direction">Direction</string>
     <string name="pref_set_home_address_via_gps">Set home address via GPS</string>
     <string name="pref_home_address">Home address</string>
+    <string name="pref_location">Location</string>
 
 </resources>

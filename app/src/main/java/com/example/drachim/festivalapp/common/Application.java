@@ -15,7 +15,7 @@ public class Application extends android.app.Application {
     public static Context getAppContext() {
         return mAppContext;
     }
-    public void setAppContext(Context mAppContext) {
+    private void setAppContext(Context mAppContext) {
         Application.mAppContext = mAppContext;
     }
 }

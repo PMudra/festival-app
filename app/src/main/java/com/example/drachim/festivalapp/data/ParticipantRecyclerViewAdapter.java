@@ -36,11 +36,11 @@ import java.util.List;
 public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ViewHolder> {
 
     private final List<Participant> participants;
-    private FestivalPlanningFragment festivalPlanningFragment;
+    private final FestivalPlanningFragment festivalPlanningFragment;
     private final FestivalActivity activity;
     private final com.example.drachim.festivalapp.common.ImageLoader imageLoader;
 
-    private SparseBooleanArray selectedItems;
+    private final SparseBooleanArray selectedItems;
 
     public ParticipantRecyclerViewAdapter(List<Participant> participants, FestivalPlanningFragment festivalPlanningFragment) {
         this.participants = participants;

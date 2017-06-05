@@ -189,7 +189,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         fab2.hide();
     }
 
-    public void showFab(int tabPosition) {
+    private void showFab(int tabPosition) {
         switch (tabPosition) {
             case 2:
                 fab.setRotation(0);

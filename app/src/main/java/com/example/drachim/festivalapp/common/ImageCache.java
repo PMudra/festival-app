@@ -110,7 +110,7 @@ public class ImageCache {
      * @return size of bitmap in bytes.
      */
     @TargetApi(12)
-    public static int getBitmapSize(Bitmap bitmap) {
+    private static int getBitmapSize(Bitmap bitmap) {
         return bitmap.getByteCount();
     }
 
@@ -127,7 +127,7 @@ public class ImageCache {
      *
      * @param percent Percent of available app memory to use to size memory cache.
      */
-    public static int calculateMemCacheSize(float percent) {
+    private static int calculateMemCacheSize(float percent) {
         if (percent < 0.05f || percent > 0.8f) {
             throw new IllegalArgumentException("setMemCacheSizePercent - percent must be "
                     + "between 0.05 and 0.8 (inclusive)");
@@ -143,7 +143,7 @@ public class ImageCache {
      * @return The existing instance of the Fragment or the new instance if just
      *         created.
      */
-    public static RetainFragment findOrCreateRetainFragment(FragmentManager fm) {
+    private static RetainFragment findOrCreateRetainFragment(FragmentManager fm) {
         // Check to see if we have retained the worker fragment.
         RetainFragment mRetainFragment = (RetainFragment) fm.findFragmentByTag(TAG);
 

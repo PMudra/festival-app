@@ -26,12 +26,12 @@ import com.google.android.gms.maps.model.LatLng;
 public class SettingsFragment extends PreferenceFragment implements FragmentCompat.OnRequestPermissionsResultCallback, SharedPreferences.OnSharedPreferenceChangeListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
 
-    private long UPDATE_INTERVAL_IN_MILLISECONDS = 10 * 1000;      /* 10 secs */
-    private long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 2000;   /* 2 secs */
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10 * 1000;      /* 10 secs */
+    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 2000;   /* 2 secs */
 
-    protected GoogleApiClient mGoogleApiClient;
-    protected LocationRequest mLocationRequest;
-    protected LatLng currentLatLng;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private LatLng currentLatLng;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,7 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
     }
 
     private void updateHomeAddress() {
-        EditTextPreference prefHomeAddress = (EditTextPreference) findPreference("pref_home_address");;
+        EditTextPreference prefHomeAddress = (EditTextPreference) findPreference("pref_home_address");
         prefHomeAddress.setText("Lat " + currentLatLng.latitude + ", Long " + currentLatLng.longitude);
     }
 

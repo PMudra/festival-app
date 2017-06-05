@@ -30,7 +30,6 @@ import android.support.v4.app.FragmentManager;
 import android.widget.ImageView;
 
 import java.io.FileDescriptor;
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
@@ -47,8 +46,8 @@ public abstract class ImageLoader {
     private boolean mFadeInBitmap = true;
     private boolean mPauseWork = false;
     private final Object mPauseWorkLock = new Object();
-    private int mImageSize;
-    private Resources mResources;
+    private final int mImageSize;
+    private final Resources mResources;
 
     protected ImageLoader(Context context, int imageSize) {
         mResources = context.getResources();
@@ -146,7 +145,7 @@ public abstract class ImageLoader {
      * Returns false if the work in progress deals with the same data. The work is not
      * stopped in that case.
      */
-    public static boolean cancelPotentialWork(Object data, ImageView imageView) {
+    private static boolean cancelPotentialWork(Object data, ImageView imageView) {
         final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
 
         if (bitmapWorkerTask != null) {
@@ -275,8 +274,7 @@ public abstract class ImageLoader {
 
         public AsyncDrawable(Resources res, Bitmap bitmap, BitmapWorkerTask bitmapWorkerTask) {
             super(res, bitmap);
-            bitmapWorkerTaskReference =
-                new WeakReference<BitmapWorkerTask>(bitmapWorkerTask);
+            bitmapWorkerTaskReference = new WeakReference<>(bitmapWorkerTask);
         }
 
         public BitmapWorkerTask getBitmapWorkerTask() {
@@ -370,8 +368,8 @@ public abstract class ImageLoader {
      * @param reqHeight The requested height of the resulting bitmap
      * @return The value to be used for inSampleSize
      */
-    public static int calculateInSampleSize(BitmapFactory.Options options,
-            int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options,
+                                             int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;

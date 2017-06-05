@@ -9,8 +9,8 @@ import com.android.volley.toolbox.Volley;
 
 public class VolleySingleton {
     private static VolleySingleton instance = null;
-    private RequestQueue requestQueue;
-    private ImageLoader imageLoader;
+    private final RequestQueue requestQueue;
+    private final ImageLoader imageLoader;
 
     private VolleySingleton(){
         requestQueue = Volley.newRequestQueue(Application.getAppContext());

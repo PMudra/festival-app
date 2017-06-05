@@ -1,6 +1,5 @@
 package com.example.drachim.festivalapp.fragment;
 
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +12,7 @@ import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class DashboardFragment extends AbstractFestivalListFragment implements View.OnClickListener {
@@ -51,7 +49,7 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
     @Override
     protected void onLoadFinished(List<Festival> data) {
         discoverList.setAdapter(new FestivalRecyclerViewAdapter(data, getOnFestivalListInteractionListener(), getImageLoader()));
-        soonList.setAdapter(new FestivalRecyclerViewAdapter(Arrays.asList(data.get(0)), getOnFestivalListInteractionListener(), getImageLoader()));
+        soonList.setAdapter(new FestivalRecyclerViewAdapter(Collections.singletonList(data.get(0)), getOnFestivalListInteractionListener(), getImageLoader()));
         swipeRefreshLayout.setRefreshing(false);
     }
 

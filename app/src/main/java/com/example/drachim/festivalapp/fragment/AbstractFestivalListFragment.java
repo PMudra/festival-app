@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,7 +22,7 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     private RequestQueue requestQueue;
     private ImageLoader imageLoader;
 
-    public ImageLoader getImageLoader() {
+    ImageLoader getImageLoader() {
         return imageLoader;
     }
 
@@ -93,6 +92,7 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         if (activity instanceof OnFestivalListInteractionListener) {
             onFestivalListInteractionListener = (OnFestivalListInteractionListener) activity;
         } else {
@@ -106,7 +106,7 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
         onFestivalListInteractionListener = null;
     }
 
-    protected OnFestivalListInteractionListener getOnFestivalListInteractionListener() {
+    OnFestivalListInteractionListener getOnFestivalListInteractionListener() {
         return onFestivalListInteractionListener;
     }
 

@@ -33,7 +33,7 @@ import java.util.Date;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AbstractFestivalListFragment.OnFestivalListInteractionListener, DateDialogFragment.OnDateListener {
 
-    public static final String CURRENT_FRAGMENT_KEY = "fragment_key";
+    private static final String CURRENT_FRAGMENT_KEY = "fragment_key";
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
     private int currentFragmentId;

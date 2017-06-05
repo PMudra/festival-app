@@ -166,17 +166,13 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case READ_CONTACTS_PERMISSIONS_REQUEST_CODE:
-
-                for (int grantResult : grantResults) {
-                    if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                        openContactsActivity();
-                        break;
-                    } else {
-                        break;
-                    }
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openContactsActivity();
+                    break;
+                } else {
+                    break;
                 }
                 //TODO: erklärung sollte angezeigt werden
-                break;
             default:
                 break;
         }

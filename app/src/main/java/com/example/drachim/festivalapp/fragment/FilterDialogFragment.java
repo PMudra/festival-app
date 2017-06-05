@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class FilterDialogFragment extends DialogFragment implements View.OnClickListener, DateDialogFragment.OnDateListener, SeekBar.OnSeekBarChangeListener {
 
-    public static String tag = "filter_dialog";
+    public static final String tag = "filter_dialog";
 
     enum Distance {
         KM1(1),
@@ -31,7 +31,7 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
         KM500(500),
         ANY(Integer.MAX_VALUE);
 
-        private int kilometres;
+        private final int kilometres;
 
         Distance(int kilometres) {
             this.kilometres = kilometres;

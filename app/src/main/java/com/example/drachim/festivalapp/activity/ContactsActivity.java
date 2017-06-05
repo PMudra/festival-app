@@ -39,7 +39,7 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
     private SimpleCursorAdapter mAdapter; // The main query adapter
     private ImageLoader mImageLoader; // Handles loading the contact image in a background thread
 
-    String[] FROM_COLS = {
+    private final String[] FROM_COLS = {
             Contacts.DISPLAY_NAME_PRIMARY,
             Contacts.PHOTO_THUMBNAIL_URI
     };
