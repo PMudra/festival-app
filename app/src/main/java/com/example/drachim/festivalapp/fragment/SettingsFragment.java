@@ -21,7 +21,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
 public class SettingsFragment extends PreferenceFragment implements FragmentCompat.OnRequestPermissionsResultCallback, SharedPreferences.OnSharedPreferenceChangeListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private static final int ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
@@ -31,7 +30,7 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private LatLng currentLatLng;
+    private Location currentLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,7 +144,7 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
 
     @Override
     public void onLocationChanged(Location location) {
-        currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        currentLocation = location;
         updateHomeAddress();
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         mGoogleApiClient.disconnect();
@@ -153,7 +152,7 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
 
     private void updateHomeAddress() {
         EditTextPreference prefHomeAddress = (EditTextPreference) findPreference("pref_home_address");
-        prefHomeAddress.setText("Lat " + currentLatLng.latitude + ", Long " + currentLatLng.longitude);
+        prefHomeAddress.setText("Lat " + currentLocation.getLatitude() + ", Long " + currentLocation.getLongitude());
     }
 
 }
