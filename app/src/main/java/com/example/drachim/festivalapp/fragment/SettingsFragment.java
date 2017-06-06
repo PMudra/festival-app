@@ -123,7 +123,9 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
     @Override
     public void onStop() {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
