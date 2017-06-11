@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.activity.DashboardActivity;
+import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -43,12 +43,12 @@ public class FirebaseMessageService extends FirebaseMessagingService {
 
     private void sendNotification(String messageBody, String festivalId) {
 
-        // TODO: Festival anhand der festivalId laden und an die FestivalActivity übergeben
-        Intent intent = new Intent(this, DashboardActivity.class);
+        Intent intent = new Intent(this, FestivalActivity.class);
+        // TODO: Die Flags nochmal evaluieren bezügl. Backstack
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        intent.putExtra("FESTIVAL", festival);
+        intent.putExtra(FestivalActivity.EXTRA_FESTIVAL_ID, Integer.parseInt(festivalId));
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new Notification.Builder(this)
@@ -61,6 +61,6 @@ public class FirebaseMessageService extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notification);
+        notificationManager.notify(0, notification);
     }
 }

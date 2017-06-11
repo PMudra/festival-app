@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.example.drachim.festivalapp.FestivalActivityPager;
@@ -24,10 +25,14 @@ import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.common.VolleySingleton;
 import com.example.drachim.festivalapp.data.Festival;
+import com.example.drachim.festivalapp.data.FestivalRequest;
+
+import java.util.List;
 
 public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     public static final String EXTRA_FESTIVAL = "FESTIVAL";
+    public static final String EXTRA_FESTIVAL_ID = "FESTIVAL_ID";
 
     private boolean isFestivalAccentColor;
     private int festivalAccentColor;
@@ -39,13 +44,16 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     private FloatingActionButton fab1;
     private FloatingActionButton fab2;
     private TabLayout tabLayout;
+    private Festival festival;
+
+    public Festival getFestival() {
+        return festival;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_festival);
-
-        Festival festival = (Festival) getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,6 +72,31 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         showFab(viewPager.getCurrentItem());
 
+        Bundle bundle = getIntent().getExtras();
+        Festival festival = (Festival) bundle.get(FestivalActivity.EXTRA_FESTIVAL);
+        if (festival != null) {
+            loadFestival(festival);
+        } else {
+            int festivalId = bundle.getInt(FestivalActivity.EXTRA_FESTIVAL_ID);
+            FestivalRequest festivalRequest = new FestivalRequest("http://amgbr.us.to:3000/festival/" + festivalId, null, new Response.Listener<List<Festival>>() {
+                @Override
+                public void onResponse(List<Festival> response) {
+                    loadFestival(response.get(0));
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+
+            VolleySingleton.getInstance().getRequestQueue().add(festivalRequest);
+        }
+
+    }
+
+    private void loadFestival(final Festival festival) {
+        this.festival = festival;
         ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
         String url = "http://amgbr.us.to:3000/festival/" + festival.getId() + "/title";
         imageLoader.get(url, new ImageLoader.ImageListener() {
@@ -80,7 +113,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
                 }
             }
         });
-
     }
 
     private void initGui(Bitmap bitmap) {

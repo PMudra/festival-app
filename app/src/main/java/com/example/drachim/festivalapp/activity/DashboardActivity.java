@@ -161,10 +161,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void onFestivalClicked(Festival festival) {
-        // todo animation
-        //final View festivalCover = findViewById(R.id.festivalCover);
-        //ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, festivalCover, "festivalCover");
-
         Intent intent = new Intent(this, FestivalActivity.class);
         intent.putExtra(FestivalActivity.EXTRA_FESTIVAL, festival);
         startActivity(intent);

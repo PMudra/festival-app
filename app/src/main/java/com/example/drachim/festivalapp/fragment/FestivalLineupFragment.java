@@ -24,7 +24,7 @@ public class FestivalLineupFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_festival_lineup, container, false);
 
-        Festival festival = (Festival) getActivity().getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
+        Festival festival = ((FestivalActivity) getActivity()).getFestival();
         lineup = festival.getLineup();
         textView = (TextView) view.findViewById(R.id.tv_lineup);
         initGui();

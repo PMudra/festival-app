@@ -28,7 +28,7 @@ public class FestivalInfoFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_festival_info, container, false);
 
-        festival = (Festival) getActivity().getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL);
+        festival = ((FestivalActivity) getActivity()).getFestival();
 
         ((TextView) view.findViewById(R.id.info_name_title)).setText(festival.getName());
         ((TextView) view.findViewById(R.id.info_date)).setText(FestivalHelper.getDateRange(festival, getActivity()));

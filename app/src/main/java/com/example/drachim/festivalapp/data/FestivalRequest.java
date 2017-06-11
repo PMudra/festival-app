@@ -7,11 +7,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +53,12 @@ public class FestivalRequest extends Request<List<Festival>> {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             Type collectionType = new TypeToken<List<Festival>>() {
             }.getType();
-            List<Festival> result = gson.fromJson(json, collectionType);
+            List<Festival> result;
+            try {
+                result = gson.fromJson(json, collectionType);
+            } catch (JsonParseException e) {
+                result = Collections.singletonList(gson.fromJson(json, Festival.class));
+            }
             return Response.success(result, HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

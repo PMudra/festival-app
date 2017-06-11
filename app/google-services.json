@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "447234594120-evl0hivi979jcd8n082jvfplk3b0fo4q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.drachim.festivalapp",
+            "certificate_hash": "ec5983b5aa49ee9b6f3ea74fb91947854a30d650"
+          }
+        },
+        {
           "client_id": "447234594120-agubpfjn2hugeh4h6cka0r4vi1etup3i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -30,6 +38,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyAVx7TokN3_X_h_YtmTaY15b__5VaGUnFQ"
+        },
+        {
+          "current_key": "AIzaSyDyLsOeClh_1bW0dFPiM00uu0vL6wuu6CM"
         }
       ],
       "services": {
