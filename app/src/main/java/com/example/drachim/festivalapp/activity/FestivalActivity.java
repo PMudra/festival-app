@@ -73,11 +73,12 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         showFab(viewPager.getCurrentItem());
 
         Bundle bundle = getIntent().getExtras();
+
         Festival festival = (Festival) bundle.get(FestivalActivity.EXTRA_FESTIVAL);
         if (festival != null) {
             loadFestival(festival);
         } else {
-            int festivalId = bundle.getInt(FestivalActivity.EXTRA_FESTIVAL_ID);
+            String festivalId = bundle.getString(FestivalActivity.EXTRA_FESTIVAL_ID);
             FestivalRequest festivalRequest = new FestivalRequest("http://amgbr.us.to:3000/festival/" + festivalId, null, new Response.Listener<List<Festival>>() {
                 @Override
                 public void onResponse(List<Festival> response) {

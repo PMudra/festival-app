@@ -49,9 +49,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.FestivalActivity"
-            android:theme="@style/AppTheme.NoActionBar.Compat.Translucent" />
+            android:theme="@style/AppTheme.NoActionBar.Compat.Translucent"
+            android:parentActivityName=".activity.DashboardActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.DashboardActivity"/>
+
+            <intent-filter>
+                <action android:name="OPEN_FESTIVAL_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+
         <activity
             android:name=".activity.ContactsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -77,6 +91,14 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_stat_ic_nav_drawer_dj" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
 
     </application>
 

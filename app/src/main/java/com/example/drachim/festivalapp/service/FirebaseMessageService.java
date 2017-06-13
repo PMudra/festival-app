@@ -3,8 +3,10 @@ package com.example.drachim.festivalapp.service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.drachim.festivalapp.R;
@@ -40,18 +42,19 @@ public class FirebaseMessageService extends FirebaseMessagingService {
     /**
      * Create and show a simple notification containing the received FCM message.
      */
-
     private void sendNotification(String messageBody, String festivalId) {
 
         Intent intent = new Intent(this, FestivalActivity.class);
         // TODO: Die Flags nochmal evaluieren bezügl. Backstack
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(FestivalActivity.EXTRA_FESTIVAL_ID, Integer.parseInt(festivalId));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(FestivalActivity.EXTRA_FESTIVAL_ID, festivalId);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(FestivalActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
 
-        Notification notification = new Notification.Builder(this)
+        Notification notification = new NotificationCompat.Builder(this)
                 .setContentTitle(messageBody)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
