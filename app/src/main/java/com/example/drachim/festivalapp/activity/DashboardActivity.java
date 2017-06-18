@@ -66,6 +66,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         } else {
             switchContentFragment(R.id.nav_dashboard);
         }
+
+        if (getIntent().getExtras() != null && getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL_ID) != null) {
+            final String festivalID = getIntent().getExtras().getString(FestivalActivity.EXTRA_FESTIVAL_ID);
+            openFestivalActivity(festivalID);
+            return;
+        }
     }
 
     @Override
@@ -163,6 +169,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     public void onFestivalClicked(Festival festival) {
         Intent intent = new Intent(this, FestivalActivity.class);
         intent.putExtra(FestivalActivity.EXTRA_FESTIVAL, festival);
+        startActivity(intent);
+    }
+
+    private void openFestivalActivity(final String festivalId) {
+        Intent intent = new Intent(this, FestivalActivity.class);
+        intent.putExtra(FestivalActivity.EXTRA_FESTIVAL_ID, festivalId);
         startActivity(intent);
     }
 

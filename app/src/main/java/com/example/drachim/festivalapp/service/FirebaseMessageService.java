@@ -3,67 +3,50 @@ package com.example.drachim.festivalapp.service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.example.drachim.festivalapp.R;
+import com.example.drachim.festivalapp.activity.DashboardActivity;
 import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessageService extends FirebaseMessagingService {
+
+    private static int notificationId = 0;
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d("TEST", "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.d("TEST", "Message data payload: " + remoteMessage.getData());
-        }
+        String message = remoteMessage.getNotification().getBody();
+        String title = remoteMessage.getNotification().getTitle();
+        String festivalId = remoteMessage.getData().get(FestivalActivity.EXTRA_FESTIVAL_ID);
 
-        // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.d("TEST", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-
-        // message will contain the Push Message
-        String message = remoteMessage.getData().get("message");
-
-        // festivalId will contain the id of the festival
-        String festivalId = remoteMessage.getData().get("festivalId");
-
-        sendNotification(message, festivalId);
+        sendNotification(message, title, festivalId);
     }
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     */
-    private void sendNotification(String messageBody, String festivalId) {
+    private void sendNotification(String message, String title, String festivalId) {
 
-        Intent intent = new Intent(this, FestivalActivity.class);
-        // TODO: Die Flags nochmal evaluieren bezügl. Backstack
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intent = new Intent(this, DashboardActivity.class);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(FestivalActivity.EXTRA_FESTIVAL_ID, festivalId);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(FestivalActivity.class);
-        stackBuilder.addNextIntent(intent);
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Notification notification = new NotificationCompat.Builder(this)
-                .setContentTitle(messageBody)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_stat_ic_nav_drawer_dj)
+                .setColor(getResources().getColor(R.color.colorAccent))
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .build();
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notification);
+        notificationManager.notify(notificationId++, notification);
     }
 }
