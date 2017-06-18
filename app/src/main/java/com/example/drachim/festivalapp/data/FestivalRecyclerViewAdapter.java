@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.fragment.AbstractFestivalListFragment;
 
@@ -17,12 +16,12 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
     private final List<Festival> festivals;
     private final AbstractFestivalListFragment.OnFestivalListInteractionListener listener;
-    private final ImageLoader imageLoader;
+    private final FestivalImageLoader festivalImageLoader;
 
-    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener, ImageLoader imageLoader) {
+    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener, FestivalImageLoader festivalImageLoader) {
         festivals = items;
         this.listener = listener;
-        this.imageLoader = imageLoader;
+        this.festivalImageLoader = festivalImageLoader;
     }
 
     @Override
@@ -39,13 +38,14 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         String dateRange = FestivalHelper.getDateRange(festival, viewHolder.getDateTextView().getContext());
         viewHolder.getDateTextView().setText(dateRange);
         viewHolder.getPlaceTextView().setText(festival.getPlace());
-        imageLoader.get("http://amgbr.us.to:3000/festival/" + festival.getId() + "/profile", ImageLoader.getImageListener(viewHolder.getImageView(), 0, 0));
+
+        festivalImageLoader.loadProfileImage(festival.getId(), viewHolder.getImageView());
 
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != listener) {
-                    listener.onFestivalClicked(viewHolder.getFestival());
+                    listener.onFestivalClicked(viewHolder.getFestival().getId());
                 }
             }
         });

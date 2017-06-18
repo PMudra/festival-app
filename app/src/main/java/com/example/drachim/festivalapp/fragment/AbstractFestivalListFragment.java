@@ -6,24 +6,24 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.example.drachim.festivalapp.common.VolleySingleton;
-import com.example.drachim.festivalapp.data.Festival;
-import com.example.drachim.festivalapp.data.FestivalRequest;
 
+import com.example.drachim.festivalapp.data.Festival;
+import com.example.drachim.festivalapp.data.FestivalImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractFestivalListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class AbstractFestivalListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ValueEventListener {
 
     private OnFestivalListInteractionListener onFestivalListInteractionListener;
-    private RequestQueue requestQueue;
-    private ImageLoader imageLoader;
 
-    ImageLoader getImageLoader() {
-        return imageLoader;
+    protected FestivalImageLoader getImageLoader() {
+        return new FestivalImageLoader(getActivity());
     }
 
     protected abstract SwipeRefreshLayout getSwipeRefreshLayout();
@@ -33,9 +33,6 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        requestQueue = VolleySingleton.getInstance().getRequestQueue();
-        imageLoader = VolleySingleton.getInstance().getImageLoader();
     }
 
     @Override
@@ -51,19 +48,23 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
             getSwipeRefreshLayout().setRefreshing(true);
         }
 
-        FestivalRequest festivalRequest = new FestivalRequest("http://amgbr.us.to:3000/festivals", null, new Response.Listener<List<Festival>>() {
-            @Override
-            public void onResponse(List<Festival> response) {
-                onLoadFinished(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference festivals = database.getReference("festivals");
+        festivals.addListenerForSingleValueEvent(this);
+    }
 
-            }
-        });
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        final List<Festival> festivals = new ArrayList<>();
+        for (DataSnapshot festival : dataSnapshot.getChildren()) {
+            festivals.add(festival.getValue(Festival.class));
+        }
+        onLoadFinished(festivals);
+    }
 
-        requestQueue.add(festivalRequest);
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
     }
 
     @Override
@@ -111,9 +112,9 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     }
 
     public interface OnFestivalListInteractionListener {
-        void onFestivalClicked(Festival festival);
+        void onFestivalClicked(final int festivalId);
 
-        void onMoreClicked(MoreOption moreOption);
+        void onMoreClicked(final MoreOption moreOption);
 
         enum MoreOption {
             Discover,

@@ -1,6 +1,7 @@
 package com.example.drachim.festivalapp.activity;
 
 import android.animation.Animator;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.Toast;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.data.Festival;
@@ -28,6 +30,9 @@ import com.example.drachim.festivalapp.fragment.DateDialogFragment;
 import com.example.drachim.festivalapp.fragment.FestivalListFragment;
 import com.example.drachim.festivalapp.fragment.FilterDialogFragment;
 import com.example.drachim.festivalapp.fragment.SettingsFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
@@ -40,11 +45,28 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private Toolbar toolbar;
     private NavigationView navigationView;
 
+    private boolean checkPlayServices() {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(result)) {
+                googleApiAvailability.getErrorDialog(this, result, 0).show();
+            }
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (!checkPlayServices()) {
+            // todo
+        }
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         setContentView(R.layout.activity_dashboard);
 
@@ -68,9 +90,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
         if (getIntent().getExtras() != null && getIntent().getExtras().get(FestivalActivity.EXTRA_FESTIVAL_ID) != null) {
-            final String festivalID = getIntent().getExtras().getString(FestivalActivity.EXTRA_FESTIVAL_ID);
-            openFestivalActivity(festivalID);
-            return;
+            final String festivalId = getIntent().getExtras().getString(FestivalActivity.EXTRA_FESTIVAL_ID);
+            onFestivalClicked(Integer.parseInt(festivalId));
         }
     }
 
@@ -166,13 +187,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void onFestivalClicked(Festival festival) {
-        Intent intent = new Intent(this, FestivalActivity.class);
-        intent.putExtra(FestivalActivity.EXTRA_FESTIVAL, festival);
-        startActivity(intent);
-    }
-
-    private void openFestivalActivity(final String festivalId) {
+    public void onFestivalClicked(final int festivalId) {
         Intent intent = new Intent(this, FestivalActivity.class);
         intent.putExtra(FestivalActivity.EXTRA_FESTIVAL_ID, festivalId);
         startActivity(intent);

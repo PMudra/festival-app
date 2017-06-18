@@ -17,21 +17,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
-import com.example.drachim.festivalapp.common.VolleySingleton;
 import com.example.drachim.festivalapp.data.Festival;
-import com.example.drachim.festivalapp.data.FestivalRequest;
+import com.example.drachim.festivalapp.data.FestivalImageLoader;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, ValueEventListener {
 
-public class FestivalActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
-
-    public static final String EXTRA_FESTIVAL = "FESTIVAL";
     public static final String EXTRA_FESTIVAL_ID = "FESTIVAL_ID";
 
     private boolean isFestivalAccentColor;
@@ -53,6 +53,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_festival);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,44 +75,29 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         Bundle bundle = getIntent().getExtras();
 
-        Festival festival = (Festival) bundle.get(FestivalActivity.EXTRA_FESTIVAL);
-        if (festival != null) {
-            loadFestival(festival);
-        } else {
-            String festivalId = bundle.getString(FestivalActivity.EXTRA_FESTIVAL_ID);
-            FestivalRequest festivalRequest = new FestivalRequest("http://amgbr.us.to:3000/festival/" + festivalId, null, new Response.Listener<List<Festival>>() {
-                @Override
-                public void onResponse(List<Festival> response) {
-                    loadFestival(response.get(0));
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final int festivalId = bundle.getInt(FestivalActivity.EXTRA_FESTIVAL_ID);
+        DatabaseReference festivalRef = database.getReference("festivals").child(String.valueOf(festivalId));
+        festivalRef.addListenerForSingleValueEvent(this);
+    }
 
-                }
-            });
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        loadFestival(dataSnapshot.getValue(Festival.class));
+    }
 
-            VolleySingleton.getInstance().getRequestQueue().add(festivalRequest);
-        }
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
 
     }
 
     private void loadFestival(final Festival festival) {
         this.festival = festival;
-        ImageLoader imageLoader = VolleySingleton.getInstance().getImageLoader();
-        String url = "http://amgbr.us.to:3000/festival/" + festival.getId() + "/title";
-        imageLoader.get(url, new ImageLoader.ImageListener() {
+        new FestivalImageLoader(this).loadTitleImage(festival.getId(), new SimpleTarget<Bitmap>() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean arg1) {
-
-                if (response.getBitmap() != null) {
-                    initColors(response.getBitmap());
-                    initGui(response.getBitmap());
-                }
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                initColors(resource);
+                initGui(resource);
             }
         });
     }
@@ -183,7 +169,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_toggle_favorite:
 
                 return true;
@@ -252,4 +238,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     public int getFestivalTextColorSelected() {
         return festivalTextColorSelected;
     }
+
+
 }
