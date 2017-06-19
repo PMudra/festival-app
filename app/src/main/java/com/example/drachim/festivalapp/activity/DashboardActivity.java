@@ -1,7 +1,6 @@
 package com.example.drachim.festivalapp.activity;
 
 import android.animation.Animator;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -20,10 +19,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.widget.Toast;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.fragment.AbstractFestivalListFragment;
 import com.example.drachim.festivalapp.fragment.DashboardFragment;
 import com.example.drachim.festivalapp.fragment.DateDialogFragment;
@@ -32,7 +29,6 @@ import com.example.drachim.festivalapp.fragment.FilterDialogFragment;
 import com.example.drachim.festivalapp.fragment.SettingsFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 
@@ -66,7 +62,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         setContentView(R.layout.activity_dashboard);
 

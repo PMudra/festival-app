@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Utilities;
+import com.example.drachim.festivalapp.data.DatabaseUtil;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalImageLoader;
 import com.google.firebase.database.DataSnapshot;
@@ -75,7 +76,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         Bundle bundle = getIntent().getExtras();
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database = DatabaseUtil.getDatabase();
         final int festivalId = bundle.getInt(FestivalActivity.EXTRA_FESTIVAL_ID);
         DatabaseReference festivalRef = database.getReference("festivals").child(String.valueOf(festivalId));
         festivalRef.addListenerForSingleValueEvent(this);

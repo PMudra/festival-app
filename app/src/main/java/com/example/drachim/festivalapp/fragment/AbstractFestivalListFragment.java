@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import com.example.drachim.festivalapp.data.DatabaseUtil;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalImageLoader;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +49,7 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
             getSwipeRefreshLayout().setRefreshing(true);
         }
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database = DatabaseUtil.getDatabase();
         DatabaseReference festivals = database.getReference("festivals");
         festivals.addListenerForSingleValueEvent(this);
     }
