@@ -25,6 +25,7 @@ import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.DatabaseUtil;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalImageLoader;
+import com.example.drachim.festivalapp.data.LocalStorage;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +47,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     private FloatingActionButton fab2;
     private TabLayout tabLayout;
     private Festival festival;
+    private Menu menu;
 
     public Festival getFestival() {
         return festival;
@@ -94,6 +96,9 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
     private void loadFestival(final Festival festival) {
         this.festival = festival;
+
+        toggleFavorite(false);
+
         new FestivalImageLoader(this).loadTitleImage(festival.getId(), new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -162,9 +167,11 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_festival, menu);
+        this.menu = menu;
+        toggleFavorite(false);
         return true;
     }
 
@@ -172,9 +179,8 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_toggle_favorite:
-
+                toggleFavorite(true);
                 return true;
-
             case android.R.id.home:
                 supportFinishAfterTransition();
                 return true;
@@ -196,6 +202,17 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    private void toggleFavorite(final boolean switchStatus) {
+        if (festival == null || menu == null) {
+            return;
+        }
+        final boolean isFavorite = LocalStorage.isFavorite(this, festival.getId());
+        final boolean newState = isFavorite ^ switchStatus;
+        final int icon = newState ? R.drawable.ic_action_favorite_white : R.drawable.ic_action_favorite_border_white;
+        menu.findItem(R.id.action_toggle_favorite).setIcon(icon);
+        LocalStorage.setFavorite(this, festival.getId(), newState);
     }
 
     public void hideFabs() {

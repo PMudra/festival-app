@@ -165,7 +165,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 toolbar.setTitle(R.string.app_name);
                 break;
             case R.id.nav_favorites:
-                fragment = new FestivalListFragment();
+                fragment = FestivalListFragment.newInstance(true);
                 toolbar.setTitle(R.string.nav_favorites);
                 break;
             case R.id.nav_discover:
