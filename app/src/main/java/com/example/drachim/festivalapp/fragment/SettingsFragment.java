@@ -1,53 +1,46 @@
 package com.example.drachim.festivalapp.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v13.app.FragmentCompat;
+import android.util.Log;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.common.Application;
-import com.example.drachim.festivalapp.common.Utilities;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
-public class SettingsFragment extends PreferenceFragment implements FragmentCompat.OnRequestPermissionsResultCallback, SharedPreferences.OnSharedPreferenceChangeListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-    private static final int ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 1;
+import static android.app.Activity.RESULT_OK;
 
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10 * 1000;      /* 10 secs */
-    private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 2000;   /* 2 secs */
-
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private Location currentLocation;
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final int PLACE_PICKER_REQUEST = 1;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         addPreferencesFromResource(R.xml.preferences);
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        sharedPreferences = getPreferenceScreen().getSharedPreferences();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         initSummary(getPreferenceScreen());
         setHasOptionsMenu(true);
 
-        Preference determineLocationButton = findPreference("pref_determine_location");
-        determineLocationButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference prefHomeAddress = findPreference(getString(R.string.pref_home_address_key));
+        prefHomeAddress.setSummary(sharedPreferences.getString(getString(R.string.pref_home_address_key), ""));
+        prefHomeAddress.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (Utilities.checkAndRequestAccessFineLocationPermission(SettingsFragment.this, ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST_CODE)) {
-                    initLocationService();
-                }
-
+                initPlacePicker();
                 return true;
             }
         });
@@ -71,41 +64,31 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
         }
     }
 
-    private void initLocationService() {
-        // Create an instance of GoogleAPIClient.
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(Application.getAppContext(), this, this).addApi(LocationServices.API).build();
-        }
+    private void initPlacePicker() {
+        PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
 
-        if (!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
-        }
-    }
+        try {
+            Intent intent = intentBuilder.build(getActivity());
+            startActivityForResult(intent, PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Indicates that Google Play Services is either not installed or not up to date. Prompt the user to correct the issue.
+            GoogleApiAvailability.getInstance().getErrorDialog(getActivity(), e.getConnectionStatusCode(), 0).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates that Google Play Services is not available and the problem is not easily resolvable.
+            String message = "Google Play Services is not available: " + GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
 
-    private void requestLocation() {
-        // Create the location request
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPDATE_INTERVAL_IN_MILLISECONDS)
-                .setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-
-        if (Utilities.checkAccessFineLocationPermission(getActivity())) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            Log.e("TEST", message);
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case ACCESS_FINE_LOCATION_PERMISSIONS_REQUEST_CODE:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initLocationService();
-                    break;
-                } else {
-                    break;
-                }
-            default:
-                break;
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(getActivity(), data);
+                updateHomeAddress(place);
+            }
         }
     }
 
@@ -119,40 +102,13 @@ public class SettingsFragment extends PreferenceFragment implements FragmentComp
         updatePreferenceSummary(findPreference(key));
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
-    }
+    private void updateHomeAddress(Place place) {
+        Preference prefHomeAddress = findPreference(getString(R.string.pref_home_address_key));
+        prefHomeAddress.setSummary(place.getAddress());
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        requestLocation();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        currentLocation = location;
-        updateHomeAddress();
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        mGoogleApiClient.disconnect();
-    }
-
-    private void updateHomeAddress() {
-        EditTextPreference prefHomeAddress = (EditTextPreference) findPreference("pref_home_address");
-        prefHomeAddress.setText("Lat " + currentLocation.getLatitude() + ", Long " + currentLocation.getLongitude());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.pref_home_address_key), place.getAddress().toString());
+        editor.apply();
     }
 
 }

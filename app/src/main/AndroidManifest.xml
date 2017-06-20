@@ -16,9 +16,6 @@
     <!-- needed to add festivals marked as interesting or as participating to calender -->
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
-    <!-- needed to calculate the distance to a festival (e.g. for the search filter) -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <!-- Declare optional permissions as not required -->
     <uses-feature
         android:name="android.permission.READ_CONTACTS"

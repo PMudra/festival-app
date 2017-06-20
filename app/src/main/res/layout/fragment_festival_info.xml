@@ -116,7 +116,7 @@
                     android:name="com.google.android.gms.maps.MapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    map:cameraZoom="13"
+                    map:cameraZoom="16"
                     map:liteMode="true"
                     map:mapType="normal"/>
 

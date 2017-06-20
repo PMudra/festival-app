@@ -5,22 +5,15 @@
         <SwitchPreference
             android:defaultValue="true"
             android:icon="@drawable/ic_action_notifications_active_gray"
-            android:key="pref_notifications"
+            android:key="@string/pref_notification_key"
             android:title="@string/pref_notifications"/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_location">
-        <EditTextPreference
-            android:icon="@drawable/ic_action_home"
-            android:key="pref_home_address"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="@string/pref_home_address"/>
-
         <Preference
-            android:icon="@drawable/ic_action_gps"
-            android:key="pref_determine_location"
-            android:title="@string/pref_set_home_address_via_gps"/>
+            android:icon="@drawable/ic_action_home"
+            android:key="@string/pref_home_address_key"
+            android:title="@string/pref_home_address"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
