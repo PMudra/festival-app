@@ -22,16 +22,16 @@ import java.util.List;
 
 public class FestivalListFragment extends AbstractFestivalListFragment {
 
-    public static final String SHOW_FAVRORITES_ONLY = "SHOW_FAVRORITES_ONLY";
+    public static final String SHOW_FAVORITES_ONLY = "SHOW_FAVORITES_ONLY";
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private boolean showFavroritesOnly;
+    private boolean showFavoritesOnly;
 
     public static FestivalListFragment newInstance(final boolean showFavroritesOnly) {
         FestivalListFragment festivalListFragment = new FestivalListFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putBoolean(SHOW_FAVRORITES_ONLY, showFavroritesOnly);
+        bundle.putBoolean(SHOW_FAVORITES_ONLY, showFavroritesOnly);
         festivalListFragment.setArguments(bundle);
 
         return festivalListFragment;
@@ -45,7 +45,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            showFavroritesOnly = arguments.getBoolean(SHOW_FAVRORITES_ONLY);
+            showFavoritesOnly = arguments.getBoolean(SHOW_FAVORITES_ONLY);
         }
     }
 
@@ -67,7 +67,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
         switch (item.getItemId()) {
             case R.id.action_filter:
                 DialogFragment filterDialogFragment = new FilterDialogFragment();
-                filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.tag);
+                filterDialogFragment.show(getChildFragmentManager(), FilterDialogFragment.tag);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -96,7 +96,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
     protected void onLoadFinished(List<Festival> data) {
         List<Festival> filteredList = new ArrayList<>();
         for (Festival festival : data) {
-            if (!showFavroritesOnly || LocalStorage.isFavorite(this.getActivity(), festival.getId())) {
+            if (!showFavoritesOnly || LocalStorage.isFavorite(this.getActivity(), festival.getId())) {
                 filteredList.add(festival);
             }
         }

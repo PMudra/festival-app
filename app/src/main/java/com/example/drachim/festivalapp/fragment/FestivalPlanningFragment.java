@@ -137,7 +137,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     private void showInputDialog() {
         DialogFragment dialogFragment = new InputParticipantDialogFragment();
         dialogFragment.setTargetFragment(this, 1); //request code
-        dialogFragment.show(getFragmentManager(), "dialog");
+        dialogFragment.show(getChildFragmentManager(), "dialog");
     }
 
     private void toggleShowFab() {
