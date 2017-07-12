@@ -2,6 +2,7 @@ package com.example.drachim.festivalapp.fragment;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Application;
@@ -98,6 +100,12 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
+
+                final String location = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
+                if (location == null) {
+                    Toast.makeText(getActivity(), R.string.filter_no_location_given, Toast.LENGTH_LONG).show();
+                }
+
                 DialogFragment filterDialogFragment = FilterDialogFragment.newInstance(filter);
                 filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.TAG);
                 return true;
