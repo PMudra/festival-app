@@ -19,10 +19,12 @@ import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.LocalStorage;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-public class FestivalListFragment extends AbstractFestivalListFragment {
+public class FestivalListFragment extends AbstractFestivalListFragment implements FilterDialogFragment.OnFilterListener {
 
     public static final String SHOW_FAVORITES_ONLY = "SHOW_FAVORITES_ONLY";
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -30,6 +32,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
     private boolean showFavoritesOnly;
     private List<Festival> festivals;
     private String searchQuery = "";
+    private FilterDialogFragment.Filter filter;
 
     public static FestivalListFragment newInstance(final boolean showFavoritesOnly) {
         FestivalListFragment festivalListFragment = new FestivalListFragment();
@@ -39,6 +42,15 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
         festivalListFragment.setArguments(bundle);
 
         return festivalListFragment;
+    }
+
+    public FestivalListFragment() {
+        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.YEAR, 1);
+        Date inOneYear = calendar.getTime();
+        filter = new FilterDialogFragment.Filter(FilterDialogFragment.Distance.KM100, true, now, inOneYear);
     }
 
     @Override
@@ -86,8 +98,8 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
-                DialogFragment filterDialogFragment = new FilterDialogFragment();
-                filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.tag);
+                DialogFragment filterDialogFragment = FilterDialogFragment.newInstance(filter);
+                filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -138,4 +150,9 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
         recyclerView.setAdapter(new FestivalRecyclerViewAdapter(filteredList, getOnFestivalListInteractionListener(), getImageLoader()));
     }
 
+    @Override
+    public void onFilterSet(FilterDialogFragment.Filter filter) {
+        this.filter = filter;
+        applyFilters();
+    }
 }

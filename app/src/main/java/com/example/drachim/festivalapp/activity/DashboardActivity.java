@@ -32,9 +32,13 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.Date;
 
-public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AbstractFestivalListFragment.OnFestivalListInteractionListener, DateDialogFragment.OnDateListener {
+public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        AbstractFestivalListFragment.OnFestivalListInteractionListener,
+        DateDialogFragment.OnDateListener,
+        FilterDialogFragment.OnFilterListener {
 
     private static final String CURRENT_FRAGMENT_KEY = "fragment_key";
+    private static final String CONTENT_FRAGMENT_TAG = "content_fragment";
     private DrawerLayout drawer;
     private FragmentManager fragmentManager;
     private int currentFragmentId;
@@ -177,7 +181,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 toolbar.setTitle(R.string.nav_settings);
                 break;
         }
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment, CONTENT_FRAGMENT_TAG);
         fragmentTransaction.commit();
     }
 
@@ -203,6 +207,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void onDateSet(final String tag, final Date date) {
-        ((FilterDialogFragment) getFragmentManager().findFragmentByTag(FilterDialogFragment.tag)).onDateSet(tag, date);
+        ((FilterDialogFragment) getFragmentManager().findFragmentByTag(FilterDialogFragment.TAG)).onDateSet(tag, date);
+    }
+
+    @Override
+    public void onFilterSet(FilterDialogFragment.Filter filter) {
+        ((FestivalListFragment) getFragmentManager().findFragmentByTag(CONTENT_FRAGMENT_TAG)).onFilterSet(filter);
     }
 }
