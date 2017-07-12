@@ -53,5 +53,6 @@
     <string name="notifications_enabled_message">Notifications enabled</string>
     <string name="notifications_disabled_message">Notifications disabled</string>
     <string name="fcm_topic_main">news</string>
+    <string name="search_hint">Search for festival name...</string>
 
 </resources>

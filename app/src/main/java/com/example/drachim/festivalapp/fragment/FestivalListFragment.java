@@ -4,6 +4,7 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,8 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private boolean showFavoritesOnly;
+    private List<Festival> festivals;
+    private String searchQuery = "";
 
     public static FestivalListFragment newInstance(final boolean showFavroritesOnly) {
         FestivalListFragment festivalListFragment = new FestivalListFragment();
@@ -52,8 +55,24 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         inflater.inflate(R.menu.menu_festival_filter, menu);
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchQuery = newText;
+                applyFilters();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -94,15 +113,28 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
 
     @Override
     protected void onLoadFinished(List<Festival> data) {
+        this.festivals = data;
+        applyFilters();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void applyFilters() {
         List<Festival> filteredList = new ArrayList<>();
-        for (Festival festival : data) {
-            if (!showFavoritesOnly || LocalStorage.isFavorite(this.getActivity(), festival.getId())) {
-                filteredList.add(festival);
+        for (Festival festival : festivals) {
+            // favorites only
+            if (showFavoritesOnly && !LocalStorage.isFavorite(this.getActivity(), festival.getId())) {
+                continue;
             }
+
+            // search for name
+            if (!festival.getName().toLowerCase().contains(searchQuery.toLowerCase())) {
+                continue;
+            }
+
+            filteredList.add(festival);
         }
 
         recyclerView.setAdapter(new FestivalRecyclerViewAdapter(filteredList, getOnFestivalListInteractionListener(), getImageLoader()));
-        swipeRefreshLayout.setRefreshing(false);
     }
 
 }
