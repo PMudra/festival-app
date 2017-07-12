@@ -1,6 +1,5 @@
 package com.example.drachim.festivalapp.data;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -13,11 +12,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class FestivalImageLoader {
-    private final Activity activity;
-
-    public FestivalImageLoader(final Activity activity) {
-        this.activity = activity;
+public class FestivalImageLoader extends ContextWrapper {
+    public FestivalImageLoader(final Context base) {
+        super(base);
     }
 
     public void loadTitleImage(final int festivalId, final Target<Bitmap> target) {
@@ -25,12 +22,10 @@ public class FestivalImageLoader {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                if (!activity.isDestroyed()) {
-                    Glide.with(activity)
-                            .load(uri)
-                            .asBitmap()
-                            .into(target);
-                }
+                Glide.with(FestivalImageLoader.this)
+                        .load(uri)
+                        .asBitmap()
+                        .into(target);
             }
         });
     }
@@ -40,11 +35,9 @@ public class FestivalImageLoader {
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                if (!activity.isDestroyed()) {
-                    Glide.with(activity)
-                            .load(uri)
-                            .into(imageView);
-                }
+                Glide.with(FestivalImageLoader.this)
+                        .load(uri)
+                        .into(imageView);
             }
         });
     }
