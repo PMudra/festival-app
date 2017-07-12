@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.activity.ContactsActivity;
 import com.example.drachim.festivalapp.activity.FestivalActivity;
 import com.example.drachim.festivalapp.common.Utilities;
+import com.example.drachim.festivalapp.data.LocalStorage;
 import com.example.drachim.festivalapp.data.Participant;
 import com.example.drachim.festivalapp.data.ParticipantRecyclerViewAdapter;
 
@@ -33,19 +33,11 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- */
 public class FestivalPlanningFragment extends Fragment implements FragmentCompat.OnRequestPermissionsResultCallback, InputParticipantDialogFragment.Callback, View.OnLongClickListener, View.OnClickListener {
 
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST_CODE = 1;
     private static final int CONTACT_ACTIVITY_REQUEST = 2;
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
     private List<Participant> participants;
     private ParticipantRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
@@ -55,44 +47,35 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     private FloatingActionButton fab_add_multiple;
 
     private ActionMode actionMode;
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-
-    public static FestivalPlanningFragment newInstance(int columnCount) {
-        FestivalPlanningFragment fragment = new FestivalPlanningFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private int festivalId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_planning_list, container, false);
+
+        festivalId = ((FestivalActivity) getActivity()).getFestival().getId();
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            participants = new ArrayList<>();
+            participants = LocalStorage.getParticipants(getActivity(), festivalId);
             adapter = new ParticipantRecyclerViewAdapter(participants, this);
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onChanged() {
+                    super.onChanged();
+                    saveParticipants();
+                }
+            });
+            adapter.sortAndUpdateList();
             recyclerView.setAdapter(adapter);
 
             fab_add_multiple = (FloatingActionButton) getActivity().findViewById(R.id.fab2);
@@ -104,7 +87,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                     if (Utilities.checkAndRequestReadContactsPermission(FestivalPlanningFragment.this, READ_CONTACTS_PERMISSIONS_REQUEST_CODE)) {
                         openContactsActivity();
                     }
-
                 }
             });
 
@@ -172,7 +154,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                 } else {
                     break;
                 }
-                //TODO: erklärung sollte angezeigt werden
             default:
                 break;
         }
@@ -225,7 +206,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
     /**
      * Toggle the selection state of an item.
-     *
+     * <p>
      * If the item was the last one in the selection and is unselected, the selection is stopped.
      * Note that the selection must already be started (actionMode must not be null).
      *
@@ -259,7 +240,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new ActionMode.Callback() {
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                    mode.getMenuInflater().inflate (R.menu.menu_cab_planning, menu);
+                    mode.getMenuInflater().inflate(R.menu.menu_cab_planning, menu);
                     ((FestivalActivity) getActivity()).hideFabs();
                     return true;
                 }
@@ -274,6 +255,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                     switch (item.getItemId()) {
                         case R.id.action_remove:
                             adapter.removeItems(adapter.getSelectedItemIds());
+                            adapter.sortAndUpdateList();
                             mode.finish();
                             return true;
 
@@ -294,6 +276,10 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         toggleSelection(recyclerView.getChildLayoutPosition(v));
 
         return true;
+    }
+
+    private void saveParticipants() {
+        LocalStorage.saveParticipants(getActivity(), festivalId, participants);
     }
 
 }

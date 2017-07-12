@@ -17,6 +17,12 @@ public class Participant implements Parcelable{
         this.photoUri = photoUri;
     }
 
+    public Participant(String name, String photoUri, boolean isInterested) {
+        this.name = name;
+        this.photoUri = photoUri;
+        this.isInterested = isInterested;
+    }
+
     private Participant(Parcel data) {
         this.name = data.readString();
         this.photoUri = data.readString();
