@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.drachim.festivalapp.R;
+import com.example.drachim.festivalapp.common.Application;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.LocalStorage;
@@ -30,11 +31,11 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
     private List<Festival> festivals;
     private String searchQuery = "";
 
-    public static FestivalListFragment newInstance(final boolean showFavroritesOnly) {
+    public static FestivalListFragment newInstance(final boolean showFavoritesOnly) {
         FestivalListFragment festivalListFragment = new FestivalListFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putBoolean(SHOW_FAVORITES_ONLY, showFavroritesOnly);
+        bundle.putBoolean(SHOW_FAVORITES_ONLY, showFavoritesOnly);
         festivalListFragment.setArguments(bundle);
 
         return festivalListFragment;
@@ -122,7 +123,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
         List<Festival> filteredList = new ArrayList<>();
         for (Festival festival : festivals) {
             // favorites only
-            if (showFavoritesOnly && !LocalStorage.isFavorite(this.getActivity(), festival.getId())) {
+            if (showFavoritesOnly && !LocalStorage.isFavorite(Application.getAppContext(), festival.getId())) {
                 continue;
             }
 
