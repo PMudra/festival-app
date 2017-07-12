@@ -74,8 +74,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         fab1 = (FloatingActionButton) findViewById(R.id.fab2);
         fab2 = (FloatingActionButton) findViewById(R.id.fab1);
 
-        showFab(viewPager.getCurrentItem());
-
         Bundle bundle = getIntent().getExtras();
 
         final FirebaseDatabase database = DatabaseUtil.getDatabase();
@@ -111,6 +109,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     private void initGui(Bitmap bitmap) {
         FestivalActivityPager adapter = new FestivalActivityPager(getFragmentManager(), this);
         viewPager.setAdapter(adapter);
+        showFab(viewPager.getCurrentItem());
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
