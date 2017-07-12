@@ -86,7 +86,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment {
         switch (item.getItemId()) {
             case R.id.action_filter:
                 DialogFragment filterDialogFragment = new FilterDialogFragment();
-                filterDialogFragment.show(getChildFragmentManager(), FilterDialogFragment.tag);
+                filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.tag);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
