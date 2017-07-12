@@ -3,8 +3,8 @@
     <string name="title_activity_dashboard">Dashboard</string>
     <string name="title_activity_discover">Discover</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="nav_developer_contact_adress" translatable="false">amgbr@gmail.com</string>
     <string name="nav_dashboard">Dashboard</string>
@@ -48,7 +48,10 @@
     <string name="pref_set_home_address_via_gps">Set home address via GPS</string>
     <string name="pref_home_address">Home address</string>
     <string name="pref_location">Location</string>
-    <string name="pref_notification_key">pref_notifications</string>
-    <string name="pref_home_address_key">pref_home_address</string>
+    <string name="pref_notification_key" translatable="false">pref_notifications</string>
+    <string name="pref_home_address_key" translatable="false">pref_home_address</string>
+    <string name="notifications_enabled_message">Notifications enabled</string>
+    <string name="notifications_disabled_message">Notifications disabled</string>
+    <string name="fcm_topic_main">news</string>
 
 </resources>
