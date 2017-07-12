@@ -1,5 +1,6 @@
 package com.example.drachim.festivalapp.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -15,13 +16,38 @@ import android.widget.TextView;
 
 import com.example.drachim.festivalapp.R;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class FilterDialogFragment extends DialogFragment implements View.OnClickListener, DateDialogFragment.OnDateListener, SeekBar.OnSeekBarChangeListener {
 
-    public static final String tag = "filter_dialog";
+    public static final String TAG = "filter_dialog";
+    public static final String FILTER = "FILTER";
+    private OnFilterListener onFilterListener;
+    private View view;
+    private Distance currentDistance;
+    private Date currentFromDate;
+    private Date currentToDate;
+
+    public static class Filter implements Serializable {
+        private Distance distance;
+        private boolean sortByDate;
+        private final Date fromDate;
+        private final Date toDate;
+
+        Filter(final Distance distance, final boolean sortByDate, final Date fromDate, final Date toDate) {
+            this.distance = distance;
+            this.sortByDate = sortByDate;
+            this.fromDate = fromDate;
+            this.toDate = toDate;
+        }
+    }
+
+    public interface OnFilterListener {
+        void onFilterSet(Filter filter);
+    }
 
     enum Distance {
         KM1(1),
@@ -41,31 +67,58 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             return Distance.values()[progress];
         }
 
+        public int toProgress() {
+            return java.util.Arrays.asList(Distance.values()).indexOf(this);
+        }
+
         public String toString(Context context) {
             return this != ANY ? kilometres + " km" : context.getString(R.string.any_distance);
         }
     }
 
+    static FilterDialogFragment newInstance(final Filter filter) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FilterDialogFragment.FILTER, filter);
+        FilterDialogFragment filterDialogFragment = new FilterDialogFragment();
+        filterDialogFragment.setArguments(bundle);
+        return filterDialogFragment;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter, null);
+        Filter filter = (Filter) getArguments().get(FILTER);
 
+        view = getActivity().getLayoutInflater().inflate(R.layout.dialog_filter, null);
+
+        // Genre
         Spinner spinner = (Spinner) view.findViewById(R.id.genre_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.music_genres, R.layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+        // Date
         view.findViewById(R.id.fromDate).setOnClickListener(this);
         view.findViewById(R.id.toDate).setOnClickListener(this);
-        ((SeekBar) view.findViewById(R.id.distance_seek_bar)).setOnSeekBarChangeListener(this);
+        onDateSet("from_date", filter.fromDate);
+        onDateSet("to_date", filter.toDate);
 
-        ((RadioButton) view.findViewById(R.id.radio_date)).setChecked(true);
+        // Sort
+        if(filter.sortByDate) {
+            ((RadioButton) view.findViewById(R.id.radio_date)).setChecked(true);
+        } else {
+            ((RadioButton) view.findViewById(R.id.radio_distance)).setChecked(true);
+        }
+
+        // Distance
+        ((SeekBar) view.findViewById(R.id.distance_seek_bar)).setOnSeekBarChangeListener(this);
+        ((SeekBar) view.findViewById(R.id.distance_seek_bar)).setProgress(filter.distance.toProgress());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view)
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        onFilterListener.onFilterSet(new Filter(currentDistance, ((RadioButton) view.findViewById(R.id.radio_date)).isChecked(), currentFromDate, currentToDate));
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -77,16 +130,40 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            onFilterListener = (OnFilterListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnFilterListener");
+        }
+    }
+
+    /**
+     * Necessary for devices older than API 23.
+     * Alternatively one could use Fragment class from SupportLibrary.
+     */
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            onFilterListener = (OnFilterListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnFilterListener");
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fromDate:
                 final Calendar calendar = Calendar.getInstance();
-                calendar.set(2017, 5 - 1, 14);
+                calendar.setTime(currentFromDate);
                 DateDialogFragment.newInstance(calendar).show(getFragmentManager(), "from_date");
                 break;
             case R.id.toDate:
                 final Calendar calendar2 = Calendar.getInstance();
-                calendar2.set(2017, 5 - 1, 14);
+                calendar2.setTime(currentToDate);
                 DateDialogFragment.newInstance(calendar2).show(getFragmentManager(), "to_date");
                 break;
         }
@@ -96,9 +173,11 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     public void onDateSet(final String tag, final Date date) {
         TextView textView;
         if (tag.equals("from_date")) {
-            textView = ((TextView) getDialog().findViewById(R.id.fromDate));
+            textView = ((TextView) view.findViewById(R.id.fromDate));
+            currentFromDate = date;
         } else {
-            textView = ((TextView) getDialog().findViewById(R.id.toDate));
+            textView = ((TextView) view.findViewById(R.id.toDate));
+            currentToDate = date;
         }
         final DateFormat dateFormat = DateFormat.getDateInstance();
         textView.setText(dateFormat.format(date));
@@ -106,7 +185,8 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
-        ((TextView) getDialog().findViewById(R.id.distance_text)).setText(Distance.fromProgress(progress).toString(getActivity()));
+        currentDistance = Distance.fromProgress(progress);
+        ((TextView) view.findViewById(R.id.distance_text)).setText(currentDistance.toString(getActivity()));
     }
 
     @Override
