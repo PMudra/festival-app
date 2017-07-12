@@ -55,7 +55,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
 
         setContentView(R.layout.activity_festival);
 
