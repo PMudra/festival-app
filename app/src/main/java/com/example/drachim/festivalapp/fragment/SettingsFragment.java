@@ -7,6 +7,7 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceGroup;
+import android.preference.SwitchPreference;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -34,6 +36,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         initSummary(getPreferenceScreen());
         setHasOptionsMenu(true);
+
+        Preference prefNotification = findPreference(getString(R.string.pref_notification_key));
+        prefNotification.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (((SwitchPreference) preference).isChecked()) {
+                    FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.fcm_topic_main));
+                    Toast.makeText(getActivity(), R.string.notifications_enabled_message, Toast.LENGTH_SHORT).show();
+                } else {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.fcm_topic_main));
+                    Toast.makeText(getActivity(), R.string.notifications_disabled_message, Toast.LENGTH_SHORT).show();
+                }
+
+                return false;
+            }
+        });
 
         Preference prefHomeAddress = findPreference(getString(R.string.pref_home_address_key));
         prefHomeAddress.setSummary(sharedPreferences.getString(getString(R.string.pref_home_address_key), ""));

@@ -40,4 +40,6 @@
     <string name="pref_home_address">Heimatadresse</string>
     <string name="pref_set_home_address_via_gps">Ermittle Heimatadresse</string>
     <string name="pref_location">Standort</string>
+    <string name="notifications_disabled_message">Benachrichtigungen deaktiviert</string>
+    <string name="notifications_enabled_message">Benachrichtigungen aktiviert</string>
 </resources>
