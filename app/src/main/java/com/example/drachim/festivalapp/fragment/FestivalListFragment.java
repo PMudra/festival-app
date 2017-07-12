@@ -1,6 +1,7 @@
 package com.example.drachim.festivalapp.fragment;
 
 import android.app.DialogFragment;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -52,7 +53,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
         calendar.setTime(now);
         calendar.add(Calendar.YEAR, 1);
         Date inOneYear = calendar.getTime();
-        filter = new FilterDialogFragment.Filter(FilterDialogFragment.Distance.KM100, true, now, inOneYear);
+        filter = new FilterDialogFragment.Filter(FilterDialogFragment.Distance.KM500, true, now, inOneYear);
     }
 
     @Override
@@ -104,10 +105,10 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
                 final String location = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
                 if (location == null) {
                     Toast.makeText(getActivity(), R.string.filter_no_location_given, Toast.LENGTH_LONG).show();
+                } else {
+                    DialogFragment filterDialogFragment = FilterDialogFragment.newInstance(filter);
+                    filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.TAG);
                 }
-
-                DialogFragment filterDialogFragment = FilterDialogFragment.newInstance(filter);
-                filterDialogFragment.show(getFragmentManager(), FilterDialogFragment.TAG);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -150,6 +151,21 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
             // search for name
             if (!festival.getName().toLowerCase().contains(searchQuery.toLowerCase())) {
                 continue;
+            }
+
+            // distance filter
+            String homeLocation = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
+            if (homeLocation != null) {
+                String[] latLng = homeLocation.split("\n");
+                double lat = Double.parseDouble(latLng[1]);
+                double lng = Double.parseDouble(latLng[2]);
+
+                int filterDistance = filter.getDistance().getKilometres();
+                float[] result = new float[1];
+                Location.distanceBetween(lat, lng, festival.getLatitude(), festival.getLongitude(), result);
+                if (result[0] > filterDistance * 1000) {
+                    continue;
+                }
             }
 
             filteredList.add(festival);

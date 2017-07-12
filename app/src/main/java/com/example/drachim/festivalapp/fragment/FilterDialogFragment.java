@@ -43,6 +43,22 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
             this.fromDate = fromDate;
             this.toDate = toDate;
         }
+
+        public Distance getDistance() {
+            return distance;
+        }
+
+        public boolean isSortByDate() {
+            return sortByDate;
+        }
+
+        public Date getFromDate() {
+            return fromDate;
+        }
+
+        public Date getToDate() {
+            return toDate;
+        }
     }
 
     public interface OnFilterListener {
@@ -50,12 +66,12 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
     }
 
     enum Distance {
-        KM1(1),
         KM10(10),
         KM50(50),
         KM100(100),
+        KM250(250),
         KM500(500),
-        ANY(Integer.MAX_VALUE);
+        ANY(100000);
 
         private final int kilometres;
 
@@ -69,6 +85,10 @@ public class FilterDialogFragment extends DialogFragment implements View.OnClick
 
         public int toProgress() {
             return java.util.Arrays.asList(Distance.values()).indexOf(this);
+        }
+
+        public int getKilometres() {
+            return kilometres;
         }
 
         public String toString(Context context) {

@@ -54,7 +54,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         });
 
         Preference prefHomeAddress = findPreference(getString(R.string.pref_home_address_key));
-        prefHomeAddress.setSummary(sharedPreferences.getString(getString(R.string.pref_home_address_key), ""));
+        String address = sharedPreferences.getString(getString(R.string.pref_home_address_key), "\n\n").split("\n", -1)[0];
+        prefHomeAddress.setSummary(address);
         prefHomeAddress.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -125,7 +126,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         prefHomeAddress.setSummary(place.getAddress());
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(getString(R.string.pref_home_address_key), place.getAddress().toString());
+        editor.putString(getString(R.string.pref_home_address_key), place.getAddress() + "\n" + place.getLatLng().latitude + "\n" + place.getLatLng().longitude);
         editor.apply();
     }
 
