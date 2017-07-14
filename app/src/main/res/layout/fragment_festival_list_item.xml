@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/MyCardViewStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/festival_card_height"
     android:clipToPadding="false"
     android:clickable="true">
 
@@ -57,7 +57,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                tools:text="Drafbaan en Evenementen Stadspark Test " />
+                tools:text="Drafbaan en Evenementen Stadspark Test Test Test Test " />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                tools:text="350 km" />
 
         </LinearLayout>
 
