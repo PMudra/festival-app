@@ -45,7 +45,14 @@ public class DateDialogFragment extends DialogFragment implements DatePickerDial
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) {
+            // Necessary to fix bug under API 19 with orientation change
+            @Override
+            protected void onStop() {
+            }
+        };
+
         datePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "Today", this);
         return datePickerDialog;
     }
@@ -87,6 +94,5 @@ public class DateDialogFragment extends DialogFragment implements DatePickerDial
     public void onClick(DialogInterface dialog, int which) {
         final Calendar calendar = Calendar.getInstance();
         onDateListener.onDateSet(getTag(), calendar.getTime());
-
     }
 }
