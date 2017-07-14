@@ -78,16 +78,17 @@
                     android:textColor="@color/colorAccent" />
 
             <LinearLayout
+                android:id="@+id/info_distance_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/info_distance_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/festival_card_textview_horizontal_margin"
-                    android:text="@string/direction_distance_label" />
+                    android:text="@string/direction_distance_label"/>
 
                 <TextView
                     android:id="@+id/info_distance"

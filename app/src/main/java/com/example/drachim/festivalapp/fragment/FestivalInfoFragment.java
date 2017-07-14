@@ -33,7 +33,13 @@ public class FestivalInfoFragment extends Fragment implements
         ((TextView) view.findViewById(R.id.info_name_title)).setText(festival.getName());
         ((TextView) view.findViewById(R.id.info_date)).setText(FestivalHelper.getDateRange(festival, getActivity()));
         ((TextView) view.findViewById(R.id.info_description)).setText(festival.getDescription());
-        ((TextView) view.findViewById(R.id.info_distance)).setText(FestivalHelper.getFriendlyDistanceToHomeLocation(festival));
+
+        String distance = FestivalHelper.getFriendlyDistanceToHomeLocation(festival);
+        if (!distance.isEmpty()) {
+            view.findViewById(R.id.info_distance_layout).setVisibility(View.VISIBLE);
+            ((TextView) view.findViewById(R.id.info_distance)).setText(distance);
+        }
+
         ((TextView) view.findViewById(R.id.info_place)).setText(FestivalHelper.getPlace(festival));
 
         MapView mapView = (MapView) view.findViewById(R.id.info_direction_map_view);
