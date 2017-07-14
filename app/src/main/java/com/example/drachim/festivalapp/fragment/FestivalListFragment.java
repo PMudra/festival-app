@@ -95,12 +95,6 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        onRefresh();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
@@ -214,7 +208,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
     }
 
     private String getHomeLocation() {
-        return PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
+        return PreferenceManager.getDefaultSharedPreferences(Application.getAppContext()).getString(getString(R.string.pref_home_address_key), null);
     }
 
     @Override

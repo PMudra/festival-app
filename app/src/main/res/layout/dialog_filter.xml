@@ -126,22 +126,4 @@
 
     </TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dialog_filter_label_vertical_margin"
-            android:text="@string/genre" />
-
-        <Spinner
-            android:id="@+id/genre_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="6dp"/>
-
-    </TableRow>
-
 </TableLayout>

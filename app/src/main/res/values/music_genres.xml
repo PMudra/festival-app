@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="music_genres">
-        <item>Electronic</item>
-        <item>Indie</item>
-        <item>Reggae</item>
-        <item>Rock</item>
-    </string-array>
-</resources>
