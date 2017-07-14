@@ -27,11 +27,6 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     protected abstract void onLoadFinished(List<Festival> data);
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
 
