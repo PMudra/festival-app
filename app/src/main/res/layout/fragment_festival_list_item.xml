@@ -34,7 +34,8 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/festival_card_textview_horizontal_margin"
             android:layout_marginStart="@dimen/festival_card_textview_horizontal_margin"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:baselineAligned="false">
 
             <TextView
                 android:id="@+id/name"
@@ -56,14 +57,16 @@
                 android:id="@+id/place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="2"
-                tools:text="Drafbaan en Evenementen Stadspark Test Test Test Test " />
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Drafbaan en Evenementen Stadspark Test  Test  Test" />
 
             <TextView
                 android:id="@+id/distance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:gravity="bottom"
                 tools:text="350 km" />
 
         </LinearLayout>

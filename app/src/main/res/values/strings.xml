@@ -31,7 +31,7 @@
     <string name="any_distance">Any distance</string>
     <string name="sort_by">Sort by</string>
     <string name="date">Date</string>
-    <string name="distance">Distance</string>
+    <string name="filter_distance">Distance</string>
     <string name="date_range">Date range</string>
     <string name="to">to</string>
 
@@ -54,5 +54,6 @@
     <string name="fcm_topic_main" translatable="false">news</string>
     <string name="search_hint">Search for festival name…</string>
     <string name="filter_no_location_given">Set home address in settings to use distance filter</string>
+    <string name="direction_distance_label">Distance:</string>
 
 </resources>
