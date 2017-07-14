@@ -50,11 +50,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
     private int festivalId;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_planning_list, container, false);
 
@@ -102,7 +97,11 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    toggleShowFab();
+                    if (fab_add_multiple.isShown() || fab_add_single.isShown()) {
+                        hideFabsMini();
+                    } else {
+                        showFabsMini();
+                    }
                 }
             });
 
@@ -110,38 +109,29 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         return view;
     }
 
+    private void hideFabsMini() {
+        Utilities.animRotateBackward(fab);
+        fab_add_multiple.hide();
+        fab_add_single.hide();
+    }
+
+    private void showFabsMini() {
+        Utilities.animRotateForward(fab);
+        fab_add_multiple.show();
+        fab_add_single.show();
+    }
+
+
     private void openContactsActivity() {
         Intent intent = new Intent(getActivity(), ContactsActivity.class);
         startActivityForResult(intent, CONTACT_ACTIVITY_REQUEST);
-        toggleShowFab();
+        hideFabsMini();
     }
 
     private void showInputDialog() {
         DialogFragment dialogFragment = new InputParticipantDialogFragment();
         dialogFragment.setTargetFragment(this, 1); //request code
         dialogFragment.show(getChildFragmentManager(), "dialog");
-    }
-
-    private void toggleShowFab() {
-        if (fab_add_multiple.isShown() || fab_add_single.isShown()) {
-
-            getFragmentManager().popBackStack();
-
-            Utilities.animRotateBackward(fab);
-
-            fab_add_multiple.hide();
-            fab_add_single.hide();
-        } else {
-            Utilities.animRotateForward(fab);
-
-            getFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .commit();
-
-            fab_add_multiple.show();
-            fab_add_single.show();
-        }
     }
 
     @Override
@@ -188,7 +178,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
     @Override
     public void accept(String participantName) {
-        toggleShowFab();
+        hideFabsMini();
 
         if (!participantName.trim().isEmpty()) {
 
@@ -201,7 +191,7 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
 
     @Override
     public void cancel() {
-        toggleShowFab();
+        hideFabsMini();
     }
 
     /**
@@ -223,7 +213,6 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
         } else {
             actionMode.setTitle(count + " " + getString(R.string.multiple_items_selected));
         }
-
     }
 
     @Override
@@ -241,7 +230,8 @@ public class FestivalPlanningFragment extends Fragment implements FragmentCompat
                 @Override
                 public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                     mode.getMenuInflater().inflate(R.menu.menu_cab_planning, menu);
-                    ((FestivalActivity) getActivity()).hideFabs();
+                    fab.hide();
+                    hideFabsMini();
                     return true;
                 }
 

@@ -21,7 +21,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.drachim.festivalapp.FestivalActivityPager;
 import com.example.drachim.festivalapp.R;
-import com.example.drachim.festivalapp.common.Utilities;
 import com.example.drachim.festivalapp.data.DatabaseUtil;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalImageLoader;
@@ -38,8 +37,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
     private boolean isFestivalAccentColor;
     private int festivalAccentColor;
-    private int festivalTextColor;
-    private int festivalTextColorSelected;
 
     private ViewPager viewPager;
     private FloatingActionButton fab;
@@ -109,7 +106,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     private void initGui(Bitmap bitmap) {
         FestivalActivityPager adapter = new FestivalActivityPager(getFragmentManager(), this);
         viewPager.setAdapter(adapter);
-        showFab(viewPager.getCurrentItem());
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
@@ -126,8 +122,8 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         if (isFestivalAccentColor) {
             festivalAccentColor = psVibrant.getRgb();
-            festivalTextColor = psVibrant.getTitleTextColor();
-            festivalTextColorSelected = psVibrant.getBodyTextColor();
+            int festivalTextColor = psVibrant.getTitleTextColor();
+            int festivalTextColorSelected = psVibrant.getBodyTextColor();
 
             tabLayout.setBackgroundColor(festivalAccentColor);
             tabLayout.setTabTextColors(festivalTextColor, festivalTextColorSelected);
@@ -157,9 +153,8 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
     @Override
     public void onBackPressed() {
-        if (fab1.isShown() || fab2.isShown()) {
-            hideFabsMini();
-            getFragmentManager().popBackStack();
+        if (viewPager.getCurrentItem() != 0) {
+            viewPager.setCurrentItem(0);
         } else {
             super.onBackPressed();
         }
@@ -190,17 +185,23 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
-        showFab(tab.getPosition());
+        if (tab.getPosition() == 2) {
+            fab.setRotation(0);
+            fab.show();
+        }
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-
+        if (tab.getPosition() == 2) {
+            fab.hide();
+            fab1.hide();
+            fab2.hide();
+        }
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     private void toggleFavorite(final boolean switchStatus) {
@@ -214,32 +215,6 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
         LocalStorage.setFavorite(this, festival.getId(), newState);
     }
 
-    public void hideFabs() {
-        fab.hide();
-        hideFabsMini();
-    }
-
-    private void hideFabsMini() {
-        Utilities.animRotateBackward(fab);
-        fab1.hide();
-        fab2.hide();
-    }
-
-    private void showFab(int tabPosition) {
-        switch (tabPosition) {
-            case 2:
-                fab.setRotation(0);
-                fab.show();
-                break;
-            default:
-                if (fab.isShown()) {
-                    hideFabs();
-                }
-                break;
-        }
-
-    }
-
     public boolean hasFestivalAccentColor() {
         return isFestivalAccentColor;
     }
@@ -247,14 +222,5 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     public int getFestivalAccentColor() {
         return festivalAccentColor;
     }
-
-    public int getFestivalTextColor() {
-        return festivalTextColor;
-    }
-
-    public int getFestivalTextColorSelected() {
-        return festivalTextColorSelected;
-    }
-
 
 }
