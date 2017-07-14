@@ -15,9 +15,9 @@
     <dimen name="festival_card_textview_vertical_margin">8dp</dimen>
     <dimen name="planning_list_item_spacing">5dp</dimen>
     <dimen name="expanded_toolbar_image_height">220dp</dimen>
-    <dimen name="festival_card_height">102dp</dimen>
-    <dimen name="festival_card_image_width">102dp</dimen>
-    <dimen name="festival_card_image_height">102dp</dimen>
+    <dimen name="festival_card_height">108dp</dimen>
+    <dimen name="festival_card_image_width">108dp</dimen>
+    <dimen name="festival_card_image_height">108dp</dimen>
     <dimen name="input_dialog_horizontal_margin">20dp</dimen>
     <dimen name="input_dialog_vertical_margin">16dp</dimen>
     <dimen name="dialog_filter_horizontal_padding">24dp</dimen>

@@ -32,6 +32,9 @@ public final class FestivalHelper {
     }
 
     public static String getFriendlyDistanceToHomeLocation(Festival festival) {
+        if (!isHomeLocationSet()) {
+            return "";
+        }
         int distanceToHomeLocation = Math.round(FestivalHelper.getDistanceToHomeLocation(festival) / 1000);
         return distanceToHomeLocation + " km";
     }
