@@ -36,6 +36,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         String dateRange = FestivalHelper.getDateRange(festival, viewHolder.getDateTextView().getContext());
         viewHolder.getDateTextView().setText(dateRange);
         viewHolder.getPlaceTextView().setText(festival.getPlace());
+        viewHolder.getDistanceTextView().setText(FestivalHelper.getFriendlyDistanceToHomeLocation(festival));
 
         FestivalImageLoader.loadProfileImage(festival.getId(), viewHolder.getImageView());
 
@@ -58,6 +59,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         private final TextView nameTextView;
         private final TextView dateTextView;
         private final TextView placeTextView;
+        private final TextView distanceTextView;
         private final ImageView imageView;
         private Festival festival;
 
@@ -66,6 +68,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
             nameTextView = (TextView) view.findViewById(R.id.name);
             dateTextView = (TextView) view.findViewById(R.id.date);
             placeTextView = (TextView) view.findViewById(R.id.place);
+            distanceTextView = (TextView) view.findViewById(R.id.distance);
             imageView = (ImageView) view.findViewById(R.id.image);
         }
 
@@ -83,6 +86,10 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
         TextView getPlaceTextView() {
             return placeTextView;
+        }
+
+        public TextView getDistanceTextView() {
+            return distanceTextView;
         }
 
         public ImageView getImageView() {
