@@ -383,9 +383,7 @@ public class ContactsActivity extends AppCompatActivity implements AdapterView.O
         };
 
         // The query column numbers which map to each value in the projection
-        final static int ID = 0;
-        final static int LOOKUP_KEY = 1;
-        final static int DISPLAY_NAME = 2;
-        final static int PHOTO_THUMBNAIL_DATA = 3;
+        int DISPLAY_NAME = 2;
+        int PHOTO_THUMBNAIL_DATA = 3;
     }
 }

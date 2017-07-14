@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ import com.example.drachim.festivalapp.fragment.FilterDialogFragment;
 import com.example.drachim.festivalapp.fragment.SettingsFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnFailureListener;
 
 import java.util.Date;
 
@@ -45,25 +47,29 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private Toolbar toolbar;
     private NavigationView navigationView;
 
-    private boolean checkPlayServices() {
+    private void checkPlayServices() {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
         if (result != ConnectionResult.SUCCESS) {
             if (googleApiAvailability.isUserResolvableError(result)) {
-                googleApiAvailability.getErrorDialog(this, result, 0).show();
+                googleApiAvailability.makeGooglePlayServicesAvailable(this).addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        finish();
+                    }
+                });
+            } else {
+                Log.i("DashboardActivity", "This device is not supported.");
+                finish();
             }
-            return false;
         }
-        return true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!checkPlayServices()) {
-            // todo
-        }
+        checkPlayServices();
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
