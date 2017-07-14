@@ -29,10 +29,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Participant}
- * TODO: Replace the implementation with code for your data type.
- */
 public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<ParticipantRecyclerViewAdapter.ViewHolder> {
 
     private final List<Participant> participants;
@@ -56,9 +52,6 @@ public class ParticipantRecyclerViewAdapter extends RecyclerView.Adapter<Partici
                 return loadContactPhotoThumbnail(data.toString(), getImageSize());
             }
         };
-
-        // Set a placeholder loading image for the image loader
-//        imageLoader.setLoadingImage(R.drawable.ic_contact_picture_180_holo_light);
 
         // Tell the image loader to set the image directly when it's finished loading
         // rather than fading in
