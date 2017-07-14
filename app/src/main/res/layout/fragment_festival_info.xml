@@ -87,7 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/festival_card_textview_horizontal_margin"
-                    tools:text="Distance:" />
+                    android:text="@string/direction_distance_label" />
 
                 <TextView
                     android:id="@+id/info_distance"
@@ -100,6 +100,7 @@
                     android:id="@+id/info_place"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/festival_card_textview_vertical_margin"
                     tools:text="Netherlands, Haarlemmermeer" />
 
                 <com.google.android.gms.maps.MapView
