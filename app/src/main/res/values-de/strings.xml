@@ -44,4 +44,5 @@
     <string name="search_hint">Suche nach Festivalnamen…</string>
     <string name="filter_no_location_given">Um den Distanz-Filter zu benutzen, muss in den Einstellungen eine Adresse eingegeben sein</string>
     <string name="direction_distance_label">Distanz:</string>
+    <string name="new_participants">Neuer Teilnehmer</string>
 </resources>

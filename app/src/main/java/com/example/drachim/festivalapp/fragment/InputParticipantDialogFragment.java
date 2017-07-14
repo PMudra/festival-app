@@ -24,7 +24,7 @@ public class InputParticipantDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(viewInflated);
-        builder.setTitle("New participant");
+        builder.setTitle(R.string.new_participants);
 
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
