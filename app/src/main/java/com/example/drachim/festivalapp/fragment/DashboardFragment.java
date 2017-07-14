@@ -87,7 +87,7 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
                 getOnFestivalListInteractionListener().onMoreClicked(OnFestivalListInteractionListener.MoreOption.Discover);
                 break;
             case R.id.dashboard_soon_more_card:
-                getOnFestivalListInteractionListener().onMoreClicked(OnFestivalListInteractionListener.MoreOption.Discover);
+                getOnFestivalListInteractionListener().onMoreClicked(OnFestivalListInteractionListener.MoreOption.Soon);
                 break;
         }
     }
