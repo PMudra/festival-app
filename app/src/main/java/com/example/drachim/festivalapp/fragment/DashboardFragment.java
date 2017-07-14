@@ -32,10 +32,10 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
         swipeRefreshLayout.setOnRefreshListener(this);
 
         discoverList = (RecyclerView)view.findViewById(R.id.dashboard_discover_list);
-        discoverList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener(), getImageLoader()));
+        discoverList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener()));
 
         soonList = (RecyclerView)view.findViewById(R.id.dashboard_soon_list);
-        soonList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener(), getImageLoader()));
+        soonList.setAdapter(new FestivalRecyclerViewAdapter(new ArrayList<Festival>(), getOnFestivalListInteractionListener()));
 
         view.findViewById(R.id.dashboard_discover_more_card).setOnClickListener(this);
         view.findViewById(R.id.dashboard_soon_more_card).setOnClickListener(this);
@@ -70,12 +70,12 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
 
         // Only the next three festivals
         final List<Festival> soonFestivals = new ArrayList<>(futureFestivals.subList(0, 3));
-        soonList.setAdapter(new FestivalRecyclerViewAdapter(soonFestivals, getOnFestivalListInteractionListener(), getImageLoader()));
+        soonList.setAdapter(new FestivalRecyclerViewAdapter(soonFestivals, getOnFestivalListInteractionListener()));
 
         // Only festivals which aren't already shown in soonList in random order
         futureFestivals.removeAll(soonFestivals);
         Collections.shuffle(futureFestivals);
-        discoverList.setAdapter(new FestivalRecyclerViewAdapter(futureFestivals.subList(0, 3), getOnFestivalListInteractionListener(), getImageLoader()));
+        discoverList.setAdapter(new FestivalRecyclerViewAdapter(futureFestivals.subList(0, 3), getOnFestivalListInteractionListener()));
 
         swipeRefreshLayout.setRefreshing(false);
     }

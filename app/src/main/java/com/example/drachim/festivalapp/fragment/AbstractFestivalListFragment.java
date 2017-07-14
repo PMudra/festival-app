@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.example.drachim.festivalapp.data.DatabaseUtil;
 import com.example.drachim.festivalapp.data.Festival;
-import com.example.drachim.festivalapp.data.FestivalImageLoader;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,10 +21,6 @@ import java.util.List;
 public abstract class AbstractFestivalListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ValueEventListener {
 
     private OnFestivalListInteractionListener onFestivalListInteractionListener;
-
-    protected FestivalImageLoader getImageLoader() {
-        return new FestivalImageLoader(getActivity());
-    }
 
     protected abstract SwipeRefreshLayout getSwipeRefreshLayout();
 

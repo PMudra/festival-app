@@ -115,7 +115,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
         View view = inflater.inflate(R.layout.fragment_festival_list, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(Collections.<Festival>emptyList(), getOnFestivalListInteractionListener(), getImageLoader()));
+        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(Collections.<Festival>emptyList(), getOnFestivalListInteractionListener()));
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -190,7 +190,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
         }
 
         sortFestivals(filteredList);
-        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(filteredList, getOnFestivalListInteractionListener(), getImageLoader()));
+        recyclerView.setAdapter(new FestivalRecyclerViewAdapter(filteredList, getOnFestivalListInteractionListener()));
     }
 
     @Override

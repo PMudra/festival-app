@@ -97,7 +97,7 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         toggleFavorite(false);
 
-        new FestivalImageLoader(this).loadTitleImage(festival.getId(), new SimpleTarget<Bitmap>() {
+        FestivalImageLoader.loadTitleImage(festival.getId(), new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 initColors(resource);

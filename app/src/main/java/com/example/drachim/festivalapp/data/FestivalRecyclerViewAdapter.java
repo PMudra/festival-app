@@ -16,12 +16,10 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
 
     private final List<Festival> festivals;
     private final AbstractFestivalListFragment.OnFestivalListInteractionListener listener;
-    private final FestivalImageLoader festivalImageLoader;
 
-    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener, FestivalImageLoader festivalImageLoader) {
+    public FestivalRecyclerViewAdapter(List<Festival> items, AbstractFestivalListFragment.OnFestivalListInteractionListener listener) {
         festivals = items;
         this.listener = listener;
-        this.festivalImageLoader = festivalImageLoader;
     }
 
     @Override
@@ -39,7 +37,7 @@ public class FestivalRecyclerViewAdapter extends RecyclerView.Adapter<FestivalRe
         viewHolder.getDateTextView().setText(dateRange);
         viewHolder.getPlaceTextView().setText(festival.getPlace());
 
-        festivalImageLoader.loadProfileImage(festival.getId(), viewHolder.getImageView());
+        FestivalImageLoader.loadProfileImage(festival.getId(), viewHolder.getImageView());
 
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
