@@ -37,8 +37,8 @@ public abstract class AbstractFestivalListFragment extends Fragment implements S
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
         onRefresh();
     }
