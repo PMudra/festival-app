@@ -1,9 +1,7 @@
 package com.example.drachim.festivalapp.fragment;
 
 import android.app.DialogFragment;
-import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,6 +16,7 @@ import android.widget.Toast;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.common.Application;
 import com.example.drachim.festivalapp.data.Festival;
+import com.example.drachim.festivalapp.data.FestivalHelper;
 import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
 import com.example.drachim.festivalapp.data.LocalStorage;
 
@@ -99,8 +98,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
         switch (item.getItemId()) {
             case R.id.action_filter:
 
-                final String location = getHomeLocation();
-                if (location == null) {
+                if (!FestivalHelper.isHomeLocationSet()) {
                     Toast.makeText(getActivity(), R.string.filter_no_location_given, Toast.LENGTH_LONG).show();
                 } else {
                     DialogFragment filterDialogFragment = FilterDialogFragment.newInstance(filter);
@@ -138,12 +136,11 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
     }
 
     private void sortFestivals(List<Festival> filteredFestivals) {
-        String homeLocation = getHomeLocation();
-        if (!filter.isSortByDate() && homeLocation != null) {
+        if (!filter.isSortByDate() && FestivalHelper.isHomeLocationSet()) {
             // Sort by distance
             final Map<Festival, Float> festivalDistance = new HashMap<>();
             for (Festival festival : filteredFestivals) {
-                festivalDistance.put(festival, getDistanceToHomeLocation(festival, homeLocation));
+                festivalDistance.put(festival, FestivalHelper.getDistanceToHomeLocation(festival));
             }
             Collections.sort(filteredFestivals, new Comparator<Festival>() {
                 @Override
@@ -176,9 +173,8 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
             }
 
             // distance filter
-            String homeLocation = getHomeLocation();
-            if (homeLocation != null) {
-                float distanceToHomeLocation = getDistanceToHomeLocation(festival, homeLocation);
+            if (FestivalHelper.isHomeLocationSet()) {
+                float distanceToHomeLocation = FestivalHelper.getDistanceToHomeLocation(festival);
                 int filterDistance = filter.getDistance().getKilometres();
                 if (distanceToHomeLocation > filterDistance * 1000) {
                     continue;
@@ -195,20 +191,6 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
 
         sortFestivals(filteredList);
         recyclerView.setAdapter(new FestivalRecyclerViewAdapter(filteredList, getOnFestivalListInteractionListener(), getImageLoader()));
-    }
-
-    private float getDistanceToHomeLocation(Festival festival, String homeLocation) {
-        String[] latLng = homeLocation.split("\n");
-        double lat = Double.parseDouble(latLng[1]);
-        double lng = Double.parseDouble(latLng[2]);
-
-        float[] result = new float[1];
-        Location.distanceBetween(lat, lng, festival.getLatitude(), festival.getLongitude(), result);
-        return result[0];
-    }
-
-    private String getHomeLocation() {
-        return PreferenceManager.getDefaultSharedPreferences(Application.getAppContext()).getString(getString(R.string.pref_home_address_key), null);
     }
 
     @Override
