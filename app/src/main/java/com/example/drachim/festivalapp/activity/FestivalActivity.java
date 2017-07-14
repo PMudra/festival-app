@@ -109,6 +109,9 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(this);
+        if (tabLayout.getSelectedTabPosition() == 2) {
+            showFab();
+        }
 
         ImageView titleImage = (ImageView) findViewById(R.id.festivalCover);
         titleImage.setImageBitmap(bitmap);
@@ -186,9 +189,13 @@ public class FestivalActivity extends AppCompatActivity implements TabLayout.OnT
     public void onTabSelected(TabLayout.Tab tab) {
         viewPager.setCurrentItem(tab.getPosition());
         if (tab.getPosition() == 2) {
-            fab.setRotation(0);
-            fab.show();
+            showFab();
         }
+    }
+
+    private void showFab() {
+        fab.setRotation(0);
+        fab.show();
     }
 
     @Override
