@@ -24,8 +24,11 @@ import com.example.drachim.festivalapp.data.LocalStorage;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FestivalListFragment extends AbstractFestivalListFragment implements FilterDialogFragment.OnFilterListener {
 
@@ -102,7 +105,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
         switch (item.getItemId()) {
             case R.id.action_filter:
 
-                final String location = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
+                final String location = getHomeLocation();
                 if (location == null) {
                     Toast.makeText(getActivity(), R.string.filter_no_location_given, Toast.LENGTH_LONG).show();
                 } else {
@@ -135,9 +138,34 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
 
     @Override
     protected void onLoadFinished(List<Festival> data) {
-        this.festivals = data;
+        festivals = data;
         applyFilters();
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void sortFestivals(List<Festival> filteredFestivals) {
+        String homeLocation = getHomeLocation();
+        if (!filter.isSortByDate() && homeLocation != null) {
+            // Sort by distance
+            final Map<Festival, Float> festivalDistance = new HashMap<>();
+            for (Festival festival : filteredFestivals) {
+                festivalDistance.put(festival, getDistanceToHomeLocation(festival, homeLocation));
+            }
+            Collections.sort(filteredFestivals, new Comparator<Festival>() {
+                @Override
+                public int compare(Festival festival1, Festival festival2) {
+                    return festivalDistance.get(festival1).compareTo(festivalDistance.get(festival2));
+                }
+            });
+        } else {
+            // Sort by date
+            Collections.sort(filteredFestivals, new Comparator<Festival>() {
+                @Override
+                public int compare(Festival festival1, Festival festival2) {
+                    return festival1.getStartDate().compareTo(festival2.getEndDate());
+                }
+            });
+        }
     }
 
     private void applyFilters() {
@@ -154,24 +182,39 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
             }
 
             // distance filter
-            String homeLocation = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
+            String homeLocation = getHomeLocation();
             if (homeLocation != null) {
-                String[] latLng = homeLocation.split("\n");
-                double lat = Double.parseDouble(latLng[1]);
-                double lng = Double.parseDouble(latLng[2]);
-
+                float distanceToHomeLocation = getDistanceToHomeLocation(festival, homeLocation);
                 int filterDistance = filter.getDistance().getKilometres();
-                float[] result = new float[1];
-                Location.distanceBetween(lat, lng, festival.getLatitude(), festival.getLongitude(), result);
-                if (result[0] > filterDistance * 1000) {
+                if (distanceToHomeLocation > filterDistance * 1000) {
                     continue;
                 }
+            }
+
+            // date filter
+            if (filter.getFromDate().after(festival.getEndDate()) || filter.getToDate().before(festival.getStartDate())) {
+                continue;
             }
 
             filteredList.add(festival);
         }
 
+        sortFestivals(filteredList);
         recyclerView.setAdapter(new FestivalRecyclerViewAdapter(filteredList, getOnFestivalListInteractionListener(), getImageLoader()));
+    }
+
+    private float getDistanceToHomeLocation(Festival festival, String homeLocation) {
+        String[] latLng = homeLocation.split("\n");
+        double lat = Double.parseDouble(latLng[1]);
+        double lng = Double.parseDouble(latLng[2]);
+
+        float[] result = new float[1];
+        Location.distanceBetween(lat, lng, festival.getLatitude(), festival.getLongitude(), result);
+        return result[0];
+    }
+
+    private String getHomeLocation() {
+        return PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.pref_home_address_key), null);
     }
 
     @Override
