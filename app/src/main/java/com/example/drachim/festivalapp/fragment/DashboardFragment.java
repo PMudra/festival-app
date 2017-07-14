@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import com.example.drachim.festivalapp.R;
 import com.example.drachim.festivalapp.data.Festival;
 import com.example.drachim.festivalapp.data.FestivalRecyclerViewAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DashboardFragment extends AbstractFestivalListFragment implements View.OnClickListener {
@@ -50,8 +50,33 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
 
     @Override
     protected void onLoadFinished(List<Festival> data) {
-        discoverList.setAdapter(new FestivalRecyclerViewAdapter(data, getOnFestivalListInteractionListener(), getImageLoader()));
-        soonList.setAdapter(new FestivalRecyclerViewAdapter(Collections.singletonList(data.get(0)), getOnFestivalListInteractionListener(), getImageLoader()));
+
+        // Only future festivals
+        List<Festival> futureFestivals = new ArrayList<>();
+        for (Festival festival : data) {
+            if (Calendar.getInstance().getTime().before(festival.getEndDate())) {
+                futureFestivals.add(festival);
+            }
+        }
+
+        // Sort by startDate
+        Collections.sort(futureFestivals, new Comparator<Festival>() {
+            public int compare(Festival f1, Festival f2) {
+                if (f1.getStartDate() == null || f1.getStartDate() == null)
+                    return 0;
+                return f1.getStartDate().compareTo(f2.getStartDate());
+            }
+        });
+
+        // Only the next three festivals
+        final List<Festival> soonFestivals = new ArrayList<>(futureFestivals.subList(0, 3));
+        soonList.setAdapter(new FestivalRecyclerViewAdapter(soonFestivals, getOnFestivalListInteractionListener(), getImageLoader()));
+
+        // Only festivals which aren't already shown in soonList in random order
+        futureFestivals.removeAll(soonFestivals);
+        Collections.shuffle(futureFestivals);
+        discoverList.setAdapter(new FestivalRecyclerViewAdapter(futureFestivals.subList(0, 3), getOnFestivalListInteractionListener(), getImageLoader()));
+
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -62,6 +87,7 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
                 getOnFestivalListInteractionListener().onMoreClicked(OnFestivalListInteractionListener.MoreOption.Discover);
                 break;
             case R.id.dashboard_soon_more_card:
+                getOnFestivalListInteractionListener().onMoreClicked(OnFestivalListInteractionListener.MoreOption.Discover);
                 break;
         }
     }
