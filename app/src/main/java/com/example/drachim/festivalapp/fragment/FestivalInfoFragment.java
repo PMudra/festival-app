@@ -43,9 +43,7 @@ public class FestivalInfoFragment extends Fragment implements
         FestivalActivity activity = (FestivalActivity) getActivity();
         if (activity.hasFestivalAccentColor()) {
             ((TextView) view.findViewById(R.id.info_name_title)).setTextColor(activity.getFestivalAccentColor());
-            ((TextView) view.findViewById(R.id.info_description_title)).setTextColor(activity.getFestivalAccentColor());
             ((TextView) view.findViewById(R.id.info_direction_title)).setTextColor(activity.getFestivalAccentColor());
-            ((TextView) view.findViewById(R.id.info_tickets_title)).setTextColor(activity.getFestivalAccentColor());
         }
 
         return view;
