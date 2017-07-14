@@ -201,6 +201,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 switchContentFragment(R.id.nav_discover);
                 break;
             case Soon:
+                navigationView.setCheckedItem(R.id.nav_discover);
+                switchContentFragment(R.id.nav_discover);
                 break;
         }
     }
