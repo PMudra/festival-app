@@ -42,6 +42,6 @@
     <string name="notifications_disabled_message">Benachrichtigungen deaktiviert</string>
     <string name="notifications_enabled_message">Benachrichtigungen aktiviert</string>
     <string name="search_hint">Suche nach Festivalnamen…</string>
-    <string name="filter_no_location_given">Um den Distanz-Filter zu benutzen, muss in den Einstelungen eine Adresse eingegeben sein</string>
+    <string name="filter_no_location_given">Um den Distanz-Filter zu benutzen, muss in den Einstellungen eine Adresse eingegeben sein</string>
     <string name="direction_distance_label">Distanz:</string>
 </resources>

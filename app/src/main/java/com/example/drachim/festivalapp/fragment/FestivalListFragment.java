@@ -55,7 +55,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
         calendar.setTime(now);
         calendar.add(Calendar.YEAR, 1);
         Date inOneYear = calendar.getTime();
-        filter = new FilterDialogFragment.Filter(FilterDialogFragment.Distance.KM500, true, now, inOneYear);
+        filter = new FilterDialogFragment.Filter(FilterDialogFragment.Distance.ANY, true, now, inOneYear);
     }
 
     @Override
@@ -77,6 +77,7 @@ public class FestivalListFragment extends AbstractFestivalListFragment implement
 
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
