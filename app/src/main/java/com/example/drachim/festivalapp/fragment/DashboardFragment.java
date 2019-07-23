@@ -62,7 +62,7 @@ public class DashboardFragment extends AbstractFestivalListFragment implements V
         // Sort by startDate
         Collections.sort(futureFestivals, new Comparator<Festival>() {
             public int compare(Festival f1, Festival f2) {
-                if (f1.getStartDate() == null || f1.getStartDate() == null)
+                if (f1.getStartDate() == null || f2.getStartDate() == null)
                     return 0;
                 return f1.getStartDate().compareTo(f2.getStartDate());
             }
